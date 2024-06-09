@@ -23,7 +23,6 @@ export class MovieCardComponentComponent implements OnInit, DoCheck, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes);
-    this.movieData.poster_path = 'assets/images/' + this.movieData.poster_path ;
   }
 
   ngDoCheck(): void {

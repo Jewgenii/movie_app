@@ -23,6 +23,13 @@ export class CinemaComponentComponent implements OnInit {
 
   ngOnInit(): void {
     this.http.get<any[]>(this.jsonURL).subscribe(data => {
+
+      data.forEach((movie) => {
+
+        movie.poster_path = 'assets/images/' + movie.poster_path;
+        movie.wasAddedToFavorites = false;
+        movie.wasAddedToWatchList = false;
+      });
       this.castMovies = data;
     });
   }
