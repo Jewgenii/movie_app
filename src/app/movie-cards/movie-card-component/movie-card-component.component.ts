@@ -15,9 +15,6 @@ export class MovieCardComponentComponent implements OnInit, DoCheck, OnChanges {
   @Output() addFavoriteEmitter = new EventEmitter<any>();
   @Output() addWatchListEmitter = new EventEmitter<any>();
 
-  // public wasAddedToWatchList: boolean = false;
-  // public wasAddedToFavorites: boolean = false;
-
   public details: boolean = false;
 
   constructor() {
@@ -26,6 +23,7 @@ export class MovieCardComponentComponent implements OnInit, DoCheck, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes);
+    this.movieData.poster_path = 'assets/images/' + this.movieData.poster_path ;
   }
 
   ngDoCheck(): void {
@@ -33,7 +31,6 @@ export class MovieCardComponentComponent implements OnInit, DoCheck, OnChanges {
   }
 
   ngOnInit(): void {
-
   }
 
   public addToFavorites(): void {

@@ -1,23 +1,23 @@
-<p class="header">Cinema!</p>
+<div class="cinema">
+  <app-movie-list-component [name]="'Cast'"
+                            *ngIf="castMovies.length"
+                            [movies]="castMovies"
+                            (addToFavoriteEmitter)="addMovieToFavorites($event)"
+                            (addToWatchListEmitter)="addMovieToWatchLater($event)">
+  </app-movie-list-component>
 
+  <app-movie-list-component [name]="'Favorites'"
+                            *ngIf="favoriteMovies.length"
+                            [movies]="favoriteMovies"
+                            (addToFavoriteEmitter)="addMovieToFavorites($event)"
+                            (addToWatchListEmitter)="addMovieToWatchLater($event)">
+  </app-movie-list-component>
 
-<app-movie-list-component [name]="'Cast'"
-                          *ngIf="castMovies.length"
-                          [movies]="castMovies"
-                          (addToFavoriteEmitter)="addMovieToFavorites($event)"
-                          (addToWatchListEmitter)="addMovieToWatchLater($event)">
-</app-movie-list-component>
+  <app-movie-list-component [name]="'Watch later'"
+                            *ngIf="watchLaterMovies.length"
+                            [movies]="watchLaterMovies"
+                            (addToFavoriteEmitter)="addMovieToFavorites($event)"
+                            (addToWatchListEmitter)="addMovieToWatchLater($event)">
+  </app-movie-list-component>
+</div>
 
-<app-movie-list-component [name]="'Favorites'"
-                          *ngIf="favoriteMovies.length"
-                          [movies]="favoriteMovies"
-                          (addToFavoriteEmitter)="addMovieToFavorites($event)"
-                          (addToWatchListEmitter)="addMovieToWatchLater($event)">
-</app-movie-list-component>
-
-<app-movie-list-component [name]="'Watch later'"
-                          *ngIf="watchLaterMovies.length"
-                          [movies]="watchLaterMovies"
-                          (addToFavoriteEmitter)="addMovieToFavorites($event)"
-                          (addToWatchListEmitter)="addMovieToWatchLater($event)">
-</app-movie-list-component>

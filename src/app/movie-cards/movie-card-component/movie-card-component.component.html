@@ -1,5 +1,5 @@
 <div class="movie-card">
-  <img class="movie-image" [src]="movieData.poster_path" alt="movie poster">
+  <img class="movie-image" [src]="movieData.poster_path" [alt]="movieData.poster_path">
   <p>{{movieData.title}}</p>
   <p>{{movieData.release_date}}</p>
   <p>{{movieData.popularity}}</p>
@@ -9,5 +9,8 @@
 
   <button (click)="showMovieDetails()">Show details</button>
 
-  <p *ngIf="details">{{movieData.overview}}</p>
+  <div *ngIf="details">
+    <p>{{movieData.overview}}</p>
+  </div>
+
 </div>
