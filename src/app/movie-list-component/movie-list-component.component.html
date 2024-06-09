@@ -1,0 +1,12 @@
+<p class="movie-list-header">{{name}}</p>
+<div class="movie-list-wrapper">
+  <div  *ngFor="let movie of movies">
+    <app-movie-card-component [movieData]="movie"
+                              (addFavoriteEmitter)="handleFavorites($event)"
+                              (addWatchListEmitter)="handleWatchList($event)">
+    </app-movie-card-component>
+  </div>
+</div>
+
+
+

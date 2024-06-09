@@ -1,0 +1,13 @@
+<div class="movie-card">
+  <img class="movie-image" [src]="movieData.poster_path" alt="movie poster">
+  <p>{{movieData.title}}</p>
+  <p>{{movieData.release_date}}</p>
+  <p>{{movieData.popularity}}</p>
+
+  <button (click)="addToWatchList()" *ngIf="!movieData.wasAddedToWatchList">Add to watch list</button>
+  <button (click)="addToFavorites()" *ngIf="!movieData.wasAddedToFavorites">Add to favorites</button>
+
+  <button (click)="showMovieDetails()">Show details</button>
+
+  <p *ngIf="details">{{movieData.overview}}</p>
+</div>
