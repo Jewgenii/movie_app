@@ -1,23 +1,20 @@
-<div class="cinema">
-  <app-movie-list-component [name]="'Cast'"
-                            *ngIf="castMovies.length"
-                            [movies]="castMovies"
-                            (addToFavoriteEmitter)="addMovieToFavorites($event)"
-                            (addToWatchListEmitter)="addMovieToWatchLater($event)">
-  </app-movie-list-component>
+<div class="header">
+  <ng-content></ng-content>
+</div>
+  
+<div *ngIf="!isNoMovies; else noMoviesContent">
 
-  <app-movie-list-component [name]="'Favorites'"
-                            *ngIf="favoriteMovies.length"
-                            [movies]="favoriteMovies"
-                            (addToFavoriteEmitter)="addMovieToFavorites($event)"
-                            (addToWatchListEmitter)="addMovieToWatchLater($event)">
+  @for (movieList of movieLists; track $index) {
+  <app-movie-list-component [name]="movieList.name" *ngIf="movieList.movies.length" [movies]="movieList.movies"
+    (addToFavoriteEmitter)="movieList.name == 'Cast'? addMovieToFavorites($event) : null"
+    (addToWatchListEmitter)="movieList.name == 'Cast'? addMovieToWatchLater($event) : null">
   </app-movie-list-component>
+  }
 
-  <app-movie-list-component [name]="'Watch later'"
-                            *ngIf="watchLaterMovies.length"
-                            [movies]="watchLaterMovies"
-                            (addToFavoriteEmitter)="addMovieToFavorites($event)"
-                            (addToWatchListEmitter)="addMovieToWatchLater($event)">
-  </app-movie-list-component>
 </div>
 
+<ng-template #noMoviesContent>
+  <div [ngClass]="{'alert-background-red':isNoMovies}">
+    <p class="no-movie-list-header">No movies found</p>
+  </div>
+</ng-template>

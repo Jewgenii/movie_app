@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input,  Output } from '@angular/core';
 import { MovieCardComponent } from '../movie-card-component/movie-card-component.component';
 import { CommonModule } from '@angular/common';
-import { MovieData } from '../../mock-data/movie-data';
+import { MovieData } from '../../Models/movieData';
+
 
 @Component({
   selector: 'app-movie-list-component',
@@ -10,7 +11,7 @@ import { MovieData } from '../../mock-data/movie-data';
   templateUrl: './movie-list-component.component.html',
   styleUrl: './movie-list-component.component.scss'
 })
-export class MovieListComponent {
+export class MovieListComponent  {
 
   @Output() addToFavoriteEmitter = new EventEmitter<MovieData>();
   @Output() addToWatchListEmitter = new EventEmitter<MovieData>();
@@ -18,16 +19,16 @@ export class MovieListComponent {
   @Input() name: string = "no name";
   @Input() movies: MovieData[] = [];
 
-  public handleFavorites(event: MovieData): void {
-    this.addToFavoriteEmitter.emit(event);
+  public handleFavorites(data: MovieData): void {
+    this.addToFavoriteEmitter.emit(data);
   }
 
-  public handleWatchList(event: MovieData): void {
-    this.addToWatchListEmitter.emit(event);
+  public handleWatchList(data: MovieData): void {
+    this.addToWatchListEmitter.emit(data);
   }
 
-  public removeMovie(event: MovieData): void {
-    this.movies = this.movies.filter((movie) => movie.id !== event.id);
+  public removeFromList(id: number): void {
+    this.movies = this.movies.filter((movie) => movie.id !== id);
   }
 
   public ngForTrackByIndex(index: number, movie: MovieData): number {

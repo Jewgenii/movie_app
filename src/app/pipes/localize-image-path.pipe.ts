@@ -7,15 +7,16 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class LocalizeImagePathPipe implements PipeTransform {
 
+  private imagesPath: string = 'assets/images/';
+
   transform(value: string, ...args: any[]): string {
     if (!value) return '';
+    return `${this.imagesPath}${this.getFileNameFromPath(value)}`;
+  }
 
-    var imagePath = value;
-
-    if (value.startsWith('/')) {
-      imagePath = value.substring(1);
-    }
-
-    return 'assets/images/' + imagePath;
+  private getFileNameFromPath(path: string): string | null {
+    const regex = /[^\\/]+$/;
+    const match = path.match(regex);
+    return match ? match[0] : '';
   }
 }

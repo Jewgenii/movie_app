@@ -5,11 +5,12 @@
   <p>{{movieData.release_date}}</p>
   <p>{{movieData.popularity}}</p>
 
-  <button (click)="addToWatchList()" *ngIf="!movieData.wasAddedToWatchList">Add to watch list</button>
-  <button (click)="addToFavoritesList()" *ngIf="!movieData.wasAddedToFavorites">Add to favorites</button>
+  @if(isShowingButtons){
+  <button (click)="addToWatchList()" *ngIf="!isAddedToWatchList">Add to watch list</button>
+  <button (click)="addToFavoritesList()" *ngIf="!isAddedToFavorites">Add to favorites</button>
+  }
 
   <button (click)="showMovieDetails()">Show details</button>
-
   <div *ngIf="isDetails">
     <p>{{movieData.overview}}</p>
   </div>

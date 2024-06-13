@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MovieListComponent } from './components/movie-list-component/movie-list-component.component';
 import { CinemaComponent } from './components/cinema-component/cinema-component.component';
+import { CapitalizeTextPipe } from "./pipes/capitalize-text.pipe";
 
 
 
@@ -10,7 +11,7 @@ import { CinemaComponent } from './components/cinema-component/cinema-component.
     standalone: true,
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss',
-    imports: [RouterOutlet, MovieListComponent, CinemaComponent]
+    imports: [RouterOutlet, MovieListComponent, CinemaComponent, CapitalizeTextPipe]
 })
 export class AppComponent {
   title = 'angular_proj';

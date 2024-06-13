@@ -39,6 +39,7 @@ button:last-of-type {
   transition: all 0.3s;
 }
 
-*:hover {
+div:hover,
+img:hover {
   background-color: cadetblue;
 }

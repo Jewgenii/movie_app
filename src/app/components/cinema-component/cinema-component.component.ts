@@ -2,7 +2,9 @@ import { Component, Input, OnInit, Output } from '@angular/core';
 import { MovieListComponent } from '../movie-list-component/movie-list-component.component';
 import { CommonModule } from '@angular/common';
 import { LocalizeImagePathPipe } from '../../pipes/localize-image-path.pipe';
-import { MovieData, MOCK_MOVIES } from '../../mock-data/movie-data';
+import { MOCK_MOVIES } from '../../mock-data/movie-data';
+import { MovieData } from '../../Models/movieData';
+import { MovieListData } from '../../Models/movieListData';
 
 @Component({
   selector: 'app-cinema-component',
@@ -14,48 +16,50 @@ import { MovieData, MOCK_MOVIES } from '../../mock-data/movie-data';
 export class CinemaComponent implements OnInit {
 
   // private jsonURL: string = 'assets/data/mock-data.json';
+  public movieLists: MovieListData[] = [];
 
-  public castMovies: MovieData[] = [];
-  public favoriteMovies: MovieData[] = [];
-  public watchLaterMovies: MovieData[] = [];
-
-  constructor() {
-  }
+  public isNoMovies: boolean = false;
 
   ngOnInit(): void {
-    // 1. loadMovies from json file
 
-    // this.http.get<any[]>(this.jsonURL).subscribe({
-    //   next: data => {
-    //     this.castMovies = data;
-    //     this.addUiPropertiesToMovies(this.castMovies)
-    //   },
-    //   error: err => console.error('An error occurred :', err),
-    //   complete: () => console.log('Fetching data completed...')
-    // });
+     let initialData: MovieData[] = MOCK_MOVIES;
+    //  initialData = [];
 
-    // 2. loadMovies from mock data
-    this.castMovies = MOCK_MOVIES;
+    this.isNoMovies = initialData.length == 0;
+    if (this.isNoMovies)
+      return;
+
+    this.movieLists.push({ name: 'Cast', movies: initialData });
+    this.movieLists.push({ name: 'Favorites', movies: [] });
+    this.movieLists.push({ name: 'Watch later', movies: [] });
   }
 
-  public addMovieToFavorites(movie: any): void {
-    var contains = this.favoriteMovies.includes(movie);
+  public addMovieToFavorites(movie: MovieData): void {
+
+    let lst = this.findListByName('Favorites');
+    if (lst !== undefined)
+      this.addToListIfNotContains(lst.movies, movie);
+  }
+
+  public addMovieToWatchLater(movie: MovieData): void {
+    let lst = this.findListByName('Watch later');
+    if (lst !== undefined)
+      this.addToListIfNotContains(lst.movies, movie);
+  }
+
+  private findListByName(name: string): MovieListData | undefined {
+    for (let i = 0; i < this.movieLists.length; i++) {
+      if (this.movieLists[i].name === name) {
+        return this.movieLists[i];
+      }
+    }
+    return undefined;
+  }
+
+  private addToListIfNotContains(list: MovieData[], movie: MovieData): void {
+    var contains = list.includes(movie)
     if (!contains) {
-      this.favoriteMovies.push(movie);
+      list.push(movie);
     }
   }
-
-  public addMovieToWatchLater(movie: any): void {
-    var contains = this.watchLaterMovies.includes(movie)
-    if (contains!) {
-      this.watchLaterMovies.push(movie);
-    }
-  }
-
-  // private addUiPropertiesToMovies(movies: any[]): void {
-  //   movies.forEach((movie) => {
-  //     movie.wasAddedToFavorites = false;
-  //     movie.wasAddedToWatchList = false;
-  //   });
-  // }
 }
