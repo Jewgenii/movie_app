@@ -1,14 +1,16 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { MovieListComponentComponent } from './movie-list-component/movie-list-component.component';
-import { CinemaComponentComponent } from './cinema-component/cinema-component.component';
+import { MovieListComponent } from './components/movie-list-component/movie-list-component.component';
+import { CinemaComponent } from './components/cinema-component/cinema-component.component';
+
+
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet, CinemaComponentComponent, MovieListComponentComponent],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+    selector: 'app-root',
+    standalone: true,
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.scss',
+    imports: [RouterOutlet, MovieListComponent, CinemaComponent]
 })
 export class AppComponent {
   title = 'angular_proj';

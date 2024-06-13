@@ -1,16 +1,16 @@
 <div class="movie-card">
-  <img class="movie-image" [src]="movieData.poster_path" [alt]="movieData.poster_path">
+  <img class="movie-image" [src]="movieData.poster_path | localizeImagePath"
+    [alt]="movieData.poster_path | localizeImagePath">
   <p>{{movieData.title}}</p>
   <p>{{movieData.release_date}}</p>
   <p>{{movieData.popularity}}</p>
 
   <button (click)="addToWatchList()" *ngIf="!movieData.wasAddedToWatchList">Add to watch list</button>
-  <button (click)="addToFavorites()" *ngIf="!movieData.wasAddedToFavorites">Add to favorites</button>
+  <button (click)="addToFavoritesList()" *ngIf="!movieData.wasAddedToFavorites">Add to favorites</button>
 
   <button (click)="showMovieDetails()">Show details</button>
 
-  <div *ngIf="details">
+  <div *ngIf="isDetails">
     <p>{{movieData.overview}}</p>
   </div>
-
 </div>
