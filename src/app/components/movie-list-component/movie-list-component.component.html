@@ -9,9 +9,11 @@
     <div class="flex align-items-center gap-2">
       <div class="movie-list-wrapper">
         <div *ngFor="let movie of movies; trackBy: ngForTrackByIndex">
-          <app-movie-card-component [movieData]="movie" [isShowingButtons]="name === 'Cast'"
-            (addFavoriteEmitter)="handleFavorites($event)" (addWatchListEmitter)="handleWatchList($event)"
-            (removeFavoriteEmitter)="removeFromList($event)" (removeWatchListEmitter)="removeFromList($event)">
+          <app-movie-card-component [movieData]="movie" [isAbleToAddToList]="!isAbleToModify"
+            (addFavoriteEmitter)="handleFavorites($event)"
+            (addWatchLaterEmitter)="handleWatchList($event)"
+            (removeFavoriteEmitter)="onRemove($event)"
+            (removeWatchLaterEmitter)="onRemove($event)">
           </app-movie-card-component>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output, output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { LocalizeImagePathPipe } from '../../pipes/localize-image-path.pipe';
-import { MovieData } from '../../Models/movieData';
+import { MovieData } from '../../models/movieData';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { ShortOverviewPipe } from '../../pipes/short-overview.pipe';
@@ -20,30 +20,25 @@ import { RatingModule } from 'primeng/rating';
 })
 export class MovieCardComponent {
 
-  @Input() movieData: MovieData = {} as MovieData;
-  @Input() isShowingButtons: boolean = false;
+  @Input() movieData!: MovieData;
+  @Input() isAbleToAddToList: boolean = false;
 
   @Output() addFavoriteEmitter = new EventEmitter<MovieData>();
-  @Output() addWatchListEmitter = new EventEmitter<MovieData>();
+  @Output() addWatchLaterEmitter = new EventEmitter<MovieData>();
 
   @Output() removeFavoriteEmitter = new EventEmitter<number>();
-  @Output() removeWatchListEmitter = new EventEmitter<number>();
+  @Output() removeWatchLaterEmitter = new EventEmitter<number>();
 
   public isDetails: boolean = false;
-
-  public rating: any = 0;
-
-  public isAddedToFavorites: boolean = false;
-  public isAddedToWatchList: boolean = false;
+  public rating: number = 0;
+  public shortDescriptionLength: number = 10;
 
   public addToFavoritesList(): void {
-    this.isAddedToFavorites = true;
     this.addFavoriteEmitter.emit(this.movieData);
   }
 
   public addToWatchList(): void {
-    this.isAddedToWatchList = true;
-    this.addWatchListEmitter.emit(this.movieData);
+    this.addWatchLaterEmitter.emit(this.movieData);
   }
 
   public removeFromFavoritesList(): void {
@@ -51,7 +46,7 @@ export class MovieCardComponent {
   }
 
   public removeFromWatchList(): void {
-    this.removeWatchListEmitter.emit(this.movieData.id);
+    this.removeWatchLaterEmitter.emit(this.movieData.id);
   }
 
   public showMovieDetails(): void {

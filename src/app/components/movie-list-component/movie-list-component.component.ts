@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, input } from '@angular/core';
 import { MovieCardComponent } from '../movie-card-component/movie-card-component.component';
 import { CommonModule } from '@angular/common';
-import { MovieData } from '../../Models/movieData';
+import { MovieData } from '../../models/movieData';
 import { BadgeModule } from 'primeng/badge';
 import { PanelModule } from 'primeng/panel';
 
@@ -21,20 +21,38 @@ export class MovieListComponent {
 
   @Input() name: string = "no name";
   @Input() movies: MovieData[] = [];
+  @Input() isAbleToModify: boolean = false;
 
   public handleFavorites(data: MovieData): void {
+    if (this.isAbleToModify)
+      return;
+
+    // if (this.isInList(this.movies, data)) {
+    //   this.onRemove(data.id);
+    // }
+
     this.addToFavoriteEmitter.emit(data);
   }
 
   public handleWatchList(data: MovieData): void {
+    if (this.isAbleToModify)
+      return;
+
+    // if (this.isInList(this.movies, data)) {
+    //   this.onRemove(data.id);
+    // }
     this.addToWatchListEmitter.emit(data);
   }
 
-  public removeFromList(id: number): void {
+  public onRemove(id: number): void {
     this.movies = this.movies.filter((movie) => movie.id !== id);
   }
 
   public ngForTrackByIndex(index: number, movie: MovieData): number {
-    return index;
+    return movie.id;
+  }
+
+  private isInList(lst: MovieData[], movie: MovieData): boolean {
+    return lst.some((m) => m.id === movie.id);
   }
 }

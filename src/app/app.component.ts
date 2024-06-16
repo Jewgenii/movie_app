@@ -5,9 +5,6 @@ import { CinemaComponent } from './components/cinema-component/cinema-component.
 import { CapitalizeTextPipe } from "./pipes/capitalize-text.pipe";
 import { PrimeNGConfig } from 'primeng/api';
 
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-// or, if you want to disable animations
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -17,6 +14,9 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
   ]
 })
 export class AppComponent implements OnInit {
+  title(title: string) {
+    return "angular_proj";
+  }
 
   constructor(private primengConfig: PrimeNGConfig) {
     this.primengConfig.ripple = true;

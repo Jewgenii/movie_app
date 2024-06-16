@@ -1,4 +1,4 @@
-import { MovieDataDto } from "../Models/dto/MovieDataDto";
+import { MovieDataDto } from "../models/dto/MovieDataDto";
 
 export const MOCK_MOVIES: MovieDataDto[] = [
   {

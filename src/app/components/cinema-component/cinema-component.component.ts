@@ -3,8 +3,8 @@ import { MovieListComponent } from '../movie-list-component/movie-list-component
 import { CommonModule } from '@angular/common';
 import { LocalizeImagePathPipe } from '../../pipes/localize-image-path.pipe';
 import { MOCK_MOVIES } from '../../mock-data/movie-data';
-import { MovieData } from '../../Models/movieData';
-import { MovieListData } from '../../Models/movieListData';
+import { MovieData } from '../../models/movieData';
+import { MovieListData } from '../../models/movieListData';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 
@@ -35,9 +35,9 @@ export class CinemaComponent implements OnInit {
     if (this.isNoMovies)
       return;
 
-    this.movieLists.push({ name: 'Cast', movies: initialData });
-    this.movieLists.push({ name: 'Favorites', movies: [] });
-    this.movieLists.push({ name: 'Watch later', movies: [] });
+    this.movieLists.push({ name: 'Cast', movies: initialData, isAbleToModify: false });
+    this.movieLists.push({ name: 'Favorites', movies: [], isAbleToModify: true });
+    this.movieLists.push({ name: 'Watch later', movies: [], isAbleToModify: true });
   }
 
   showBottomRight(movie: MovieData, lstName: string = '') {
@@ -51,7 +51,7 @@ export class CinemaComponent implements OnInit {
       });
   }
 
-  public addMovieToFavorites(movie: MovieData): void {
+  public onAddMovieToFavorites(movie: MovieData): void {
 
     let lst = this.findListByName('Favorites');
     if (lst !== undefined) {
@@ -61,7 +61,7 @@ export class CinemaComponent implements OnInit {
     }
   }
 
-  public addMovieToWatchLater(movie: MovieData): void {
+  public onAddMovieToWatchLater(movie: MovieData): void {
     let lst = this.findListByName('Watch later');
     if (lst !== undefined) {
       if (this.addToListIfNotContains(lst.movies, movie)) {

@@ -7,7 +7,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class CapitalizeTextPipe implements PipeTransform {
 
-  transform(value: unknown, ...args: unknown[]): unknown {
+  transform(value: string, ...args: string[]): string {
     if(value === null || value === undefined)
       return '';
     return value.toString().toUpperCase();

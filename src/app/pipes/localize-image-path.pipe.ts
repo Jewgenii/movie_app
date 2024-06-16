@@ -9,8 +9,9 @@ export class LocalizeImagePathPipe implements PipeTransform {
 
   private imagesPath: string = 'assets/images/';
 
-  transform(value: string, ...args: any[]): string {
+  transform(value: string, ...relativePath: string[]): string {
     if (!value) return '';
+
     return `${this.imagesPath}${this.getFileNameFromPath(value)}`;
   }
 
