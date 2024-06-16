@@ -43,10 +43,22 @@ img:hover {
   background-color: cadetblue;
 }
 
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.flex-center-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
 // :host {
 //   ::ng-deep {
-//     p-card {
-//       height: 1200px;
-//     }
+
 //   }
 // }

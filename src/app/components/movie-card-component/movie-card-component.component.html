@@ -5,17 +5,16 @@
   </ng-template>
 
   <ng-template pTemplate="content">
-
-    <div class="flex gap-1 mt-1" *ngIf="isShowingButtons">
-      <p-button icon="pi pi-heart" severity="danger" (onClick)="addToFavoritesList()" />
-      <p-button icon="pi pi-eye" severity="warning" (onClick)="addToWatchList()" />
+    <div class="flex flex-center-row mt-1" *ngIf="isShowingButtons">
+      <p-button icon="pi pi-heart" rounded="true" text="true" severity="danger" (onClick)="addToFavoritesList()" />
+      <p-button icon="pi pi-eye" rounded="true" text="true" severity="warning" (onClick)="addToWatchList()" />
     </div>
   </ng-template>
 
   <ng-template pTemplate="footer">
-    <button (click)="showMovieDetails()">Show details</button>
-    <div *ngIf="isDetails">
-      <p>{{movieData.overview}}</p>
+    <div class="flex-center">
+      <button (click)="showMovieDetails()" class="center-buttons">Show details</button>
+      <p *ngIf="isDetails">{{movieData.overview}}</p>
     </div>
   </ng-template>
 </p-card>
