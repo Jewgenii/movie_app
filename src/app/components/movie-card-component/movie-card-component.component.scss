@@ -42,3 +42,11 @@ button:last-of-type {
 img:hover {
   background-color: cadetblue;
 }
+
+// :host {
+//   ::ng-deep {
+//     p-card {
+//       height: 1200px;
+//     }
+//   }
+// }

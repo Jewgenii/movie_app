@@ -1,13 +1,21 @@
-<p class="movie-list-header">{{name}}</p>
-<div class="movie-list-wrapper">
-  <div *ngFor="let movie of movies; trackBy: ngForTrackByIndex">
-    <app-movie-card-component
-      [movieData]="movie"
-      [isShowingButtons]="name === 'Cast'"
-      (addFavoriteEmitter)="handleFavorites($event)"
-      (addWatchListEmitter)="handleWatchList($event)"
-      (removeFavoriteEmitter)="removeFromList($event)"
-      (removeWatchListEmitter)="removeFromList($event)">
-    </app-movie-card-component>
-  </div>
-</div>
+<p-panel header="{{name}}">
+  <ng-template pTemplate="header">
+    <div class="flex align-items-end gap-2">
+      <p-badge [value]="movies.length" />
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="content">
+    <div class="flex align-items-center gap-2">
+      <div class="movie-list-wrapper">
+        <div *ngFor="let movie of movies; trackBy: ngForTrackByIndex">
+          <app-movie-card-component [movieData]="movie" [isShowingButtons]="name === 'Cast'"
+            (addFavoriteEmitter)="handleFavorites($event)" (addWatchListEmitter)="handleWatchList($event)"
+            (removeFavoriteEmitter)="removeFromList($event)" (removeWatchListEmitter)="removeFromList($event)">
+          </app-movie-card-component>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+</p-panel>

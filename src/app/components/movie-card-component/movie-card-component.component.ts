@@ -5,14 +5,16 @@ import { MovieData } from '../../Models/movieData';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { ShortOverviewPipe } from '../../pipes/short-overview.pipe';
-
+import { ImageModule } from 'primeng/image';
+import { RatingModule } from 'primeng/rating';
 @Component({
   selector: 'app-movie-card-component',
   standalone: true,
   imports: [
     CommonModule,
     LocalizeImagePathPipe, ShortOverviewPipe,
-    CardModule, ButtonModule, ],
+    CardModule, ButtonModule, ImageModule, RatingModule
+  ],
   templateUrl: './movie-card-component.component.html',
   styleUrl: './movie-card-component.component.scss'
 })
@@ -28,6 +30,8 @@ export class MovieCardComponent {
   @Output() removeWatchListEmitter = new EventEmitter<number>();
 
   public isDetails: boolean = false;
+
+  public rating: any = 0;
 
   public isAddedToFavorites: boolean = false;
   public isAddedToWatchList: boolean = false;

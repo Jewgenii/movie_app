@@ -1,10 +1,12 @@
-<p-card header="{{movieData.title}}" subheader="{{movieData.overview | shortOverview}}" [style]="{ width: '250px' }">
+<p-card header="{{movieData.title}}" subheader="{{movieData.overview | shortOverview}}" [style]="{ width : '250px'}">
   <ng-template pTemplate="header">
-    <img alt="Card" [src]="movieData.poster_path | localizeImagePath" />
+    <p-image src="{{movieData.poster_path | localizeImagePath}}" alt="{{movieData.title}}" [preview]="true" />
+    <p-rating stars="5" />
   </ng-template>
 
   <ng-template pTemplate="content">
-    <div class="flex flex-column align-items-end gap-1 mt-1" *ngIf="isShowingButtons">
+
+    <div class="flex gap-1 mt-1" *ngIf="isShowingButtons">
       <p-button icon="pi pi-heart" severity="danger" (onClick)="addToFavoritesList()" />
       <p-button icon="pi pi-eye" severity="warning" (onClick)="addToWatchList()" />
     </div>
