@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MovieListComponent } from '../movie-list-component/movie-list-component.component';
 import { CommonModule } from '@angular/common';
 import { LocalizeImagePathPipe } from '../../pipes/localize-image-path.pipe';
@@ -40,37 +40,44 @@ export class CinemaComponent implements OnInit {
     this.movieLists.push({ name: 'Watch later', movies: [], isAbleToModify: true });
   }
 
-  showBottomRight(movie: MovieData, lstName: string = '') {
+  public showNotification(severity: string, summary: string, detail: string, key: string, life: number): void {
     this.messageService.add(
       {
-        severity: 'success',
-        summary: `"${movie.title}"`,
-        detail: 'was added to ' + lstName,
-        key: 'br',
+        severity: severity,
+        summary: summary,
+        detail: detail,
+        key: key,
         life: 2000
       });
   }
 
-  public onAddMovieToFavorites(movie: MovieData): void {
+  public onToggleFavorites(movie: MovieData): void {
+    let lst = this.getListByName('Favorites');
+    if (!lst || !lst.isAbleToModify)
+      return;
 
-    let lst = this.findListByName('Favorites');
-    if (lst !== undefined) {
-      if (this.addToListIfNotContains(lst.movies, movie)) {
-        this.showBottomRight(movie, 'Favorites');
-      }
+    if (this.containsById(lst, movie)) {
+      this.removeFromList(lst, movie);
+      return;
     }
+
+    this.addToList(lst, movie);
   }
 
-  public onAddMovieToWatchLater(movie: MovieData): void {
-    let lst = this.findListByName('Watch later');
-    if (lst !== undefined) {
-      if (this.addToListIfNotContains(lst.movies, movie)) {
-        this.showBottomRight(movie, 'Watch later');
-      }
+  public onToggleWatchLater(movie: MovieData): void {
+    let lst = this.getListByName('Watch later');
+    if (!lst || !lst.isAbleToModify)
+      return;
+
+    if (this.containsById(lst, movie)) {
+      this.removeFromList(lst, movie);
+      return;
     }
+
+    this.addToList(lst, movie);
   }
 
-  private findListByName(name: string): MovieListData | undefined {
+  private getListByName(name: string): MovieListData | undefined {
     for (let i = 0; i < this.movieLists.length; i++) {
       if (this.movieLists[i].name === name) {
         return this.movieLists[i];
@@ -79,12 +86,17 @@ export class CinemaComponent implements OnInit {
     return undefined;
   }
 
-  private addToListIfNotContains(list: MovieData[], movie: MovieData): boolean {
-    var contains = list.includes(movie)
-    if (!contains) {
-      list.push(movie);
-      return true;
-    }
-    return false;
+  private containsById(list: MovieListData, movie: MovieData): boolean {
+    return list.movies.some((m) => m.id === movie.id);
+  }
+
+  private addToList(list: MovieListData, movie: MovieData): void {
+    list.movies.push(movie);
+    this.showNotification('success', movie.title, `Was removed from ${list.name}`, 'br', 2000);
+  }
+
+  private removeFromList(list: MovieListData, movie: MovieData): void {
+    list.movies = list.movies.filter((m) => m.id !== movie.id);
+    this.showNotification('error', movie.title, `Was removed from ${list.name}`, 'br', 2000);
   }
 }

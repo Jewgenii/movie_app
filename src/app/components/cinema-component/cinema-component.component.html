@@ -5,7 +5,7 @@
 <div *ngIf="!isNoMovies; else noMoviesContent">
   @for (movieList of movieLists; track $index) {
   <app-movie-list-component [name]="movieList.name" *ngIf="movieList.movies.length" [movies]="movieList.movies"
-    (addToFavoriteEmitter)="onAddMovieToFavorites($event)" (addToWatchListEmitter)="onAddMovieToWatchLater($event)"
+    (addToFavoritesEmitter)="onToggleFavorites($event)" (addToWatchLaterEmitter)="onToggleWatchLater($event)"
     [isAbleToModify]="movieList.isAbleToModify">
   </app-movie-list-component>
   }

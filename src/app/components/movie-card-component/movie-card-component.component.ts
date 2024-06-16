@@ -33,19 +33,19 @@ export class MovieCardComponent {
   public rating: number = 0;
   public shortDescriptionLength: number = 10;
 
-  public addToFavoritesList(): void {
-    this.addFavoriteEmitter.emit(this.movieData);
+  public addToFavorites(): void {
+    this.addFavoriteEmitter.emit({...this.movieData});
   }
 
-  public addToWatchList(): void {
-    this.addWatchLaterEmitter.emit(this.movieData);
+  public addToWatchLater(): void {
+    this.addWatchLaterEmitter.emit({...this.movieData});
   }
 
-  public removeFromFavoritesList(): void {
+  public removeFromFavorites(): void {
     this.removeFavoriteEmitter.emit(this.movieData.id);
   }
 
-  public removeFromWatchList(): void {
+  public removeFromWatchLater(): void {
     this.removeWatchLaterEmitter.emit(this.movieData.id);
   }
 

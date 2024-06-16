@@ -16,32 +16,19 @@ import { PanelModule } from 'primeng/panel';
 })
 export class MovieListComponent {
 
-  @Output() addToFavoriteEmitter = new EventEmitter<MovieData>();
-  @Output() addToWatchListEmitter = new EventEmitter<MovieData>();
+  @Output() addToFavoritesEmitter = new EventEmitter<MovieData>();
+  @Output() addToWatchLaterEmitter = new EventEmitter<MovieData>();
 
   @Input() name: string = "no name";
   @Input() movies: MovieData[] = [];
   @Input() isAbleToModify: boolean = false;
 
   public handleFavorites(data: MovieData): void {
-    if (this.isAbleToModify)
-      return;
-
-    // if (this.isInList(this.movies, data)) {
-    //   this.onRemove(data.id);
-    // }
-
-    this.addToFavoriteEmitter.emit(data);
+    this.addToFavoritesEmitter.emit(data);
   }
 
-  public handleWatchList(data: MovieData): void {
-    if (this.isAbleToModify)
-      return;
-
-    // if (this.isInList(this.movies, data)) {
-    //   this.onRemove(data.id);
-    // }
-    this.addToWatchListEmitter.emit(data);
+  public handleWatchLater(data: MovieData): void {
+    this.addToWatchLaterEmitter.emit(data);
   }
 
   public onRemove(id: number): void {
@@ -50,9 +37,5 @@ export class MovieListComponent {
 
   public ngForTrackByIndex(index: number, movie: MovieData): number {
     return movie.id;
-  }
-
-  private isInList(lst: MovieData[], movie: MovieData): boolean {
-    return lst.some((m) => m.id === movie.id);
   }
 }

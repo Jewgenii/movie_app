@@ -11,7 +11,7 @@
         <div *ngFor="let movie of movies; trackBy: ngForTrackByIndex">
           <app-movie-card-component [movieData]="movie" [isAbleToAddToList]="!isAbleToModify"
             (addFavoriteEmitter)="handleFavorites($event)"
-            (addWatchLaterEmitter)="handleWatchList($event)"
+            (addWatchLaterEmitter)="handleWatchLater($event)"
             (removeFavoriteEmitter)="onRemove($event)"
             (removeWatchLaterEmitter)="onRemove($event)">
           </app-movie-card-component>
