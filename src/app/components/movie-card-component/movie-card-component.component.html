@@ -1,17 +1,19 @@
-<div class="movie-card">
-  <img class="movie-image" [src]="movieData.poster_path | localizeImagePath"
-    [alt]="movieData.poster_path | localizeImagePath">
-  <p>{{movieData.title}}</p>
-  <p>{{movieData.release_date}}</p>
-  <p>{{movieData.popularity}}</p>
+<p-card header="{{movieData.title}}" subheader="{{movieData.overview | shortOverview}}" [style]="{ width: '250px' }">
+  <ng-template pTemplate="header">
+    <img alt="Card" [src]="movieData.poster_path | localizeImagePath" />
+  </ng-template>
 
-  @if(isShowingButtons){
-  <button (click)="addToWatchList()" *ngIf="!isAddedToWatchList">Add to watch list</button>
-  <button (click)="addToFavoritesList()" *ngIf="!isAddedToFavorites">Add to favorites</button>
-  }
+  <ng-template pTemplate="content">
+    <div class="flex flex-column align-items-end gap-1 mt-1" *ngIf="isShowingButtons">
+      <p-button icon="pi pi-heart" severity="danger" (onClick)="addToFavoritesList()" />
+      <p-button icon="pi pi-eye" severity="warning" (onClick)="addToWatchList()" />
+    </div>
+  </ng-template>
 
-  <button (click)="showMovieDetails()">Show details</button>
-  <div *ngIf="isDetails">
-    <p>{{movieData.overview}}</p>
-  </div>
-</div>
+  <ng-template pTemplate="footer">
+    <button (click)="showMovieDetails()">Show details</button>
+    <div *ngIf="isDetails">
+      <p>{{movieData.overview}}</p>
+    </div>
+  </ng-template>
+</p-card>

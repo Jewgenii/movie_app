@@ -1,7 +1,7 @@
 <div class="header">
   <ng-content></ng-content>
 </div>
-  
+
 <div *ngIf="!isNoMovies; else noMoviesContent">
 
   @for (movieList of movieLists; track $index) {
@@ -18,3 +18,5 @@
     <p class="no-movie-list-header">No movies found</p>
   </div>
 </ng-template>
+
+<p-toast position="bottom-right" key="br" />

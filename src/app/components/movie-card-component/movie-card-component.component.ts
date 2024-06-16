@@ -2,11 +2,17 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output, output } from '@angular/core';
 import { LocalizeImagePathPipe } from '../../pipes/localize-image-path.pipe';
 import { MovieData } from '../../Models/movieData';
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+import { ShortOverviewPipe } from '../../pipes/short-overview.pipe';
 
 @Component({
   selector: 'app-movie-card-component',
   standalone: true,
-  imports: [CommonModule, LocalizeImagePathPipe],
+  imports: [
+    CommonModule,
+    LocalizeImagePathPipe, ShortOverviewPipe,
+    CardModule, ButtonModule, ],
   templateUrl: './movie-card-component.component.html',
   styleUrl: './movie-card-component.component.scss'
 })
