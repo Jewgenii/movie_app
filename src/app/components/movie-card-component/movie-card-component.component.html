@@ -8,17 +8,14 @@
         <p-image src="{{movieData.poster_path | localizeImagePath}}" alt="{{movieData.title}}" [preview]="true" />
       </div>
 
-
       <div class="relative-footer">
-        @if(isMayBeAddedToList){
+        @if(!isRemovable){
+        <p-button icon="pi pi-trash" rounded="true" text="true" severity="danger" (onClick)="removeFromList()" />
+        }@else {
         <p-button icon="pi pi-heart" rounded="true" text="true" severity="danger" (onClick)="addToFavorites()" />
         <p-button icon="pi pi-eye" rounded="true" text="true" severity="warning" (onClick)="addToWatchLater()" />
-      }@else {
-        <p-button icon="pi pi-trash" rounded="true" text="true" severity="danger" (onClick)="removeFromFavorites()" />
-        <p-button icon="pi pi-trash" rounded="true" text="true" severity="danger" (onClick)="removeFromWatchLater()" />
-      }
+        }
       </div>
-
 
     </div>
 

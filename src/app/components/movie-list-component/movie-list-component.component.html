@@ -9,11 +9,10 @@
     <div class="flex align-items-center gap-2">
       <div class="movie-list-wrapper">
         @for (movie of movies; track movie.id) {
-        <app-movie-card-component [movieData]="movie" [isMayBeAddedToList]="!isReadOnly"
-          (addToFavoritesEmitter)="cinema.addToFavorites(movie)"
-          (addToWatchLaterEmitter)="cinema.addToWatchLater(movie)"
-          (removeFromFavoritesEmitter)="cinema.removeFromFavorites(movie.id)"
-          (removeFromWatchLaterEmitter)="cinema.removeFromWatchLater(movie.id)">
+        <app-movie-card-component [movieData]="movie" [isRemovable]="isReadOnly"
+          (addToFavoritesEmitter)="addToFavorites($event)"
+          (addToWatchLaterEmitter)="addToWatchLater($event)"
+          (removeFromListEmitter)="removeFromList($event)">
         </app-movie-card-component>
         }
       </div>

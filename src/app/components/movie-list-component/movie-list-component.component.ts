@@ -22,4 +22,16 @@ export class MovieListComponent {
   @Input() movies: Array<MovieModel> = Array<MovieModel>();
   @Input() isReadOnly: boolean = false;
 
+  public removeFromList(id: number): void {
+    this.cinema.removeFromWatchLater(id);
+    this.cinema.removeFromFavorites(id);
+  }
+
+  public addToFavorites(data: MovieModel): void {
+    this.cinema.addToFavorites(data);
+  }
+
+  public addToWatchLater(data: MovieModel): void {
+    this.cinema.addToWatchLater(data);
+  }
 }

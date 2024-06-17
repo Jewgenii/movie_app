@@ -21,13 +21,12 @@ import { RatingModule } from 'primeng/rating';
 export class MovieCardComponent {
 
   @Output() addToFavoritesEmitter = new EventEmitter<MovieModel>();
-  @Output() removeFromFavoritesEmitter = new EventEmitter<number>();
-
   @Output() addToWatchLaterEmitter = new EventEmitter<MovieModel>();
-  @Output() removeFromWatchLaterEmitter = new EventEmitter<number>();
+
+  @Output() removeFromListEmitter = new EventEmitter<number>();
 
   @Input() movieData!: MovieModel;
-  @Input() isMayBeAddedToList: boolean = false;
+  @Input() isRemovable: boolean = false;
 
   public readonly wordsCount: number = 10
   public isDetails: boolean = false;
@@ -40,12 +39,8 @@ export class MovieCardComponent {
     this.addToWatchLaterEmitter.emit({ ...this.movieData });
   }
 
-  public removeFromFavorites(): void {
-    this.removeFromFavoritesEmitter.emit(this.movieData.id);
-  }
-
-  public removeFromWatchLater(): void {
-    this.removeFromWatchLaterEmitter.emit(this.movieData.id);
+  public removeFromList(): void {
+    this.removeFromListEmitter.emit(this.movieData.id);
   }
 
   public showMovieDetails(): void {

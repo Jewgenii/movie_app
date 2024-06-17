@@ -32,9 +32,9 @@ export class CinemaComponent implements OnInit {
     let initialData: MovieModel[] = MOCK_MOVIES;
     //  initialData = [];
 
-    this.castMovies = { name: 'Cast', movies: initialData, isReadOnly: false };
-    this.favoriteMovies = { name: 'Favorites', movies: [], isReadOnly: true };
-    this.watchLaterMovies = { name: 'Watch later', movies: [], isReadOnly: true };
+    this.castMovies = { name: 'Cast', movies: initialData, isReadOnly: true };
+    this.favoriteMovies = { name: 'Favorites', movies: [], isReadOnly: false };
+    this.watchLaterMovies = { name: 'Watch later', movies: [], isReadOnly: false };
   }
 
   public addToFavorites(data: MovieModel): void {
