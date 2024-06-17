@@ -3,10 +3,10 @@ import { MovieListComponent } from '../movie-list-component/movie-list-component
 import { CommonModule } from '@angular/common';
 import { LocalizeImagePathPipe } from '../../pipes/localize-image-path.pipe';
 import { MOCK_MOVIES } from '../../mock-data/movie-data';
-import { MovieData } from '../../models/movieData';
-import { MovieListData } from '../../models/movieListData';
+import { MovieModel } from '../../models/movieModel';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { MovieListModel } from '../../models/MovieListModel';
 
 @Component({
   selector: 'app-cinema-component',
@@ -20,37 +20,57 @@ import { MessageService } from 'primeng/api';
   styleUrl: './cinema-component.component.scss'
 })
 export class CinemaComponent implements OnInit {
-  public readonly movieLists: Array<MovieListData> = [];
-  public isNoMovies: boolean = false;
+
+  public castMovies!: MovieListModel;
+  public favoriteMovies!: MovieListModel;
+  public watchLaterMovies!: MovieListModel;
 
   constructor(private messageService: MessageService) { }
 
-  public addToFavorites(data: MovieData): void {
-    this.addMovieToList("Favorites", data);
-  }
+  public ngOnInit(): void {
 
-  public removeFromListById(list: MovieListData, id: number): void {
-    this.removeMovieFromList(list.name, id);
-  }
-
-  public addToWatchLater(data: MovieData): void {
-    this.addMovieToList("Watch later", data);
-  }
-
-
-
-  ngOnInit(): void {
-
-    let initialData: MovieData[] = MOCK_MOVIES;
+    let initialData: MovieModel[] = MOCK_MOVIES;
     //  initialData = [];
 
-    this.isNoMovies = initialData.length == 0;
-    if (this.isNoMovies)
-      return;
+    this.castMovies = { name: 'Cast', movies: initialData, isReadOnly: false };
+    this.favoriteMovies = { name: 'Favorites', movies: [], isReadOnly: true };
+    this.watchLaterMovies = { name: 'Watch later', movies: [], isReadOnly: true };
+  }
 
-    this.movieLists.push({ name: 'Cast', movies: initialData, isReadOnly: false });
-    this.movieLists.push({ name: 'Favorites', movies: [], isReadOnly: true });
-    this.movieLists.push({ name: 'Watch later', movies: [], isReadOnly: true });
+  public addToFavorites(data: MovieModel): void {
+    const isInList = this.favoriteMovies.movies.some((m) => m.id === data.id);
+
+    if (!isInList) {
+      this.favoriteMovies.movies.push(data);
+      this.showNotification('success', data.title, `Was added to ${this.favoriteMovies.name}`, 'br', 2000);
+    }
+  }
+
+  public addToWatchLater(data: MovieModel): void {
+    const isInList = this.watchLaterMovies.movies.some((m) => m.id === data.id);
+
+    if (!isInList) {
+      this.watchLaterMovies.movies.push(data);
+      this.showNotification('success', data.title, `Was added to ${this.watchLaterMovies.name}`, 'br', 2000);
+    }
+  }
+
+  public removeFromFavorites(id: number): void {
+    const movie = this.favoriteMovies.movies.find((m) => m.id === id)!;
+
+    if (movie) {
+      this.favoriteMovies.movies = this.favoriteMovies.movies.filter((m) => m.id !== id);
+      this.showNotification('error', movie.title, `Was removed from ${this.favoriteMovies.name}`, 'br', 2000);
+    }
+  }
+
+  public removeFromWatchLater(id: number): void {
+    const movie = this.watchLaterMovies.movies.find((m) => m.id === id)!;
+
+    if (movie) {
+      this.watchLaterMovies.movies = this.watchLaterMovies.movies.filter((m) => m.id !== id);
+      this.showNotification('error', movie.title, `Was removed from ${this.watchLaterMovies.name}`, 'br', 2000);
+    }
   }
 
   public showNotification(severity: string, summary: string, detail: string, key: string, life: number): void {
@@ -62,53 +82,5 @@ export class CinemaComponent implements OnInit {
         key: key,
         life: 2000
       });
-  }
-
-  private getListByName(name: string): MovieListData | undefined {
-    for (let i = 0; i < this.movieLists.length; i++) {
-      if (this.movieLists[i].name === name) {
-        return this.movieLists[i];
-      }
-    }
-    return undefined;
-  }
-
-  private containsById(list: MovieListData, id: number): MovieData {
-    return list.movies.find((m) => m.id === id)!;
-  }
-
-  private addToList(list: MovieListData, movie: MovieData): void {
-    list.movies.push(movie);
-  }
-
-  private removeFromList(list: MovieListData, id: number): void {
-    list.movies = list.movies.filter((m) => m.id !== id);
-  }
-  private addMovieToList(listName: string, data: MovieData): boolean {
-    let lst = this.getListByName(listName);
-    if (!lst || !lst.isReadOnly)
-      return false;
-
-    let existingMovie = this.containsById(lst, data.id);
-    if (existingMovie)
-      return false;
-
-    this.addToList(lst, data);
-    this.showNotification('success', data.title, `Was added to ${lst.name}`, 'br', 2000);
-    return true;
-  }
-
-  private removeMovieFromList(listName: string, id: number): boolean {
-    let lst = this.getListByName(listName);
-    if (!lst || !lst.isReadOnly)
-      return false;
-
-    let existingMovie = this.containsById(lst, id);
-    if (!existingMovie)
-      return false;
-
-    this.removeFromList(lst, id);
-    this.showNotification('error', existingMovie.title, `Was removed from ${lst.name}`, 'br', 2000);
-    return true;
   }
 }

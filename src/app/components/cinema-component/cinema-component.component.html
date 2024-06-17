@@ -2,18 +2,27 @@
   <ng-content></ng-content>
 </div>
 
-<div *ngIf="!isNoMovies; else noMoviesContent">
-  @for (movieList of movieLists; track $index) {
-  <app-movie-list-component [name]="movieList.name" [cinema]="this" *ngIf="movieList.movies.length"
-    [movies]="movieList.movies" [isReadOnly]="movieList.isReadOnly">
-  </app-movie-list-component>
-  }
+@if (castMovies.movies.length) {
+<app-movie-list-component [name]="castMovies.name" [cinema]="this" [movies]="castMovies.movies"
+  [isReadOnly]="castMovies.isReadOnly">
+</app-movie-list-component>
+}@else
+{
+<div [ngClass]="{'alert-background-red':castMovies.movies.length}">
+  <p class="no-movie-list-header">No movies found</p>
 </div>
+}
 
-<ng-template #noMoviesContent>
-  <div [ngClass]="{'alert-background-red':isNoMovies}">
-    <p class="no-movie-list-header">No movies found</p>
-  </div>
-</ng-template>
-  
+@if(favoriteMovies.movies.length){
+<app-movie-list-component [name]="favoriteMovies.name" [cinema]="this" [movies]="favoriteMovies.movies"
+  [isReadOnly]="favoriteMovies.isReadOnly">
+</app-movie-list-component>
+}
+
+@if(watchLaterMovies.movies.length){
+<app-movie-list-component [name]="watchLaterMovies.name" [cinema]="this" [movies]="watchLaterMovies.movies"
+  [isReadOnly]="watchLaterMovies.isReadOnly">
+</app-movie-list-component>
+}
+
 <p-toast position="bottom-right" key="br" />

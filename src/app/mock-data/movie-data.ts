@@ -1,6 +1,6 @@
-import { MovieDataDto } from "../models/dto/MovieDataDto";
+import { MovieModel } from "../models/movieModel";
 
-export const MOCK_MOVIES: MovieDataDto[] = [
+export const MOCK_MOVIES: MovieModel[] = [
   {
     "adult": false,
     "backdrop_path": "apes.jpg",
