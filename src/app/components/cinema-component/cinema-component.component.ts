@@ -33,11 +33,11 @@ export class CinemaComponent implements OnInit {
     this.watchLaterMovies = { name: 'Watch later', movies: [], isReadOnly: false };
   }
 
-  public removeFromList(id: number, listComponent: MovieListComponent): boolean {
+  public removeFromList(id: number, movies: Array<MovieModel>): boolean {
     // removing items by splice because this.movies is passed by reference
-    let index = listComponent.movies.indexOf(listComponent.movies.find((m) => m.id === id)!);
+    let index = movies.indexOf(movies.find((m) => m.id === id)!);
     if (index > -1) {
-      listComponent.movies.splice(index, 1);
+      movies.splice(index, 1);
       return true;
     }
 

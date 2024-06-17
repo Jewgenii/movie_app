@@ -23,7 +23,7 @@ export class MovieListComponent {
   @Input() isReadOnly: boolean = false;
 
   public removeFromList(id: number): void {
-    if (this.cinema.removeFromList(id, this)) {
+    if (this.cinema.removeFromList(id, this.movies)) {
       this.cinema.showNotification('error', this.title, `Was removed from ${this.title}`, 'br', 2000);
     }
   }
