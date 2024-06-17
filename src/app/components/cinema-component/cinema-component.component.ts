@@ -20,27 +20,19 @@ import { MessageService } from 'primeng/api';
   styleUrl: './cinema-component.component.scss'
 })
 export class CinemaComponent implements OnInit {
-  public readonly movieLists: MovieListData[] = [];
+  public readonly movieLists: Array<MovieListData> = [];
   public isNoMovies: boolean = false;
 
   public addToFavorites(data: MovieData): void {
     this.addMovieToList("Favorites", data);
   }
 
-  public onRemove(list :MovieListData, id: number): void {
+  public onRemove(list: MovieListData, id: number): void {
     this.removeMovieFromList(list.name, id);
-  }
-
-  public removeFromFavorites(id: number): void {
-    this.removeMovieFromList("Favorites", id);
   }
 
   public addToWatchLater(data: MovieData): void {
     this.addMovieToList("Watch later", data);
-  }
-
-  public removeFromWatchLater(id: number): void {
-    this.removeMovieFromList("Watch later", id);
   }
 
   private addMovieToList(listName: string, data: MovieData): boolean {
@@ -53,7 +45,7 @@ export class CinemaComponent implements OnInit {
       return false;
 
     this.addToList(lst, data);
-    this.showNotification('success', data.title, `Was removed from ${lst.name}`, 'br', 2000);
+    this.showNotification('success', data.title, `Was added to ${lst.name}`, 'br', 2000);
     return true;
   }
 
