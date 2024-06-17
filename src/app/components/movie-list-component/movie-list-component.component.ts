@@ -20,7 +20,7 @@ export class MovieListComponent {
   @Input() cinema!: CinemaComponent;
   @Input() name: string = "no name";
   @Input() movies: MovieData[] = [];
-  @Input() isAbleToModify: boolean = false;
+  @Input() isReadOnly: boolean = false;
 
   public ngForTrackByIndex(index: number, movie: MovieData): number {
     return movie.id;

@@ -23,11 +23,13 @@ export class CinemaComponent implements OnInit {
   public readonly movieLists: Array<MovieListData> = [];
   public isNoMovies: boolean = false;
 
+  constructor(private messageService: MessageService) { }
+
   public addToFavorites(data: MovieData): void {
     this.addMovieToList("Favorites", data);
   }
 
-  public onRemove(list: MovieListData, id: number): void {
+  public removeFromListById(list: MovieListData, id: number): void {
     this.removeMovieFromList(list.name, id);
   }
 
@@ -35,35 +37,7 @@ export class CinemaComponent implements OnInit {
     this.addMovieToList("Watch later", data);
   }
 
-  private addMovieToList(listName: string, data: MovieData): boolean {
-    let lst = this.getListByName(listName);
-    if (!lst || !lst.isAbleToModify)
-      return false;
 
-    let existingMovie = this.containsById(lst, data.id);
-    if (existingMovie)
-      return false;
-
-    this.addToList(lst, data);
-    this.showNotification('success', data.title, `Was added to ${lst.name}`, 'br', 2000);
-    return true;
-  }
-
-  private removeMovieFromList(listName: string, id: number): boolean {
-    let lst = this.getListByName(listName);
-    if (!lst || !lst.isAbleToModify)
-      return false;
-
-    let existingMovie = this.containsById(lst, id);
-    if (!existingMovie)
-      return false;
-
-    this.removeFromList(lst, id);
-    this.showNotification('error', existingMovie.title, `Was removed from ${lst.name}`, 'br', 2000);
-    return true;
-  }
-
-  constructor(private messageService: MessageService) { }
 
   ngOnInit(): void {
 
@@ -74,9 +48,9 @@ export class CinemaComponent implements OnInit {
     if (this.isNoMovies)
       return;
 
-    this.movieLists.push({ name: 'Cast', movies: initialData, isAbleToModify: false });
-    this.movieLists.push({ name: 'Favorites', movies: [], isAbleToModify: true });
-    this.movieLists.push({ name: 'Watch later', movies: [], isAbleToModify: true });
+    this.movieLists.push({ name: 'Cast', movies: initialData, isReadOnly: false });
+    this.movieLists.push({ name: 'Favorites', movies: [], isReadOnly: true });
+    this.movieLists.push({ name: 'Watch later', movies: [], isReadOnly: true });
   }
 
   public showNotification(severity: string, summary: string, detail: string, key: string, life: number): void {
@@ -109,5 +83,32 @@ export class CinemaComponent implements OnInit {
 
   private removeFromList(list: MovieListData, id: number): void {
     list.movies = list.movies.filter((m) => m.id !== id);
+  }
+  private addMovieToList(listName: string, data: MovieData): boolean {
+    let lst = this.getListByName(listName);
+    if (!lst || !lst.isReadOnly)
+      return false;
+
+    let existingMovie = this.containsById(lst, data.id);
+    if (existingMovie)
+      return false;
+
+    this.addToList(lst, data);
+    this.showNotification('success', data.title, `Was added to ${lst.name}`, 'br', 2000);
+    return true;
+  }
+
+  private removeMovieFromList(listName: string, id: number): boolean {
+    let lst = this.getListByName(listName);
+    if (!lst || !lst.isReadOnly)
+      return false;
+
+    let existingMovie = this.containsById(lst, id);
+    if (!existingMovie)
+      return false;
+
+    this.removeFromList(lst, id);
+    this.showNotification('error', existingMovie.title, `Was removed from ${lst.name}`, 'br', 2000);
+    return true;
   }
 }
