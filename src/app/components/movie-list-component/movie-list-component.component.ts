@@ -22,18 +22,10 @@ export class MovieListComponent {
   @Input() movies: Array<MovieModel> = Array<MovieModel>();
   @Input() isReadOnly: boolean = false;
 
-  public removeFromFavorites(id: number): void {
-    this.cinema.removeFromFavorites(id);
-  }
-
   public removeFromList(id: number): void {
-    // removing items by splice because this.movies is passed by reference
-    let index = this.movies.indexOf(this.movies.find((m) => m.id === id)!);
-    if (index > -1) {
-      this.movies.splice(index, 1);
+    if (this.cinema.removeFromList(id, this)) {
+      this.cinema.showNotification('error', this.title, `Was removed from ${this.title}`, 'br', 2000);
     }
-
-    this.cinema.showNotification('error', this.title, `Was removed from ${this.title}`, 'br', 2000);
   }
 
   public addToFavorites(data: MovieModel): void {

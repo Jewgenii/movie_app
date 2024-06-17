@@ -33,6 +33,17 @@ export class CinemaComponent implements OnInit {
     this.watchLaterMovies = { name: 'Watch later', movies: [], isReadOnly: false };
   }
 
+  public removeFromList(id: number, listComponent: MovieListComponent): boolean {
+    // removing items by splice because this.movies is passed by reference
+    let index = listComponent.movies.indexOf(listComponent.movies.find((m) => m.id === id)!);
+    if (index > -1) {
+      listComponent.movies.splice(index, 1);
+      return true;
+    }
+
+    return false
+  }
+
   public addToFavorites(data: MovieModel): boolean {
     const isInList = this.favoriteMovies.movies.some((m) => m.id === data.id);
 
@@ -52,24 +63,6 @@ export class CinemaComponent implements OnInit {
       return true;
     }
     return false;
-  }
-
-  public removeFromFavorites(id: number): void {
-    const movie = this.favoriteMovies.movies.find((m) => m.id === id)!;
-
-    if (movie) {
-      this.favoriteMovies.movies = this.favoriteMovies.movies.filter((m) => m.id !== id);
-      this.showNotification('error', movie.title, `Was removed from ${this.favoriteMovies.name}`, 'br', 2000);
-    }
-  }
-
-  public removeFromWatchLater(id: number): void {
-    const movie = this.watchLaterMovies.movies.find((m) => m.id === id)!;
-
-    if (movie) {
-      this.watchLaterMovies.movies = this.watchLaterMovies.movies.filter((m) => m.id !== id);
-      this.showNotification('error', movie.title, `Was removed from ${this.watchLaterMovies.name}`, 'br', 2000);
-    }
   }
 
   public showNotification(severity: string, summary: string, detail: string, key: string, life: number): void {
