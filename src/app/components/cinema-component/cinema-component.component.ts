@@ -27,6 +27,10 @@ export class CinemaComponent implements OnInit {
     this.addMovieToList("Favorites", data);
   }
 
+  public onRemove(list :MovieListData, id: number): void {
+    this.removeMovieFromList(list.name, id);
+  }
+
   public removeFromFavorites(id: number): void {
     this.removeMovieFromList("Favorites", id);
   }

@@ -22,8 +22,7 @@ export class MovieCardComponent {
 
   @Output() addToFavoritesEmitter = new EventEmitter<MovieData>();
   @Output() addToWatchLaterEmitter = new EventEmitter<MovieData>();
-  @Output() removeFromFavoritesEmitter = new EventEmitter<number>();
-  @Output() removeFromWatchLaterEmitter = new EventEmitter<number>();
+  @Output() removeEmitter = new EventEmitter<number>();
 
   @Input() movieData!: MovieData;
   @Input() isMayBeAddedToList: boolean = false;
@@ -41,11 +40,7 @@ export class MovieCardComponent {
   }
 
   public removeFromFavorites(): void {
-    this.removeFromFavoritesEmitter.emit(this.movieData.id);
-  }
-
-  public removeFromWatchLater(): void {
-    this.removeFromWatchLaterEmitter.emit(this.movieData.id);
+    this.removeEmitter.emit(this.movieData.id);
   }
 
   public showMovieDetails(): void {
