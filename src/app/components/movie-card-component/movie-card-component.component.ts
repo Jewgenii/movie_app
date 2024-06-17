@@ -20,21 +20,32 @@ import { RatingModule } from 'primeng/rating';
 })
 export class MovieCardComponent {
 
-  @Output() toggleFavoritesEmitter = new EventEmitter<MovieData>();
-  @Output() toggleWatchLaterEmitter = new EventEmitter<MovieData>();
+  @Output() addToFavoritesEmitter = new EventEmitter<MovieData>();
+  @Output() addToWatchLaterEmitter = new EventEmitter<MovieData>();
+  @Output() removeFromFavoritesEmitter = new EventEmitter<number>();
+  @Output() removeFromWatchLaterEmitter = new EventEmitter<number>();
 
   @Input() movieData!: MovieData;
+  @Input() isMayBeAddedToList: boolean = false;
 
   public readonly wordsCount: number = 10;
 
   public isDetails: boolean = false;
 
-  public toggleFavorites(): void {
-    this.toggleFavoritesEmitter.emit({ ...this.movieData });
+  public addToFavorites(): void {
+    this.addToFavoritesEmitter.emit({ ...this.movieData });
   }
 
-  public toggleWatchLater(): void {
-    this.toggleWatchLaterEmitter.emit({ ...this.movieData });
+  public addToWatchLater(): void {
+    this.addToWatchLaterEmitter.emit({ ...this.movieData });
+  }
+
+  public removeFromFavorites(): void {
+    this.removeFromFavoritesEmitter.emit(this.movieData.id);
+  }
+
+  public removeFromWatchLater(): void {
+    this.removeFromWatchLaterEmitter.emit(this.movieData.id);
   }
 
   public showMovieDetails(): void {

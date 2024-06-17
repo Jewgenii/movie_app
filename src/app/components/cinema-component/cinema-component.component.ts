@@ -23,12 +23,29 @@ export class CinemaComponent implements OnInit {
   public readonly movieLists: MovieListData[] = [];
   public isNoMovies: boolean = false;
 
-  public AddMovieToList(listName: string, data: MovieData): boolean {
+  public addToFavorites(data: MovieData): void {
+    this.addMovieToList("Favorites", data);
+  }
+
+  public removeFromFavorites(id: number): void {
+    this.removeMovieFromList("Favorites", id);
+  }
+
+  public addToWatchLater(data: MovieData): void {
+    this.addMovieToList("Watch later", data);
+  }
+
+  public removeFromWatchLater(id: number): void {
+    this.removeMovieFromList("Watch later", id);
+  }
+
+  private addMovieToList(listName: string, data: MovieData): boolean {
     let lst = this.getListByName(listName);
     if (!lst || !lst.isAbleToModify)
       return false;
 
-    if (this.containsById(lst, data))
+    let existingMovie = this.containsById(lst, data.id);
+    if (existingMovie)
       return false;
 
     this.addToList(lst, data);
@@ -36,16 +53,17 @@ export class CinemaComponent implements OnInit {
     return true;
   }
 
-  public RemoveMovieFromList(listName: string, data: MovieData): boolean {
+  private removeMovieFromList(listName: string, id: number): boolean {
     let lst = this.getListByName(listName);
     if (!lst || !lst.isAbleToModify)
       return false;
 
-    if (!this.containsById(lst, data))
+    let existingMovie = this.containsById(lst, id);
+    if (!existingMovie)
       return false;
 
-    this.removeFromList(lst, data);
-    this.showNotification('error', data.title, `Was removed from ${lst.name}`, 'br', 2000);
+    this.removeFromList(lst, id);
+    this.showNotification('error', existingMovie.title, `Was removed from ${lst.name}`, 'br', 2000);
     return true;
   }
 
@@ -85,15 +103,15 @@ export class CinemaComponent implements OnInit {
     return undefined;
   }
 
-  private containsById(list: MovieListData, movie: MovieData): boolean {
-    return list.movies.some((m) => m.id === movie.id);
+  private containsById(list: MovieListData, id: number): MovieData {
+    return list.movies.find((m) => m.id === id)!;
   }
 
   private addToList(list: MovieListData, movie: MovieData): void {
     list.movies.push(movie);
   }
 
-  private removeFromList(list: MovieListData, movie: MovieData): void {
-    list.movies = list.movies.filter((m) => m.id !== movie.id);
+  private removeFromList(list: MovieListData, id: number): void {
+    list.movies = list.movies.filter((m) => m.id !== id);
   }
 }

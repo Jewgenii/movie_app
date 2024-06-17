@@ -22,20 +22,6 @@ export class MovieListComponent {
   @Input() movies: MovieData[] = [];
   @Input() isAbleToModify: boolean = false;
 
-  public handleFavorites(data: MovieData): void {
-    let wasAdded = this.cinema.AddMovieToList("Favorites", data);
-
-    if(!wasAdded)
-      this.cinema.RemoveMovieFromList("Favorites", data);
-  }
-
-  public handleWatchLater(data: MovieData): void {
-    let wasAdded = this.cinema.AddMovieToList("Watch later", data);
-
-    if(!wasAdded)
-      this.cinema.RemoveMovieFromList("Watch later", data);
-  }
-
   public ngForTrackByIndex(index: number, movie: MovieData): number {
     return movie.id;
   }

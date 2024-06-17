@@ -5,14 +5,21 @@
     <div class="container">
 
       <div class="content">
-        <p-image  src="{{movieData.poster_path | localizeImagePath}}"
-          alt="{{movieData.title}}" [preview]="true" />
+        <p-image src="{{movieData.poster_path | localizeImagePath}}" alt="{{movieData.title}}" [preview]="true" />
       </div>
 
+
       <div class="relative-footer">
-        <p-button icon="pi pi-heart" rounded="true" text="true" severity="danger" (onClick)="toggleFavorites()" />
-        <p-button icon="pi pi-eye" rounded="true" text="true" severity="warning" (onClick)="toggleWatchLater()" />
+        @if(isMayBeAddedToList){
+        <p-button icon="pi pi-heart" rounded="true" text="true" severity="danger" (onClick)="addToFavorites()" />
+        <p-button icon="pi pi-eye" rounded="true" text="true" severity="warning" (onClick)="addToWatchLater()" />
+      }@else {
+        <p-button icon="pi pi-trash" rounded="true" text="true" severity="danger" (onClick)="removeFromFavorites()" />
+        <p-button icon="pi pi-trash" rounded="true" text="true" severity="warning" (onClick)="removeFromWatchLater()" />
+      }
       </div>
+
+
 
     </div>
 
