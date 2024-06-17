@@ -1,15 +1,26 @@
-<p-card header="{{movieData.title}}" subheader="{{movieData.overview | shortOverview:shortDescriptionLength}}"
+<p-card header="{{movieData.title}}" subheader="{{movieData.overview | shortOverview:wordsCount}}"
   [style]="{ width : '250px'}">
   <ng-template pTemplate="header">
-    <p-image src="{{movieData.poster_path | localizeImagePath}}" alt="{{movieData.title}}" [preview]="true" />
+
+    <div class="container">
+
+      <div class="content">
+        <p-image  src="{{movieData.poster_path | localizeImagePath}}"
+          alt="{{movieData.title}}" [preview]="true" />
+      </div>
+
+      <div class="relative-footer">
+        <p-button icon="pi pi-heart" rounded="true" text="true" severity="danger" (onClick)="toggleFavorites()" />
+        <p-button icon="pi pi-eye" rounded="true" text="true" severity="warning" (onClick)="toggleWatchLater()" />
+      </div>
+
+    </div>
+
     <p-rating stars="5" />
   </ng-template>
 
   <ng-template pTemplate="content">
-    <div class="flex flex-center-row mt-1" *ngIf="isAbleToAddToList">
-      <p-button icon="pi pi-heart" rounded="true" text="true" severity="danger" (onClick)="addToFavorites()" />
-      <p-button icon="pi pi-eye" rounded="true" text="true" severity="warning" (onClick)="addToWatchLater()" />
-    </div>
+
   </ng-template>
 
   <ng-template pTemplate="footer">

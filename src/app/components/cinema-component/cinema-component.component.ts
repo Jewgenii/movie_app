@@ -20,9 +20,34 @@ import { MessageService } from 'primeng/api';
   styleUrl: './cinema-component.component.scss'
 })
 export class CinemaComponent implements OnInit {
-
-  public movieLists: MovieListData[] = [];
+  public readonly movieLists: MovieListData[] = [];
   public isNoMovies: boolean = false;
+
+  public AddMovieToList(listName: string, data: MovieData): boolean {
+    let lst = this.getListByName(listName);
+    if (!lst || !lst.isAbleToModify)
+      return false;
+
+    if (this.containsById(lst, data))
+      return false;
+
+    this.addToList(lst, data);
+    this.showNotification('success', data.title, `Was removed from ${lst.name}`, 'br', 2000);
+    return true;
+  }
+
+  public RemoveMovieFromList(listName: string, data: MovieData): boolean {
+    let lst = this.getListByName(listName);
+    if (!lst || !lst.isAbleToModify)
+      return false;
+
+    if (!this.containsById(lst, data))
+      return false;
+
+    this.removeFromList(lst, data);
+    this.showNotification('error', data.title, `Was removed from ${lst.name}`, 'br', 2000);
+    return true;
+  }
 
   constructor(private messageService: MessageService) { }
 
@@ -51,32 +76,6 @@ export class CinemaComponent implements OnInit {
       });
   }
 
-  public onToggleFavorites(movie: MovieData): void {
-    let lst = this.getListByName('Favorites');
-    if (!lst || !lst.isAbleToModify)
-      return;
-
-    if (this.containsById(lst, movie)) {
-      this.removeFromList(lst, movie);
-      return;
-    }
-
-    this.addToList(lst, movie);
-  }
-
-  public onToggleWatchLater(movie: MovieData): void {
-    let lst = this.getListByName('Watch later');
-    if (!lst || !lst.isAbleToModify)
-      return;
-
-    if (this.containsById(lst, movie)) {
-      this.removeFromList(lst, movie);
-      return;
-    }
-
-    this.addToList(lst, movie);
-  }
-
   private getListByName(name: string): MovieListData | undefined {
     for (let i = 0; i < this.movieLists.length; i++) {
       if (this.movieLists[i].name === name) {
@@ -92,11 +91,9 @@ export class CinemaComponent implements OnInit {
 
   private addToList(list: MovieListData, movie: MovieData): void {
     list.movies.push(movie);
-    this.showNotification('success', movie.title, `Was removed from ${list.name}`, 'br', 2000);
   }
 
   private removeFromList(list: MovieListData, movie: MovieData): void {
     list.movies = list.movies.filter((m) => m.id !== movie.id);
-    this.showNotification('error', movie.title, `Was removed from ${list.name}`, 'br', 2000);
   }
 }

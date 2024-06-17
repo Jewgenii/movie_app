@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { MovieData } from '../../models/movieData';
 import { BadgeModule } from 'primeng/badge';
 import { PanelModule } from 'primeng/panel';
+import { CinemaComponent } from '../cinema-component/cinema-component.component';
 
 @Component({
   selector: 'app-movie-list-component',
@@ -16,23 +17,23 @@ import { PanelModule } from 'primeng/panel';
 })
 export class MovieListComponent {
 
-  @Output() addToFavoritesEmitter = new EventEmitter<MovieData>();
-  @Output() addToWatchLaterEmitter = new EventEmitter<MovieData>();
-
+  @Input() cinema!: CinemaComponent;
   @Input() name: string = "no name";
   @Input() movies: MovieData[] = [];
   @Input() isAbleToModify: boolean = false;
 
   public handleFavorites(data: MovieData): void {
-    this.addToFavoritesEmitter.emit(data);
+    let wasAdded = this.cinema.AddMovieToList("Favorites", data);
+
+    if(!wasAdded)
+      this.cinema.RemoveMovieFromList("Favorites", data);
   }
 
   public handleWatchLater(data: MovieData): void {
-    this.addToWatchLaterEmitter.emit(data);
-  }
+    let wasAdded = this.cinema.AddMovieToList("Watch later", data);
 
-  public onRemove(id: number): void {
-    this.movies = this.movies.filter((movie) => movie.id !== id);
+    if(!wasAdded)
+      this.cinema.RemoveMovieFromList("Watch later", data);
   }
 
   public ngForTrackByIndex(index: number, movie: MovieData): number {
