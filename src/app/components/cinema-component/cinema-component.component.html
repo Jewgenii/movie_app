@@ -3,7 +3,7 @@
 </div>
 
 @if (castMovies.movies.length) {
-<app-movie-list-component [name]="castMovies.name" [cinema]="this" [movies]="castMovies.movies"
+<app-movie-list-component [title]="castMovies.name" [cinema]="this" [movies]="castMovies.movies"
   [isReadOnly]="castMovies.isReadOnly">
 </app-movie-list-component>
 }@else
@@ -14,13 +14,13 @@
 }
 
 @if(favoriteMovies.movies.length){
-<app-movie-list-component [name]="favoriteMovies.name" [cinema]="this" [movies]="favoriteMovies.movies"
+<app-movie-list-component [title]="favoriteMovies.name" [cinema]="this" [movies]="favoriteMovies.movies"
   [isReadOnly]="favoriteMovies.isReadOnly">
 </app-movie-list-component>
 }
 
 @if(watchLaterMovies.movies.length){
-<app-movie-list-component [name]="watchLaterMovies.name" [cinema]="this" [movies]="watchLaterMovies.movies"
+<app-movie-list-component [title]="watchLaterMovies.name" [cinema]="this" [movies]="watchLaterMovies.movies"
   [isReadOnly]="watchLaterMovies.isReadOnly">
 </app-movie-list-component>
 }

@@ -15,7 +15,7 @@ import { PrimeNGConfig } from 'primeng/api';
 })
 export class AppComponent implements OnInit {
   title(title: string) {
-    return "angular_proj";
+    return "Movie App";
   }
 
   constructor(private primengConfig: PrimeNGConfig) {

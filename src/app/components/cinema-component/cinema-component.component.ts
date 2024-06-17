@@ -28,31 +28,30 @@ export class CinemaComponent implements OnInit {
   constructor(private messageService: MessageService) { }
 
   public ngOnInit(): void {
-
-    let initialData: MovieModel[] = MOCK_MOVIES;
-    //  initialData = [];
-
-    this.castMovies = { name: 'Cast', movies: initialData, isReadOnly: true };
+    this.castMovies = { name: 'Cast', movies: MOCK_MOVIES, isReadOnly: true };
     this.favoriteMovies = { name: 'Favorites', movies: [], isReadOnly: false };
     this.watchLaterMovies = { name: 'Watch later', movies: [], isReadOnly: false };
   }
 
-  public addToFavorites(data: MovieModel): void {
+  public addToFavorites(data: MovieModel): boolean {
     const isInList = this.favoriteMovies.movies.some((m) => m.id === data.id);
 
     if (!isInList) {
       this.favoriteMovies.movies.push(data);
-      this.showNotification('success', data.title, `Was added to ${this.favoriteMovies.name}`, 'br', 2000);
+      return true;
     }
+
+    return false;
   }
 
-  public addToWatchLater(data: MovieModel): void {
+  public addToWatchLater(data: MovieModel): boolean {
     const isInList = this.watchLaterMovies.movies.some((m) => m.id === data.id);
 
     if (!isInList) {
       this.watchLaterMovies.movies.push(data);
-      this.showNotification('success', data.title, `Was added to ${this.watchLaterMovies.name}`, 'br', 2000);
+      return true;
     }
+    return false;
   }
 
   public removeFromFavorites(id: number): void {

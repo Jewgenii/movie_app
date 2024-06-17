@@ -43,6 +43,7 @@ export class MovieCardComponent {
     this.removeFromListEmitter.emit(this.movieData.id);
   }
 
+
   public showMovieDetails(): void {
     this.isDetails = !this.isDetails;
   }

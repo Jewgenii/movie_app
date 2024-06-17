@@ -18,20 +18,33 @@ import { CinemaComponent } from '../cinema-component/cinema-component.component'
 export class MovieListComponent {
 
   @Input() cinema!: CinemaComponent;
-  @Input() name: string = "no name";
+  @Input() title: string = "no name";
   @Input() movies: Array<MovieModel> = Array<MovieModel>();
   @Input() isReadOnly: boolean = false;
 
-  public removeFromList(id: number): void {
-    this.cinema.removeFromWatchLater(id);
+  public removeFromFavorites(id: number): void {
     this.cinema.removeFromFavorites(id);
   }
 
+  public removeFromList(id: number): void {
+    // removing items by splice because this.movies is passed by reference
+    let index = this.movies.indexOf(this.movies.find((m) => m.id === id)!);
+    if (index > -1) {
+      this.movies.splice(index, 1);
+    }
+
+    this.cinema.showNotification('error', this.title, `Was removed from ${this.title}`, 'br', 2000);
+  }
+
   public addToFavorites(data: MovieModel): void {
-    this.cinema.addToFavorites(data);
+    if (this.cinema.addToFavorites(data)) {
+      this.cinema.showNotification('success', data.title, `Was added to ${this.title}`, 'br', 2000);
+    }
   }
 
   public addToWatchLater(data: MovieModel): void {
-    this.cinema.addToWatchLater(data);
+    if (this.cinema.addToWatchLater(data)) {
+      this.cinema.showNotification('success', data.title, `Was added to ${this.title}`, 'br', 2000);
+    }
   }
 }
