@@ -1,0 +1,40 @@
+<p-splitter [style]="{ height: '300px' }" [panelSizes]="[20, 80]" [minSizes]="[10, 0]" styleClass="mb-5">
+  <ng-template pTemplate>
+    <div class="col flex align-items-center justify-content-center">
+      <h1>Movie Lists</h1>
+
+      <ul>
+        @for (list of lists; track $index) {
+        <li>
+          <!-- <button [routerLink]="[{ outlets: { 'list-details-outlet': ['details', list.title] } }]">{{list.title}}</button> -->
+          <button (click)="navigateToMovies(list)">{{list.title}}</button>
+        </li>
+        }
+
+      </ul>
+    </div>
+  </ng-template>
+  <ng-template pTemplate>
+    <p-splitter layout="vertical" [panelSizes]="[15, 85]">
+      <ng-template pTemplate>
+        <div style="flex-grow: 1;" class="flex align-items-center justify-content-center">
+          Panel 2
+        </div>
+      </ng-template>
+      <ng-template pTemplate>
+        <p-splitter [panelSizes]="[20, 80]">
+
+          <ng-template pTemplate>
+            <div class="col flex align-items-center justify-content-center">
+              <router-outlet name="list-details-outlet"></router-outlet>
+            </div>
+          </ng-template>
+
+        </p-splitter>
+      </ng-template>
+    </p-splitter>
+  </ng-template>
+</p-splitter>
+
+<!-- <button (click)="navigateToChild()">Go to Child</button>
+<router-outlet name="childOutlet"></router-outlet> -->

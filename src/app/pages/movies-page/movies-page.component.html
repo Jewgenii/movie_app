@@ -1,0 +1,13 @@
+@for (movie of listModel?.movies; track $index) {
+<div class="col flex align-items-center justify-content-center">
+
+  <a (click)="openDetails(movie)">
+    <h1>{{movie.title}}</h1>
+    <!-- <p>{{movie.overview}}</p> -->
+    <!-- <button (click)="navigateToMovieDetails(movie)">View Details</button> -->
+  </a>
+
+</div>
+}@empty {
+<p>No movies found</p>
+}
