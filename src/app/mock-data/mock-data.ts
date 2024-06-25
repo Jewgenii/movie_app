@@ -1,4 +1,6 @@
-export const nowPlayingMovies = [
+import { MovieModel } from "../models/movieModel"
+
+export const nowPlayingMovies: Array<MovieModel> = [
   {
     "adult": false,
     "backdrop_path": "/coATv42PoiLqAFKStJiMZs2r6Zb.jpg",
@@ -142,7 +144,7 @@ export const nowPlayingMovies = [
   },
 ]
 
-export const popularMovies = [
+export const popularMovies: Array<MovieModel> = [
   {
     "adult": false,
     "backdrop_path": "/coATv42PoiLqAFKStJiMZs2r6Zb.jpg",
@@ -312,7 +314,7 @@ export const popularMovies = [
   },
 ]
 
-export const topRatedMovies = [
+export const topRatedMovies: Array<MovieModel> = [
   {
     "adult": false,
     "backdrop_path": "/zfbjgQE1uSd9wiPTX4VzsLi0rGG.jpg",
@@ -511,7 +513,7 @@ export const topRatedMovies = [
   },
 ]
 
-export const upcomingMovies = [
+export const upcomingMovies: Array<MovieModel> = [
   {
     "adult": false,
     "backdrop_path": "/coATv42PoiLqAFKStJiMZs2r6Zb.jpg",

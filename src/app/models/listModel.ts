@@ -1,6 +1,7 @@
 import { MovieModel } from "./movieModel";
 
 export class ListModel {
-  public movies: Array<MovieModel> | undefined;
+  public id!: number;
   public title: string | undefined;
+  public movies: Array<MovieModel> | undefined;
 }

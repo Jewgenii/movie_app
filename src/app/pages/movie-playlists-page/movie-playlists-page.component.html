@@ -4,13 +4,18 @@
       <h1>Movie Lists</h1>
 
       <ul>
-        @for (list of lists; track $index) {
         <li>
-          <!-- <button [routerLink]="[{ outlets: { 'list-details-outlet': ['details', list.title] } }]">{{list.title}}</button> -->
-          <button (click)="navigateToMovies(list)">{{list.title}}</button>
+          <button (click)="navigateToContainerOutlet('nowPlaying')">"Now playing"</button>
         </li>
-        }
-
+        <li>
+          <button (click)="navigateToContainerOutlet('popular')">"Popular"</button>
+        </li>
+        <li>
+          <button (click)="navigateToContainerOutlet('top')">"Top rated"</button>
+        </li>
+        <li>
+          <button (click)="navigateToContainerOutlet('upcoming')">"Upcoming"</button>
+        </li>
       </ul>
     </div>
   </ng-template>
@@ -18,7 +23,14 @@
     <p-splitter layout="vertical" [panelSizes]="[15, 85]">
       <ng-template pTemplate>
         <div style="flex-grow: 1;" class="flex align-items-center justify-content-center">
-          Panel 2
+          <ul>
+            <li>
+              <button (click)="navigateToContainerOutlet('favorites')">"Favorites"</button>
+            </li>
+            <li>
+              <button (click)="navigateToContainerOutlet('watchLater')">"Watch later"</button>
+            </li>
+          </ul>
         </div>
       </ng-template>
       <ng-template pTemplate>
@@ -26,7 +38,7 @@
 
           <ng-template pTemplate>
             <div class="col flex align-items-center justify-content-center">
-              <router-outlet name="list-details-outlet"></router-outlet>
+              <router-outlet name="container-outlet"></router-outlet>
             </div>
           </ng-template>
 
@@ -35,6 +47,3 @@
     </p-splitter>
   </ng-template>
 </p-splitter>
-
-<!-- <button (click)="navigateToChild()">Go to Child</button>
-<router-outlet name="childOutlet"></router-outlet> -->

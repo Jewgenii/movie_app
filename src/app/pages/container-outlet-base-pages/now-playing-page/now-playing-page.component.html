@@ -1,0 +1,8 @@
+@for (movie of movies; track movie.id) {
+<button (click)="openCard(movie.id)">
+  <p>{{movie.title}}</p>
+</button>
+
+}@empty {
+<p>no movies</p>
+}
