@@ -1,13 +1,13 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationEnd } from '@angular/router';
+
+import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { SidebarModule } from 'primeng/sidebar';
 import { ButtonModule } from 'primeng/button';
-import { Route, Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { PanelModule } from 'primeng/panel';
 import { ListboxModule } from 'primeng/listbox';
 import { SplitterModule } from 'primeng/splitter';
+import { MovieNavigationService } from '../../services/movie-navigation-service/movie-navigation.service';
 
 @Component({
   selector: 'app-movie-playlists-page',
@@ -16,25 +16,14 @@ import { SplitterModule } from 'primeng/splitter';
   templateUrl: './movie-playlists-page.component.html',
   styleUrl: './movie-playlists-page.component.scss'
 })
-export class MoviePlayListsPageComponent implements OnInit {
+export class MoviePlayListsPageComponent {
 
-  constructor(private router: Router,
-    private route: ActivatedRoute) {
+  constructor(
+    private _route: ActivatedRoute,
+    private _movieNavigationService: MovieNavigationService) {
   }
 
-  ngOnInit(): void {
-  }
-
-  navigateToContainerOutlet(route: string) {
-    this.router.navigate([{ outlets: { 'container-outlet': route }, }], { relativeTo: this.route })
-      .then(this.handleNavigationResult)
-  }
-
-  private handleNavigationResult(e: boolean): void {
-    if (e) {
-      console.log('Navigation is successful!');
-    } else {
-      console.log('Navigation has failed!');
-    }
+  navigateToContainerOutlet(routeName: string) {
+    this._movieNavigationService.navigateToContainerOutlet(this._route, routeName);
   }
 }

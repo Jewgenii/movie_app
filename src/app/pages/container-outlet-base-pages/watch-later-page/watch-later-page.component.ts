@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MovieService } from '../../../services/movie-service/movie.service';
 import { MovieModel } from '../../../models/movieModel';
-import { MovieCardOpenerService } from '../../../services/movie-card-opener-service/movie-card-opener.service';
+import { MovieNavigationService } from '../../../services/movie-navigation-service/movie-navigation.service';
 
 @Component({
   selector: 'app-watch-later-page',
@@ -13,7 +13,7 @@ import { MovieCardOpenerService } from '../../../services/movie-card-opener-serv
 export class WatchLaterPageComponent implements OnInit {
 
   constructor(private _movieService: MovieService,
-    private _movieCardOpenerService: MovieCardOpenerService
+    private _movieNavigationService: MovieNavigationService
   ) {
 
   }
@@ -31,6 +31,6 @@ export class WatchLaterPageComponent implements OnInit {
       return;
     }
 
-    this._movieCardOpenerService.openCard(id);
+    this._movieNavigationService.openCard(id);
   }
 }
