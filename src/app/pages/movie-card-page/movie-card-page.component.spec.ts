@@ -10,7 +10,7 @@ describe('MovieDetailsPageComponent', () => {
     await TestBed.configureTestingModule({
       imports: [MovieCardPageComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(MovieCardPageComponent);
     component = fixture.componentInstance;

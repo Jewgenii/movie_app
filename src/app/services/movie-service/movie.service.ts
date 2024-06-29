@@ -7,10 +7,62 @@ import { nowPlayingMovies, popularMovies, topRatedMovies, upcomingMovies } from 
 })
 export class MovieService {
 
-  constructor() { }
+  constructor() {
+    // this._favorites = new Array<MovieModel>();
+    // this._watchLater = new Array<MovieModel>();
+    console.log("MovieService ctor");
+  }
 
-  private _favorites!: Array<MovieModel>;
-  private _watchLater!: Array<MovieModel>;
+  private _favorites: Array<MovieModel> = new Array<MovieModel>();
+  private _watchLater: Array<MovieModel> = new Array<MovieModel>();
+
+  public getWatchLater(): Array<MovieModel> {
+    return this._watchLater;
+  }
+
+  public getFavorites(): Array<MovieModel> {
+    return this._favorites;
+  }
+
+  public getMovieById(id: number): MovieModel {
+    let allMovies = popularMovies.concat(nowPlayingMovies).concat(topRatedMovies).concat(upcomingMovies);
+
+    for (let obj of allMovies) {
+      if (obj.id === id) {
+        return (obj as MovieModel);
+      }
+    }
+
+    throw Error('movie data not found');
+  }
+
+  public addToFavorite(movie: MovieModel): boolean {
+    if (!this._favorites.some(m => m.id == movie.id)) {
+      this._favorites.push(movie);
+      return true;
+    }
+
+    return false;
+  }
+
+  public removeFromFavorite(id: number): boolean {
+    this._favorites = this._favorites.filter(e => e.id != id);
+    return true;
+  }
+
+  public addToWatchLater(movie: MovieModel): boolean {
+    if (!this._watchLater.some(m => m.id == movie.id)) {
+      this._watchLater.push(movie);
+      return true;
+    }
+
+    return false;
+  }
+
+  public removeFromWatchLater(id: number): boolean {
+    this._watchLater = this._watchLater.filter(e => e.id != id);
+    return true;
+  }
 
   public getPopular(): Array<MovieModel> {
     return popularMovies as Array<MovieModel>;
@@ -26,53 +78,5 @@ export class MovieService {
 
   public getUpcoming(): Array<MovieModel> {
     return upcomingMovies as Array<MovieModel>;
-  }
-
-  public getWatchLater(): Array<MovieModel> {
-    return this._watchLater;
-  }
-
-  public getFavorites(): Array<MovieModel> {
-    return this._watchLater;
-  }
-
-  public getMovieById(id: number): MovieModel | null {
-    let allMovies = popularMovies.concat(nowPlayingMovies).concat(topRatedMovies).concat(upcomingMovies);
-
-    for (let obj of allMovies) {
-      if (obj.id === id) {
-        return (obj as MovieModel);
-      }
-    }
-
-    return null;
-  }
-
-  public setToFavorite(movie: MovieModel) {
-    if (!this._favorites.some(m => m.id == movie.id)) {
-      this._favorites.push(movie);
-    }
-  }
-
-  public setToWatchLater(movie: MovieModel) {
-    if (!this._watchLater.some(m => m.id == movie.id)) {
-      this._watchLater.push(movie);
-    }
-  }
-
-  public removeFromFavorite(id: number) {
-    const index = this._favorites.findIndex(movie => movie.id === id);
-
-    if (index !== -1) {
-      this._favorites.splice(index, 1);
-    }
-  }
-
-  public removeFromWatchLater(id: number) {
-    const index = this._watchLater.findIndex(movie => movie.id === id);
-
-    if (index !== -1) {
-      this._watchLater.splice(index, 1);
-    }
   }
 }

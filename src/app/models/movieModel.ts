@@ -2,7 +2,7 @@ export class MovieModel {
   public adult: boolean | undefined;
   public backdrop_path: string | undefined;
   public genre_ids: Array<number> | undefined;
-  public id: number | undefined;
+  public id!: number;
   public original_language: string | undefined;
   public original_title: string | undefined;
   public overview: string | undefined;
