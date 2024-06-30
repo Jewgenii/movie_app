@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { MovieModel } from "../models/movieModel";
-import { ActivatedRouteSnapshot, MaybeAsync, Resolve, RouterStateSnapshot } from "@angular/router";
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
 
 
