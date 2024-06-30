@@ -3,12 +3,14 @@ import { MovieService } from '../../../services/movie-service/movie.service';
 import { MovieModel } from '../../../models/movieModel';
 import { MovieNavigationService } from '../../../services/movie-navigation-service/movie-navigation.service';
 import { OnSameUrlNavigation } from '@angular/router';
+import { MovieCardComponent } from '../../../components/movie-card/movie-card.component';
 
 @Component({
   selector: 'app-favorites-page',
   standalone: true,
   templateUrl: './favorites-page.component.html',
-  styleUrl: './favorites-page.component.scss'
+  styleUrl: './favorites-page.component.scss',
+  imports: [MovieCardComponent]
 })
 export class FavoritesPageComponent implements OnInit {
 

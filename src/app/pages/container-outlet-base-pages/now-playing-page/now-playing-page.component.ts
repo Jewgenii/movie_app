@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { MovieService } from '../../../services/movie-service/movie.service';
 import { MovieModel } from '../../../models/movieModel';
 import { MovieNavigationService } from '../../../services/movie-navigation-service/movie-navigation.service';
+import { MovieCardComponent } from '../../../components/movie-card/movie-card.component';
 
 @Component({
-  selector: 'app-now-playing-page',
-  standalone: true,
-  imports: [],
-  templateUrl: './now-playing-page.component.html',
-  styleUrl: './now-playing-page.component.scss'
+    selector: 'app-now-playing-page',
+    standalone: true,
+    templateUrl: './now-playing-page.component.html',
+    styleUrl: './now-playing-page.component.scss',
+    imports: [MovieCardComponent]
 })
 export class NowPlayingPageComponent implements OnInit {
 

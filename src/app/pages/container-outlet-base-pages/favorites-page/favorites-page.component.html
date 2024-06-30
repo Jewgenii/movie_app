@@ -1,8 +1,8 @@
-@for (movie of movies; track movie.id) {
-  <button (click)="openCard(movie.id)">
-    <p>{{movie.title}}</p>
-  </button>
+<div class="cards-container">
 
+  @for (movie of movies; track movie.id) {
+    <app-movie-card [movieData]=movie (click)="openCard(movie.id)"></app-movie-card>
   }@empty {
   <p>no movies</p>
   }
+</div>

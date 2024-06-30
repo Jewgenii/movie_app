@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { MovieService } from '../../../services/movie-service/movie.service';
 import { MovieModel } from '../../../models/movieModel';
 import { MovieNavigationService } from '../../../services/movie-navigation-service/movie-navigation.service';
+import { MovieCardComponent } from '../../../components/movie-card/movie-card.component';
 
 @Component({
   selector: 'app-top-rated-page',
   standalone: true,
-  imports: [],
+  imports: [MovieCardComponent],
   templateUrl: './top-rated-page.component.html',
   styleUrl: './top-rated-page.component.scss'
 })

@@ -11,10 +11,15 @@ export class MovieService {
     // this._favorites = new Array<MovieModel>();
     // this._watchLater = new Array<MovieModel>();
     console.log("MovieService ctor");
+
+    this._allMovies = popularMovies.concat(nowPlayingMovies).concat(topRatedMovies).concat(upcomingMovies);
+    this._favorites = new Array<MovieModel>();
+    this._watchLater = new Array<MovieModel>();
   }
 
-  private _favorites: Array<MovieModel> = new Array<MovieModel>();
-  private _watchLater: Array<MovieModel> = new Array<MovieModel>();
+  private readonly _allMovies!: Array<MovieModel>;
+  private _favorites!: Array<MovieModel>;
+  private _watchLater!: Array<MovieModel>;
 
   public getWatchLater(): Array<MovieModel> {
     return this._watchLater;
@@ -24,16 +29,13 @@ export class MovieService {
     return this._favorites;
   }
 
-  public getMovieById(id: number): MovieModel {
-    let allMovies = popularMovies.concat(nowPlayingMovies).concat(topRatedMovies).concat(upcomingMovies);
-
-    for (let obj of allMovies) {
-      if (obj.id === id) {
-        return (obj as MovieModel);
+  public getMovieById(id: number): MovieModel | null {
+    for (let movie of this._allMovies) {
+      if (movie.id === id) {
+        return movie;
       }
     }
-
-    throw Error('movie data not found');
+    return null;
   }
 
   public addToFavorite(movie: MovieModel): boolean {

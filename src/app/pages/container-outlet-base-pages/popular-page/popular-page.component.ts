@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { MovieModel } from '../../../models/movieModel';
 import { MovieService } from '../../../services/movie-service/movie.service';
 import { MovieNavigationService } from '../../../services/movie-navigation-service/movie-navigation.service';
+import { MovieCardComponent } from '../../../components/movie-card/movie-card.component';
 
 @Component({
   selector: 'app-popular-page',
   standalone: true,
-  imports: [],
+  imports: [MovieCardComponent],
   templateUrl: './popular-page.component.html',
-  styleUrl: './popular-page.component.scss'
+  styleUrl: './popular-page.component.scss',
 })
 export class PopularComponent implements OnInit {
 

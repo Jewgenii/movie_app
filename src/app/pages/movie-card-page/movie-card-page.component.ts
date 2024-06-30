@@ -27,36 +27,37 @@ import { MovieService } from '../../services/movie-service/movie.service';
 })
 export class MovieCardPageComponent {
 
+  public readonly wordsCount: number = 10
+
   public movieData: MovieModel = {} as MovieModel;
   public isInFavorites: boolean = false;
   public isInWatchLater: boolean = false;
+  public isDetails: boolean = false;
 
   constructor(private _route: ActivatedRoute,
     private _movieService: MovieService
   ) {
   }
 
+
   ngOnInit(): void {
 
     this._route.paramMap.subscribe(data => {
-      try {
 
-        let id = Number(data.get('id'));
-        this.movieData = this._movieService.getMovieById(id);
+      let id = Number(data.get('id'));
 
-        this.isInFavorites = this._movieService.getFavorites().some(e => e.id === this.movieData.id);
-        this.isInWatchLater = this._movieService.getWatchLater().some(e => e.id === this.movieData.id);
-
-      } catch (error) {
-        if (error instanceof Error) {
-          console.log(error.message)
-        }
+      let tmpMovie = this._movieService.getMovieById(id);
+      if (!tmpMovie) {
+        console.log('movie is not found');
+        return;
       }
+
+      this.movieData = tmpMovie;
+
+      this.isInFavorites = this._movieService.getFavorites().some(e => e.id === this.movieData.id);
+      this.isInWatchLater = this._movieService.getWatchLater().some(e => e.id === this.movieData.id);
     });
   }
-
-  public readonly wordsCount: number = 10
-  public isDetails: boolean = false;
 
   public addToFavorites(): void {
     let isAdded = this._movieService.addToFavorite(this.movieData);
