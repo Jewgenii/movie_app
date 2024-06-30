@@ -1,7 +1,8 @@
 <div class="card-movie">
-  <p-card header="{{movieData.title}}">
+
+  <p-card header="">
     <ng-template pTemplate="header">
-      <div class="container">
+      <div class="container padder">
         <div class="relative-footer">
 
           @if(isInFavorites){
@@ -23,22 +24,28 @@
     </ng-template>
 
     <ng-template pTemplate="content">
-      <div class="flex-column">
-        <div>
-          <img class="p-card-image" src="{{movieData.poster_path | localizeImagePath}}" alt="{{movieData.title}}" />
-        </div>
-        <div>
-          <label for="lang">Language:</label>
-          <p id="lang">{{movieData.original_language}}</p>
+      <div class="padder">
+        <h2>{{movieData.title}}</h2>
+        <div class="flex-column ">
+          <div>
+            <img class="p-card-image" src="{{movieData.poster_path | localizeImagePath}}" alt="{{movieData.title}}" />
+          </div>
+          <div id="info" class="padder-left">
+            <label for="lang">Language:</label>
+            <p id="lang">{{movieData.original_language}}</p>
 
-          <label for="release_date">Release:</label>
-          <p id="release_date">{{movieData.release_date}}</p>
+            <label for="release_date">Release:</label>
+            <p id="release_date">{{movieData.release_date}}</p>
 
-          <label for="description">Description:</label>
-          <p>{{movieData.overview}}</p>
+            <label for="description">Description:</label>
+            <p>{{movieData.overview}}</p>
+          </div>
         </div>
       </div>
+
+
     </ng-template>
   </p-card>
-</div>
 
+
+</div>
