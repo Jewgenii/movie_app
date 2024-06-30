@@ -1,41 +1,44 @@
-<p-card header="{{movieData.title}}" subheader="{{movieData.overview | shortOverview:wordsCount}}"
-  [style]="{ width : '250px'}">
-  <ng-template pTemplate="header">
+<div class="card-movie">
+  <p-card header="{{movieData.title}}">
+    <ng-template pTemplate="header">
+      <div class="container">
+        <div class="relative-footer">
 
-    <div class="container">
-
-      <div class="content">
-        <p-image src="{{movieData.poster_path | localizeImagePath}}" alt="{{movieData.title}}" [preview]="true" />
-      </div>
-
-      <div class="relative-footer">
-
-        @if(isInFavorites){
-          <p-button icon="pi pi-heart-fill" rounded="true" text="true" severity="danger" (onClick)="removeFromFavorites()" />
-        }@else {
+          @if(isInFavorites){
+          <p-button icon="pi pi-heart-fill" rounded="true" text="true" severity="danger"
+            (onClick)="removeFromFavorites()" />
+          }@else {
           <p-button icon="pi pi-heart" rounded="true" text="true" severity="danger" (onClick)="addToFavorites()" />
-        }
+          }
 
-        @if(isInWatchLater){
-          <p-button icon="pi pi-star-fill" rounded="true" text="true" severity="warning" (onClick)="removeFromWatchLater()" />
-        }@else {
+          @if(isInWatchLater){
+          <p-button icon="pi pi-star-fill" rounded="true" text="true" severity="warning"
+            (onClick)="removeFromWatchLater()" />
+          }@else {
           <p-button icon="pi pi-star" rounded="true" text="true" severity="warning" (onClick)="addToWatchLater()" />
-        }
+          }
+        </div>
+
       </div>
+    </ng-template>
 
-    </div>
+    <ng-template pTemplate="content">
+      <div class="flex-column">
+        <div>
+          <img class="p-card-image" src="{{movieData.poster_path | localizeImagePath}}" alt="{{movieData.title}}" />
+        </div>
+        <div>
+          <label for="lang">Language:</label>
+          <p id="lang">{{movieData.original_language}}</p>
 
-    <p-rating stars="5" />
-  </ng-template>
+          <label for="release_date">Release:</label>
+          <p id="release_date">{{movieData.release_date}}</p>
 
-  <ng-template pTemplate="content">
+          <label for="description">Description:</label>
+          <p>{{movieData.overview}}</p>
+        </div>
+      </div>
+    </ng-template>
+  </p-card>
+</div>
 
-  </ng-template>
-
-  <ng-template pTemplate="footer">
-    <div class="flex-center">
-      <p (click)="toggleMovieDetails()">Show details...</p>
-      <p *ngIf="isDetails">{{movieData.overview}}</p>
-    </div>
-  </ng-template>
-</p-card>

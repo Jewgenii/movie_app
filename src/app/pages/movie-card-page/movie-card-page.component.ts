@@ -1,5 +1,4 @@
 import { CommonModule } from '@angular/common';
-import { EventEmitter, Input, Output } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 
@@ -34,9 +33,7 @@ export class MovieCardPageComponent {
   public isInWatchLater: boolean = false;
   public isDetails: boolean = false;
 
-  constructor(private _route: ActivatedRoute,
-    private _movieService: MovieService
-  ) {
+  constructor(private _route: ActivatedRoute, private _movieService: MovieService) {
   }
 
 
@@ -89,9 +86,5 @@ export class MovieCardPageComponent {
       this.isInWatchLater = false;
       console.log(this.movieData.title + ' removeFromWatchLater');
     }
-  }
-
-  public toggleMovieDetails(): void {
-    this.isDetails = !this.isDetails;
   }
 }
