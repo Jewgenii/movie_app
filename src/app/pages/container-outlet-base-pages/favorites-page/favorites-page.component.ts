@@ -1,38 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import { MovieService } from '../../../services/movie-service/movie.service';
-import { MovieModel } from '../../../models/movieModel';
-import { MovieNavigationService } from '../../../services/movie-navigation-service/movie-navigation.service';
-import { OnSameUrlNavigation } from '@angular/router';
 import { MovieCardComponent } from '../../../components/movie-card/movie-card.component';
+import { ContainerOutletBasePageComponent } from '../container-outlet-base-page/container-outlet-base-page.component';
+import { RouterModule } from '@angular/router';  // Import RouterModule for [routerLink]
 
 @Component({
   selector: 'app-favorites-page',
   standalone: true,
-  templateUrl: './favorites-page.component.html',
-  styleUrl: './favorites-page.component.scss',
-  imports: [MovieCardComponent]
+  templateUrl: '../container-outlet-base-page/container-outlet-base-page.component.html',
+  styleUrl: '../container-outlet-base-page/container-outlet-base-page.component.scss',
+  imports: [MovieCardComponent, RouterModule]
 })
-export class FavoritesPageComponent implements OnInit {
+export class FavoritesPageComponent extends ContainerOutletBasePageComponent implements OnInit {
 
-  constructor(private _movieService: MovieService,
-    private _movieNavigationService: MovieNavigationService
+  constructor(
+    private _movieService: MovieService
   ) {
-    console.log("FavoritesPageComponent ctor")
+    super();
   }
-
-  public movies: Array<MovieModel> = [];
 
   ngOnInit(): void {
-    this.movies = this._movieService.getFavorites();
+    this._movies = this._movieService.getFavorites();
   }
-
-  openCard(id: number | undefined): void {
-    if (id == undefined) {
-      console.log('id is undefined');
-      return;
-    }
-
-    this._movieNavigationService.openCard(id);
-  }
-
 }

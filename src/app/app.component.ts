@@ -5,14 +5,13 @@ import { RouterOutlet } from '@angular/router';
 import { PrimeNGConfig } from 'primeng/api';
 import { SidebarModule } from 'primeng/sidebar';
 import { MovieService } from './services/movie-service/movie.service';
-import { MovieNavigationService } from './services/movie-navigation-service/movie-navigation.service';
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [HttpClientModule, RouterOutlet, SidebarModule],
-  providers: [MovieService, MovieNavigationService],
+  providers: [MovieService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

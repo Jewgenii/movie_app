@@ -1,35 +1,32 @@
 import { Injectable } from '@angular/core';
-import { MovieModel } from '../../models/movieModel';
+import { MovieModel } from '../../models/movie-model';
 import { nowPlayingMovies, popularMovies, topRatedMovies, upcomingMovies } from '../../mock-data/mock-data';
+import { MovieInterface } from '../../interfaces/movie-interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MovieService {
 
-  constructor() {
-    // this._favorites = new Array<MovieModel>();
-    // this._watchLater = new Array<MovieModel>();
-    console.log("MovieService ctor");
+  private readonly _allMovies!: Array<MovieInterface>;
+  private _favorites!: Array<MovieInterface>;
+  private _watchLater!: Array<MovieInterface>;
 
+  constructor() {
     this._allMovies = popularMovies.concat(nowPlayingMovies).concat(topRatedMovies).concat(upcomingMovies);
-    this._favorites = new Array<MovieModel>();
-    this._watchLater = new Array<MovieModel>();
+    this._favorites = new Array<MovieInterface>();
+    this._watchLater = new Array<MovieInterface>();
   }
 
-  private readonly _allMovies!: Array<MovieModel>;
-  private _favorites!: Array<MovieModel>;
-  private _watchLater!: Array<MovieModel>;
-
-  public getWatchLater(): Array<MovieModel> {
+  public getWatchLater(): Array<MovieInterface> {
     return this._watchLater;
   }
 
-  public getFavorites(): Array<MovieModel> {
+  public getFavorites(): Array<MovieInterface> {
     return this._favorites;
   }
 
-  public getMovieById(id: number): MovieModel | null {
+  public getMovieById(id: number): MovieInterface | null {
     for (let movie of this._allMovies) {
       if (movie.id === id) {
         return movie;
@@ -38,7 +35,7 @@ export class MovieService {
     return null;
   }
 
-  public addToFavorite(movie: MovieModel): boolean {
+  public addToFavorite(movie: MovieInterface): boolean {
     if (!this._favorites.some(m => m.id == movie.id)) {
       this._favorites.push(movie);
       return true;
@@ -52,7 +49,7 @@ export class MovieService {
     return true;
   }
 
-  public addToWatchLater(movie: MovieModel): boolean {
+  public addToWatchLater(movie: MovieInterface): boolean {
     if (!this._watchLater.some(m => m.id == movie.id)) {
       this._watchLater.push(movie);
       return true;
@@ -66,19 +63,19 @@ export class MovieService {
     return true;
   }
 
-  public getPopular(): Array<MovieModel> {
+  public getPopular(): Array<MovieInterface> {
     return popularMovies as Array<MovieModel>;
   }
 
-  public getNowPlaying(): Array<MovieModel> {
+  public getNowPlaying(): Array<MovieInterface> {
     return nowPlayingMovies as Array<MovieModel>;
   }
 
-  public getTopRated(): Array<MovieModel> {
+  public getTopRated(): Array<MovieInterface> {
     return topRatedMovies as Array<MovieModel>;
   }
 
-  public getUpcoming(): Array<MovieModel> {
+  public getUpcoming(): Array<MovieInterface> {
     return upcomingMovies as Array<MovieModel>;
   }
 }
