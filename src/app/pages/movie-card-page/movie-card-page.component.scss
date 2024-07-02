@@ -10,3 +10,38 @@
   flex-direction: row;
 }
 
+.padder,
+.padder-left,
+.padder-top,
+.padder-right,
+.padder-bottom {
+  width: 100%;
+  height: 100%;
+}
+
+.padder-left {
+  padding-left: 5px;
+}
+
+.padder-top {
+  padding-top: 5px;
+}
+
+.padder-right {
+  padding-right: 5px;
+}
+
+.padder-bottom {
+  padding-bottom: 5px;
+}
+
+.padder {
+  padding-left: 5px;
+  padding-top: 5px;
+  padding-right: 5px;
+  padding-bottom: 5px;
+}
+
+#info *{
+  padding-bottom: 20px;
+}
