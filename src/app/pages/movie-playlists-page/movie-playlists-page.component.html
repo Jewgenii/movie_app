@@ -1,20 +1,20 @@
-<p-splitter [style]="{ height: '300px' }" [panelSizes]="[20, 80]" [minSizes]="[10, 0]" styleClass="mb-5">
+<p-splitter [panelSizes]="[20, 80]" [minSizes]="[10, 0]" styleClass="mb-5">
   <ng-template pTemplate>
     <div class="col flex align-items-center justify-content-center">
       <h1>Movie Lists</h1>
 
       <ul style="list-style: none;">
         <li>
-          <button (click)="navigateToContainerOutlet('nowPlaying')">Now playing</button>
+          <button [routerLink]="[{ outlets: { 'container-outlet': 'nowPlaying' } }]">Now playing</button>
         </li>
         <li>
-          <button (click)="navigateToContainerOutlet('popular')">Popular</button>
+          <button [routerLink]="[{ outlets: { 'container-outlet': 'popular' } }]">Popular</button>
         </li>
         <li>
-          <button (click)="navigateToContainerOutlet('top')">Top rated</button>
+          <button [routerLink]="[{ outlets: { 'container-outlet': 'popular' } }]">Top rated</button>
         </li>
         <li>
-          <button (click)="navigateToContainerOutlet('upcoming')">Upcoming</button>
+          <button [routerLink]="[{ outlets: { 'container-outlet': 'upcoming' } }]">Upcoming</button>
         </li>
       </ul>
     </div>
@@ -25,12 +25,11 @@
       <ng-template pTemplate>
         <ul style="list-style: none;">
           <li>
-            <button (click)="navigateToContainerOutlet('favorites')">Favorites</button>
+            <button [routerLink]="[{ outlets: { 'container-outlet': 'favorites' } }]">Favorites</button>
           </li>
           <li>
-            <button (click)="navigateToContainerOutlet('watchLater')">Watch later</button>
+            <button [routerLink]="[{ outlets: { 'container-outlet': 'watchLater' } }]">Watch later</button>
           </li>
-
         </ul>
 
       </ng-template>

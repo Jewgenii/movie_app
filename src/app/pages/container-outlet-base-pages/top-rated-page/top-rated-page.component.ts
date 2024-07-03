@@ -1,36 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { MovieService } from '../../../services/movie-service/movie.service';
-import { MovieModel } from '../../../models/movieModel';
-import { MovieNavigationService } from '../../../services/movie-navigation-service/movie-navigation.service';
 import { MovieCardComponent } from '../../../components/movie-card/movie-card.component';
+import { ContainerOutletBasePageComponent } from '../container-outlet-base-page/container-outlet-base-page.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-top-rated-page',
   standalone: true,
-  imports: [MovieCardComponent],
-  templateUrl: './top-rated-page.component.html',
-  styleUrl: './top-rated-page.component.scss'
+  imports: [MovieCardComponent, RouterModule],
+  templateUrl: '../container-outlet-base-page/container-outlet-base-page.component.html',
+  styleUrl: '../container-outlet-base-page/container-outlet-base-page.component.scss',
 })
-export class TopRatedComponent implements OnInit {
+export class TopRatedComponent extends ContainerOutletBasePageComponent implements OnInit {
 
-  constructor(private _movieService: MovieService,
-    private _movieNavigationService: MovieNavigationService
+  constructor(private _movieService: MovieService
   ) {
-
+    super();
   }
-
-  public movies: Array<MovieModel> = [];
 
   ngOnInit(): void {
-    this.movies = this._movieService.getTopRated();
-  }
-
-  openCard(id: number | undefined): void {
-    if (id == undefined) {
-      console.log('id is undefined');
-      return;
-    }
-
-    this._movieNavigationService.openCard(id);
+    this._movies = this._movieService.getTopRated();
   }
 }
