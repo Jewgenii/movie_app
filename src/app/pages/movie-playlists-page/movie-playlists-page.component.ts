@@ -8,6 +8,8 @@ import { ListboxModule } from 'primeng/listbox';
 import { SplitterModule } from 'primeng/splitter';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { ButtonModule } from 'primeng/button';
+import { HttpHeaders } from '@angular/common/http';
+import { MovieManagerService } from '../../services/movie-manager/movie-manager.service';
 
 
 @Component({
@@ -24,10 +26,13 @@ export class MoviePlayListsPageComponent implements OnInit {
 
   constructor(
     public route: ActivatedRoute,
-    private _router: Router) {
+    private _router: Router,
+    private _movieMangerService: MovieManagerService) {
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+
+    let popular = await this._movieMangerService.getPopular();
 
   }
 

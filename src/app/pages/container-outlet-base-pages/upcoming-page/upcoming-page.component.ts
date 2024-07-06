@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MovieService } from '../../../services/movie-service/movie.service';
+import { MockupMovieService } from '../../../services/mockup-movie-service/mockup-movie-service';
 import { MovieCardComponent } from '../../../components/movie-card/movie-card.component';
 import { ContainerOutletBasePageComponent } from '../container-outlet-base-page/container-outlet-base-page.component';
 import { RouterModule } from '@angular/router';
@@ -13,7 +13,7 @@ import { RouterModule } from '@angular/router';
 })
 export class UpcomingPageComponent extends ContainerOutletBasePageComponent implements OnInit {
 
-  constructor(private _movieService: MovieService
+  constructor(private _movieService: MockupMovieService
   ) {
     super();
   }

@@ -10,7 +10,7 @@ import { LocalizeImagePathPipe } from '../../pipes/localize-image-path-pipe.pipe
 import { Component, OnInit, numberAttribute } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MovieModel } from '../../models/movie-model';
-import { MovieService } from '../../services/movie-service/movie.service';
+import { MockupMovieService } from '../../services/mockup-movie-service/mockup-movie-service';
 
 
 @Component({
@@ -33,7 +33,7 @@ export class MovieCardPageComponent {
   public isInWatchLater: boolean = false;
   public isDetails: boolean = false;
 
-  constructor(private _route: ActivatedRoute, private _movieService: MovieService) {
+  constructor(private _route: ActivatedRoute, private _movieService: MockupMovieService) {
   }
 
 

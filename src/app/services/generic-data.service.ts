@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class GenericDataService<DataType> {
+export class GenericDataService {
 
   constructor(protected _httpClient: HttpClient) { }
 

@@ -1,81 +1,64 @@
 import { Injectable } from '@angular/core';
-import { MovieModel } from '../../models/movie-model';
-import { nowPlayingMovies, popularMovies, topRatedMovies, upcomingMovies } from '../../mock-data/mock-data';
-import { MovieInterface } from '../../interfaces/movie-interface';
+import { Observable } from 'rxjs';
+import { HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
+import { AccountDetails, TokenResponse, ValidateWithLogin } from '../../models/movie-service-models';
+import { HttpOptions } from '../../models/http-options';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MovieService {
 
-  private readonly _allMovies!: Array<MovieInterface>;
-  private _favorites!: Array<MovieInterface>;
-  private _watchLater!: Array<MovieInterface>;
+  private readonly _baseUrl: string = "https://api.themoviedb.org/3";
 
-  constructor() {
-    this._allMovies = popularMovies.concat(nowPlayingMovies).concat(topRatedMovies).concat(upcomingMovies);
-    this._favorites = new Array<MovieInterface>();
-    this._watchLater = new Array<MovieInterface>();
+  constructor(private _httpClient: HttpClient
+  ) {
   }
 
-  public getWatchLater(): Array<MovieInterface> {
-    return this._watchLater;
+  public getToken(api_key: string): Observable<TokenResponse> {
+    return this._httpClient.get<TokenResponse>(`${this._baseUrl}/authentication/token/new?api_key=${api_key}`);
   }
 
-  public getFavorites(): Array<MovieInterface> {
-    return this._favorites;
+
+  public validateWithLogin(api_key: string, loginModel: ValidateWithLogin): Observable<any> {
+    return this._httpClient.post<any>(`${this._baseUrl}/authentication/token/validate_with_login?api_key=${api_key}`, loginModel);
   }
 
-  public getMovieById(id: number): MovieInterface | null {
-    for (let movie of this._allMovies) {
-      if (movie.id === id) {
-        return movie;
-      }
-    }
-    return null;
+  public postSession(api_key: string, request_token: string, options: HttpOptions): Observable<any> {
+    return this._httpClient.post<any>(`${this._baseUrl}/authentication/session/new?api_key=${api_key}`,
+      { "request_token": request_token },
+      options);
   }
 
-  public addToFavorite(movie: MovieInterface): boolean {
-    if (!this._favorites.some(m => m.id == movie.id)) {
-      this._favorites.push(movie);
-      return true;
-    }
-
-    return false;
+  public getAccountInfo(options: HttpOptions): Observable<AccountDetails> {
+    return this._httpClient.get<AccountDetails>(`${this._baseUrl}/account/null`, options);
   }
 
-  public removeFromFavorite(id: number): boolean {
-    this._favorites = this._favorites.filter(e => e.id != id);
-    return true;
+  public getLists(accountId: string, options: HttpOptions): Observable<any> {
+    return this._httpClient.get<any>(`${this._baseUrl}/account/${accountId}/lists`, options);
   }
 
-  public addToWatchLater(movie: MovieInterface): boolean {
-    if (!this._watchLater.some(m => m.id == movie.id)) {
-      this._watchLater.push(movie);
-      return true;
-    }
-
-    return false;
+  public getFavorites(accountId: string, options: HttpOptions): Observable<any> {
+    return this._httpClient.get<any>(`${this._baseUrl}/account/${accountId}/favorite/movies`,
+      options);
   }
 
-  public removeFromWatchLater(id: number): boolean {
-    this._watchLater = this._watchLater.filter(e => e.id != id);
-    return true;
+  public getWatchList(accountId: string, options: HttpOptions): Observable<any> {
+    return this._httpClient.get<any>(`${this._baseUrl}/account/${accountId}/watchlist/movies`,
+      options);
   }
 
-  public getPopular(): Array<MovieInterface> {
-    return popularMovies as Array<MovieModel>;
+  public getPopular(options: HttpOptions): Observable<any> {
+    return this._httpClient.get<any>(`${this._baseUrl}/movie/popular`, options);
   }
 
-  public getNowPlaying(): Array<MovieInterface> {
-    return nowPlayingMovies as Array<MovieModel>;
+  public getUpcoming(options: HttpOptions): Observable<any> {
+    return this._httpClient.get<any>(`${this._baseUrl}/movie/upcoming`,
+      options);
   }
 
-  public getTopRated(): Array<MovieInterface> {
-    return topRatedMovies as Array<MovieModel>;
-  }
-
-  public getUpcoming(): Array<MovieInterface> {
-    return upcomingMovies as Array<MovieModel>;
+  public addToFavorite(id: string, options: HttpOptions): Observable<any> {
+    return this._httpClient.post<any>(`${this._baseUrl}/movie/upcoming`,
+      options);
   }
 }
