@@ -1,4 +1,4 @@
-interface ResponseBase {
+export interface ResponseBase {
   success: boolean;
   expires_at: Date;
 }

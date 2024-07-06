@@ -20,13 +20,10 @@ import { CredentialsManagerService } from './services/credentials-service/creden
 })
 export class AppComponent implements OnInit {
 
-  constructor(private primengConfig: PrimeNGConfig,
-    private _movieManagerService: MovieManagerService) { }
+  constructor(private primengConfig: PrimeNGConfig) { }
 
   ngOnInit(): void {
 
     this.primengConfig.ripple = true;
-
-    // this._movieManagerService.initialize();
   }
 }

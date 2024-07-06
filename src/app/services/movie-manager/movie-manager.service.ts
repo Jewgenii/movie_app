@@ -5,7 +5,7 @@ import { HttpHeaders } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { UserCredentials } from '../../models/user-credentials';
 import { CredentialsManagerService } from '../credentials-service/credentials-manager.service';
-import { MovieListModel, MovieListWithDatesModel, MovieModel } from '../../models/movie-list-model';
+import { MovieDetails, MovieListModel, MovieListWithDatesModel, MovieModel } from '../../models/movie-list-model';
 
 
 @Injectable({
@@ -17,9 +17,7 @@ export class MovieManagerService {
 
   constructor(private _movieService: MovieService,
     private _credentialsManager: CredentialsManagerService
-  )
-  {
-
+  ) {
     this._userCredentials = this._credentialsManager.getUserCredentials();
 
     this._options = {
@@ -27,12 +25,6 @@ export class MovieManagerService {
         "Authorization": `Bearer ${this._userCredentials.apiAuthToken}`
       })
     };
-
-  }
-
-  initialize(): void {
-
-
 
   }
 
@@ -63,6 +55,12 @@ export class MovieManagerService {
     const movieList = await firstValueFrom(query);
 
     return movieList.results;
+  }
+
+  public async getMovieDetails(id: number): Promise<MovieModel> {
+    let query = this._movieService.getMovieDetails<MovieDetails>(id, this._options);
+    let movie = await firstValueFrom(query);
+    return movie as unknown as MovieModel;
   }
 
 

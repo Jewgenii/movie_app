@@ -43,19 +43,15 @@ export class MovieService {
       options);
   }
 
-  public getWatchList(accountId: string, options: HttpOptions): Observable<any> {
-    return this._httpClient.get<any>(`${this._baseUrl}/account/${accountId}/watchlist/movies`,
-      options);
-  }
-
-
-
   public addToFavorite(id: string, options: HttpOptions): Observable<any> {
     return this._httpClient.post<any>(`${this._baseUrl}/movie/upcoming`,
       options);
   }
 
 
+  public getWatchList(accountId: string, options: HttpOptions): Observable<any> {
+    return this._httpClient.get<any>(`${this._baseUrl}/account/${accountId}/watchlist/movies`, options);
+  }
 
   public getNowPlaying<Type>(options: HttpOptions): Observable<Type> {
     return this._httpClient.get<Type>(`${this._baseUrl}/movie/now_playing`, options);
@@ -70,8 +66,10 @@ export class MovieService {
   }
 
   public getUpcoming<Type>(options: HttpOptions): Observable<Type> {
-    return this._httpClient.get<Type>(`${this._baseUrl}/movie/upcoming`,
-      options);
+    return this._httpClient.get<Type>(`${this._baseUrl}/movie/upcoming`, options);
   }
 
+  public getMovieDetails<Type>(id: number, options: HttpOptions): Observable<Type> {
+    return this._httpClient.get<Type>(`${this._baseUrl}/movie/${id}`, options);
+  }
 }

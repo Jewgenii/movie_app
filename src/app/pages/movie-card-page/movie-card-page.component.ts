@@ -11,6 +11,8 @@ import { Component, OnInit, numberAttribute } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MockupMovieService } from '../../services/mockup-movie-service/mockup-movie-service';
 import { MovieModel } from '../../models/movie-list-model';
+import { MovieManagerService } from '../../services/movie-manager/movie-manager.service';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -33,17 +35,17 @@ export class MovieCardPageComponent {
   public isInWatchLater: boolean = false;
   public isDetails: boolean = false;
 
-  constructor(private _route: ActivatedRoute, private _movieService: MockupMovieService) {
+  constructor(private _route: ActivatedRoute, private _movieManagerService: MovieManagerService) {
   }
 
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
 
-    this._route.paramMap.subscribe(data => {
+    this._route.paramMap.subscribe(async data => {
 
       let id = Number(data.get('id'));
 
-      let tmpMovie = this._movieService.getMovieById(id);
+      let tmpMovie = await this._movieManagerService.getMovieDetails(id);
       if (!tmpMovie) {
         console.log('movie is not found');
         return;
@@ -51,40 +53,40 @@ export class MovieCardPageComponent {
 
       this.movieData = tmpMovie;
 
-      this.isInFavorites = this._movieService.getFavorites().some(e => e.id === this.movieData.id);
-      this.isInWatchLater = this._movieService.getWatchLater().some(e => e.id === this.movieData.id);
+      // this.isInFavorites = this._movieService.getFavorites().some(e => e.id === this.movieData.id);
+      // this.isInWatchLater = this._movieService.getWatchLater().some(e => e.id === this.movieData.id);
     });
   }
 
   public addToFavorites(): void {
-    let isAdded = this._movieService.addToFavorite(this.movieData);
-    if (isAdded) {
-      this.isInFavorites = true;
-      console.log(this.movieData.title + ' addToFavorites');
-    }
+    // let isAdded = this._movieService.addToFavorite(this.movieData);
+    // if (isAdded) {
+    //   this.isInFavorites = true;
+    //   console.log(this.movieData.title + ' addToFavorites');
+    // }
   }
 
   public removeFromFavorites(): void {
-    let isRemoved = this._movieService.removeFromFavorite(this.movieData.id);
-    if (isRemoved) {
-      this.isInFavorites = false;
-      console.log(this.movieData.title + ' removeFromFavorites');
-    }
+    // let isRemoved = this._movieService.removeFromFavorite(this.movieData.id);
+    // if (isRemoved) {
+    //   this.isInFavorites = false;
+    //   console.log(this.movieData.title + ' removeFromFavorites');
+    // }
   }
 
   public addToWatchLater(): void {
-    let isAdded = this._movieService.addToWatchLater(this.movieData)
-    if (isAdded) {
-      this.isInWatchLater = true;
-      console.log(this.movieData.title + ' addToWatchLater');
-    }
+    // let isAdded = this._movieService.addToWatchLater(this.movieData)
+    // if (isAdded) {
+    //   this.isInWatchLater = true;
+    //   console.log(this.movieData.title + ' addToWatchLater');
+    // }
   }
 
   public removeFromWatchLater(): void {
-    let isRemoved = this._movieService.removeFromWatchLater(this.movieData.id);
-    if (isRemoved) {
-      this.isInWatchLater = false;
-      console.log(this.movieData.title + ' removeFromWatchLater');
-    }
+    // let isRemoved = this._movieService.removeFromWatchLater(this.movieData.id);
+    // if (isRemoved) {
+    //   this.isInWatchLater = false;
+    //   console.log(this.movieData.title + ' removeFromWatchLater');
+    // }
   }
 }
