@@ -1,4 +1,5 @@
-import { MovieModel } from "../models/movie-model"
+import { MovieModel } from "../models/movie-list-model"
+
 
 export const nowPlayingMovies: Array<MovieModel> = [
   {

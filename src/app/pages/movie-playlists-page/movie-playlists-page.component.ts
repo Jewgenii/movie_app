@@ -35,8 +35,4 @@ export class MoviePlayListsPageComponent implements OnInit {
     let popular = await this._movieMangerService.getPopular();
 
   }
-
-  navigateToContainerOutlet(routeName: string) {
-    this._router.navigate([{ outlets: { 'container-outlet': routeName }, }], { relativeTo: this.route });
-  }
 }

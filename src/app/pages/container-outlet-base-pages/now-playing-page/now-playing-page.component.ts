@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { MockupMovieService } from '../../../services/mockup-movie-service/mockup-movie-service';
 import { MovieCardComponent } from '../../../components/movie-card/movie-card.component';
 import { ContainerOutletBasePageComponent } from '../container-outlet-base-page/container-outlet-base-page.component';
 import { RouterModule } from '@angular/router';  // Import RouterModule for [routerLink]
+import { MovieManagerService } from '../../../services/movie-manager/movie-manager.service';
 
 @Component({
   selector: 'app-now-playing-page',
@@ -13,13 +13,13 @@ import { RouterModule } from '@angular/router';  // Import RouterModule for [rou
 })
 export class NowPlayingPageComponent extends ContainerOutletBasePageComponent implements OnInit {
 
-  constructor(private _movieService: MockupMovieService
+  constructor(private _movieManagerService: MovieManagerService
   ) {
     super();
   }
 
-  ngOnInit(): void {
-    this._movies = this._movieService.getNowPlaying();
+  async ngOnInit(): Promise<void> {
+    this._movies = await this._movieManagerService.getNowPlaying();
   }
 
 }

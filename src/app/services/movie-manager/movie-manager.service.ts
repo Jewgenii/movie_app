@@ -5,6 +5,7 @@ import { HttpHeaders } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { UserCredentials } from '../../models/user-credentials';
 import { CredentialsManagerService } from '../credentials-service/credentials-manager.service';
+import { MovieListModel, MovieListWithDatesModel, MovieModel } from '../../models/movie-list-model';
 
 
 @Injectable({
@@ -16,10 +17,8 @@ export class MovieManagerService {
 
   constructor(private _movieService: MovieService,
     private _credentialsManager: CredentialsManagerService
-  ) {
-  }
-
-  initialize(): void {
+  )
+  {
 
     this._userCredentials = this._credentialsManager.getUserCredentials();
 
@@ -31,10 +30,42 @@ export class MovieManagerService {
 
   }
 
-  public getPopular(): Promise<any> {
-    let res = this._movieService.getPopular(this._options);
-    return firstValueFrom(res);
+  initialize(): void {
+
+
+
   }
+
+  public async getPopular(): Promise<MovieModel[]> {
+    let query = this._movieService.getPopular<MovieListModel>(this._options);
+    const movieList = await firstValueFrom(query);
+
+    return movieList.results;
+  }
+
+
+  public async getNowPlaying(): Promise<MovieModel[]> {
+    let query = this._movieService.getNowPlaying<MovieListWithDatesModel>(this._options);
+    const movieList = await firstValueFrom(query);
+
+    return movieList.results;
+  }
+
+  public async getTopRated(): Promise<MovieModel[]> {
+    let query = this._movieService.getTopRated<MovieListModel>(this._options);
+    const movieList = await firstValueFrom(query);
+
+    return movieList.results;
+  }
+
+  public async getUpcoming(): Promise<MovieModel[]> {
+    let query = this._movieService.getUpcoming<MovieListWithDatesModel>(this._options);
+    const movieList = await firstValueFrom(query);
+
+    return movieList.results;
+  }
+
+
 
   tmp() {
     // this._movieService.getPopular().subscribe(res => {

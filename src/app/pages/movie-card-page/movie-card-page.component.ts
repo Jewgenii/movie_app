@@ -9,8 +9,8 @@ import { LocalizeImagePathPipe } from '../../pipes/localize-image-path-pipe.pipe
 
 import { Component, OnInit, numberAttribute } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MovieModel } from '../../models/movie-model';
 import { MockupMovieService } from '../../services/mockup-movie-service/mockup-movie-service';
+import { MovieModel } from '../../models/movie-list-model';
 
 
 @Component({

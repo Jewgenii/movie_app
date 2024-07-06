@@ -27,6 +27,6 @@ export class AppComponent implements OnInit {
 
     this.primengConfig.ripple = true;
 
-    this._movieManagerService.initialize();
+    // this._movieManagerService.initialize();
   }
 }

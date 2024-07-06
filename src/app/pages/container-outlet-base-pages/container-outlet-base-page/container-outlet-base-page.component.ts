@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { MovieModel } from '../../../models/movie-model';
 import { MovieCardComponent } from '../../../components/movie-card/movie-card.component';
 import { RouterModule } from '@angular/router';  // Import RouterModule for [routerLink]
+import { MovieModel } from '../../../models/movie-list-model';
 
 @Component({
   selector: 'app-container-outlet-base-page',
