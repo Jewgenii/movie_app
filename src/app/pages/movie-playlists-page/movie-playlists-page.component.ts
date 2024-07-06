@@ -32,7 +32,5 @@ export class MoviePlayListsPageComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
 
-    let popular = await this._movieMangerService.getPopular();
-
   }
 }
