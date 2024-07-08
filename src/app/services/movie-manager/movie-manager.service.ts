@@ -18,12 +18,13 @@ export class MovieManagerService {
   constructor(private _movieService: MovieService,
     private _credentialsManager: CredentialsManagerService
   ) {
+
     this._userCredentials = this._credentialsManager.getUserCredentials();
 
     this._options = {
       headers: new HttpHeaders({
-        "x-auth-interceptor": ``,
-        // "Authorization": `Bearer ${this._userCredentials.apiAuthToken}`
+        // "x-auth-interceptor": ``,
+        "Authorization": `Bearer ${this._userCredentials.apiAuthToken}`
       })
     };
   }

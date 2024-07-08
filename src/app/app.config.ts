@@ -10,6 +10,6 @@ import { HeadersAdderService } from './services/http-interceptors/headers-adder.
 export const appConfig: ApplicationConfig = {
   providers: [provideRouter(routes),
   provideHttpClient(withInterceptorsFromDi()),
-  { provide: HTTP_INTERCEPTORS, useClass: HeadersAdderService, multi: true },
+  // { provide: HTTP_INTERCEPTORS, useClass: HeadersAdderService, multi: true },
   importProvidersFrom(BrowserAnimationsModule)]
 };
