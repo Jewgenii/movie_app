@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MockupMovieService } from '../../../services/mockup-movie-service/mockup-movie-service';
 import { MovieCardComponent } from '../../../components/movie-card/movie-card.component';
 import { ContainerOutletBasePageComponent } from '../container-outlet-base-page/container-outlet-base-page.component';
 import { RouterModule } from '@angular/router';

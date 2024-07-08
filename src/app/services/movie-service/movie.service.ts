@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
-import { AccountDetails, TokenResponse, ValidateWithLogin } from '../../models/movie-service-models';
+import { AccountDetails, CreateSessionResult, TokenResponse, ValidateWithLogin, ValidateWithLoginResult } from '../../models/movie-service-models';
 import { HttpOptions } from '../../models/http-options';
 
 @Injectable({
@@ -20,17 +20,17 @@ export class MovieService {
   }
 
 
-  public validateWithLogin(api_key: string, loginModel: ValidateWithLogin): Observable<any> {
+  public validateWithLogin(api_key: string, loginModel: ValidateWithLogin): Observable<ValidateWithLoginResult> {
     return this._httpClient.post<any>(`${this._baseUrl}/authentication/token/validate_with_login?api_key=${api_key}`, loginModel);
   }
 
-  public postSession(api_key: string, request_token: string, options: HttpOptions): Observable<any> {
+  public postSession(api_key: string, request_token: string, options: HttpOptions): Observable<CreateSessionResult> {
     return this._httpClient.post<any>(`${this._baseUrl}/authentication/session/new?api_key=${api_key}`,
       { "request_token": request_token },
       options);
   }
 
-  public getAccountInfo(options: HttpOptions): Observable<AccountDetails> {
+  public getAccountInfo(options?: HttpOptions): Observable<AccountDetails> {
     return this._httpClient.get<AccountDetails>(`${this._baseUrl}/account/null`, options);
   }
 
@@ -38,10 +38,7 @@ export class MovieService {
     return this._httpClient.get<any>(`${this._baseUrl}/account/${accountId}/lists`, options);
   }
 
-  public getFavorites(accountId: string, options: HttpOptions): Observable<any> {
-    return this._httpClient.get<any>(`${this._baseUrl}/account/${accountId}/favorite/movies`,
-      options);
-  }
+
 
   public addToFavorite(id: string, options: HttpOptions): Observable<any> {
     return this._httpClient.post<any>(`${this._baseUrl}/movie/upcoming`,
@@ -49,8 +46,8 @@ export class MovieService {
   }
 
 
-  public getWatchList(accountId: string, options: HttpOptions): Observable<any> {
-    return this._httpClient.get<any>(`${this._baseUrl}/account/${accountId}/watchlist/movies`, options);
+  public getWatchList<Type>(accountId: number, options: HttpOptions): Observable<Type> {
+    return this._httpClient.get<Type>(`${this._baseUrl}/account/${accountId}/watchlist/movies`, options);
   }
 
   public getNowPlaying<Type>(options: HttpOptions): Observable<Type> {
@@ -71,5 +68,10 @@ export class MovieService {
 
   public getMovieDetails<Type>(id: number, options: HttpOptions): Observable<Type> {
     return this._httpClient.get<Type>(`${this._baseUrl}/movie/${id}`, options);
+  }
+
+  public getFavorites<Type>(accountId: number, options: HttpOptions): Observable<Type> {
+    return this._httpClient.get<Type>(`${this._baseUrl}/account/${accountId}/favorite/movies`,
+      options);
   }
 }

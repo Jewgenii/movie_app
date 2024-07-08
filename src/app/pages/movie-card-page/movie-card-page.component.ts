@@ -7,9 +7,8 @@ import { RatingModule } from 'primeng/rating';
 import { ShortOverviewPipe } from '../../pipes/short-overview-pipe.pipe';
 import { LocalizeImagePathPipe } from '../../pipes/localize-image-path-pipe.pipe';
 
-import { Component, OnInit, numberAttribute } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MockupMovieService } from '../../services/mockup-movie-service/mockup-movie-service';
 import { MovieModel } from '../../models/movie-list-model';
 import { MovieManagerService } from '../../services/movie-manager/movie-manager.service';
 import { Observable } from 'rxjs';

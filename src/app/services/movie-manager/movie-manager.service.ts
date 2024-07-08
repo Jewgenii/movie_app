@@ -6,6 +6,7 @@ import { firstValueFrom } from 'rxjs';
 import { UserCredentials } from '../../models/user-credentials';
 import { CredentialsManagerService } from '../credentials-service/credentials-manager.service';
 import { MovieDetails, MovieListModel, MovieListWithDatesModel, MovieModel } from '../../models/movie-list-model';
+import { AccountDetails, CreateSessionResult, TokenResponse, ValidateWithLogin, ValidateWithLoginResult } from '../../models/movie-service-models';
 
 
 @Injectable({
@@ -23,7 +24,6 @@ export class MovieManagerService {
 
     this._options = {
       headers: new HttpHeaders({
-        // "x-auth-interceptor": ``,
         "Authorization": `Bearer ${this._userCredentials.apiAuthToken}`
       })
     };
@@ -64,24 +64,42 @@ export class MovieManagerService {
     return movie as unknown as MovieModel;
   }
 
+  public async getFavorites(): Promise<MovieModel[]> {
+    let accountDetails = await this.getAccountDetails();
+
+    let query = this._movieService.getFavorites<MovieListModel>(accountDetails.id, this._options);
+    let movie = await firstValueFrom(query);
+    return movie.results;
+  }
 
 
-  tmp() {
-    // this._movieService.getPopular().subscribe(res => {
+  public async getWatchList(): Promise<MovieModel[]> {
+    let accountDetails = await this.getAccountDetails();
 
-    //   console.log(res)
-    // });
+    let query = this._movieService.getWatchList<MovieListModel>(accountDetails.id, this._options);
+    let movie = await firstValueFrom(query);
+    return movie.results;
+  }
 
 
-    // let token = await this._movieService.getToken(this._api_key);
+  private async getAccountDetails(): Promise<AccountDetails> {
+    const res: AccountDetails = await firstValueFrom(this._movieService.getAccountInfo(this._options));
+    return res;
+  }
 
-    // let loginModel: ValidateWithLogin = {
-    //   "username": this._userName,
-    //   "password": this._userPass,
-    //   "request_token": token.request_token
-    // }
 
-    // let validResult = await this._movieService.validateWithLogin(this._api_key, loginModel);
-    // let session = await this._movieService.postSession(this._api_key, token.request_token);
+  private async getSession(): Promise<void> {
+
+    const tokenResult: TokenResponse = await firstValueFrom(this._movieService.getToken(this._userCredentials.apiKey));
+
+    const login: ValidateWithLogin = {
+      password: this._userCredentials.password,
+      username: this._userCredentials.userName,
+      request_token: tokenResult.request_token
+    };
+
+    const validResult: ValidateWithLoginResult = await firstValueFrom(this._movieService.validateWithLogin(this._userCredentials.apiKey, login));
+
+    const session: CreateSessionResult = await firstValueFrom(this._movieService.postSession(this._userCredentials.apiKey, tokenResult.request_token, this._options));
   }
 }

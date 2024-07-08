@@ -39,3 +39,24 @@ export interface Tmdb {
 export interface Gravatar {
   hash: string;
 }
+
+
+export interface ValidateWithLoginResult {
+  success: boolean;
+  expires_at: string;
+  request_token: string;
+}
+
+export interface CreateSessionResult {
+  success: boolean;
+  session_id: string;
+  status_code: number,
+  status_message: string;
+}
+
+
+export interface PostMovieToList {
+  media_id: number;
+  media_type: string;
+  favorite: boolean;
+}
