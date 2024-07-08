@@ -4,8 +4,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { importProvidersFrom } from '@angular/core';
 
 import { routes } from './app.routes';
-import { provideHttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
+import { HeadersAdderService } from './services/http-interceptors/headers-adder.service';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes), provideHttpClient(), importProvidersFrom(BrowserAnimationsModule)]
+  providers: [provideRouter(routes),
+  provideHttpClient(withInterceptorsFromDi()),
+  { provide: HTTP_INTERCEPTORS, useClass: HeadersAdderService, multi: true },
+  importProvidersFrom(BrowserAnimationsModule)]
 };

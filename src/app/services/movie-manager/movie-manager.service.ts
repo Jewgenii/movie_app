@@ -22,10 +22,10 @@ export class MovieManagerService {
 
     this._options = {
       headers: new HttpHeaders({
-        "Authorization": `Bearer ${this._userCredentials.apiAuthToken}`
+        "x-auth-interceptor": ``,
+        // "Authorization": `Bearer ${this._userCredentials.apiAuthToken}`
       })
     };
-
   }
 
   public async getPopular(): Promise<MovieModel[]> {

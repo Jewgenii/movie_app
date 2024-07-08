@@ -1,5 +1,5 @@
 
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { PrimeNGConfig } from 'primeng/api';
@@ -9,12 +9,24 @@ import { MovieService } from './services/movie-service/movie.service';
 import { LocalStorageService } from './services/local-storage-service/local-storage.service';
 import { MovieManagerService } from './services/movie-manager/movie-manager.service';
 import { CredentialsManagerService } from './services/credentials-service/credentials-manager.service';
+import { HeadersAdderService } from './services/http-interceptors/headers-adder.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [HttpClientModule, RouterOutlet, SidebarModule],
-  providers: [CredentialsManagerService, LocalStorageService, MockupMovieService, MovieService, MovieManagerService],
+  imports: [
+    HttpClientModule,
+    RouterOutlet,
+    SidebarModule
+  ],
+  providers: [
+    LocalStorageService,
+    CredentialsManagerService,
+    MovieService,
+    MovieManagerService,
+   
+    MockupMovieService
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
