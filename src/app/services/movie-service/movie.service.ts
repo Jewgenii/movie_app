@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
-import { AccountDetails, CreateSessionResult, TokenResponse, ValidateWithLogin, ValidateWithLoginResult } from '../../models/movie-service-models';
+import { AccountDetails, CreateSessionResult, TokenResult, ValidateWithLogin, ValidateWithLoginResult } from '../../models/movie-service-models';
 import { HttpOptions } from '../../models/http-options';
 
 @Injectable({
@@ -15,8 +15,8 @@ export class MovieService {
 
   }
 
-  public getToken(options: HttpOptions): Observable<TokenResponse> {
-    return this._httpClient.get<TokenResponse>(`${this._baseUrl}/authentication/token/new`, options);
+  public getToken(options: HttpOptions): Observable<TokenResult> {
+    return this._httpClient.get<TokenResult>(`${this._baseUrl}/authentication/token/new`, options);
   }
 
 

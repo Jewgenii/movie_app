@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { MovieService } from '../movie-service/movie.service';
 import { HttpHeaders } from '@angular/common/http';
 
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, map } from 'rxjs';
 import { UserCredentials } from '../../models/user-credentials';
 import { CredentialsManagerService } from '../credentials-service/credentials-manager.service';
 import { MovieDetails, MovieListModel, MovieListWithDatesModel, MovieModel } from '../../models/movie-list-model';
-import { AccountDetails, CreateSessionResult, TokenResponse, ValidateWithLogin, ValidateWithLoginResult } from '../../models/movie-service-models';
+import { AccountDetails, CreateSessionResult, TokenResult, ValidateWithLogin, ValidateWithLoginResult } from '../../models/movie-service-models';
+import { UnaryOperator } from '@angular/compiler';
 
 
 @Injectable({
@@ -16,7 +17,7 @@ export class MovieManagerService {
   private _options: any;
   private _userCredentials!: UserCredentials;
 
-  private _sessionId!: string;
+  private _currentSessionId: string = "";
 
   constructor(private _movieService: MovieService,
     private _credentialsManager: CredentialsManagerService
@@ -62,9 +63,11 @@ export class MovieManagerService {
 
   public async getMovieDetails(id: number): Promise<MovieModel> {
     let query = this._movieService.getMovieDetails<MovieDetails>(id, this._options);
-    let movie = await firstValueFrom(query);
+    let movies = await firstValueFrom(query.pipe(map(res => {
+      return res as unknown as MovieModel;
+    })));
 
-    return movie as unknown as MovieModel;
+    return movies;
   }
 
   public async getFavorites(): Promise<MovieModel[]> {
@@ -90,10 +93,9 @@ export class MovieManagerService {
     return res;
   }
 
-
   public async startSession(): Promise<void> {
 
-    const tokenResult: TokenResponse = await firstValueFrom(this._movieService.getToken(this._options));
+    const tokenResult: TokenResult = await firstValueFrom(this._movieService.getToken(this._options));
 
     const login: ValidateWithLogin = {
       password: this._userCredentials.password,
@@ -107,6 +109,6 @@ export class MovieManagerService {
       throw new Error(validResult.status_message);
 
     const session = await firstValueFrom(this._movieService.postSession(tokenResult.request_token, this._options));
-    this._sessionId = session.session_id;
+    this._currentSessionId = session.session_id;
   }
 }

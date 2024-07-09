@@ -8,11 +8,11 @@ export interface TokenResultBase extends ErrorResult {
   expires_at: Date;
 }
 
-export interface TokenResponse extends TokenResultBase {
+export interface TokenResult extends TokenResultBase {
   request_token: string;
 }
 
-export interface SessionResponse extends TokenResultBase {
+export interface SessionResult extends TokenResultBase {
   guest_session_id: string;
 }
 
