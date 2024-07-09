@@ -16,6 +16,8 @@ export class MovieManagerService {
   private _options: any;
   private _userCredentials!: UserCredentials;
 
+  private _sessionId!: string;
+
   constructor(private _movieService: MovieService,
     private _credentialsManager: CredentialsManagerService
   ) {
@@ -29,16 +31,16 @@ export class MovieManagerService {
     };
   }
 
-  public async getPopular(): Promise<MovieModel[]> {
-    let query = this._movieService.getPopular<MovieListModel>(this._options);
+
+  public async getNowPlaying(): Promise<MovieModel[]> {
+    let query = this._movieService.getNowPlaying<MovieListWithDatesModel>(this._options);
     const movieList = await firstValueFrom(query);
 
     return movieList.results;
   }
 
-
-  public async getNowPlaying(): Promise<MovieModel[]> {
-    let query = this._movieService.getNowPlaying<MovieListWithDatesModel>(this._options);
+  public async getPopular(): Promise<MovieModel[]> {
+    let query = this._movieService.getPopular<MovieListModel>(this._options);
     const movieList = await firstValueFrom(query);
 
     return movieList.results;
@@ -61,6 +63,7 @@ export class MovieManagerService {
   public async getMovieDetails(id: number): Promise<MovieModel> {
     let query = this._movieService.getMovieDetails<MovieDetails>(id, this._options);
     let movie = await firstValueFrom(query);
+
     return movie as unknown as MovieModel;
   }
 
@@ -88,7 +91,7 @@ export class MovieManagerService {
   }
 
 
-  private async getSession(): Promise<void> {
+  public async startSession(): Promise<void> {
 
     const tokenResult: TokenResponse = await firstValueFrom(this._movieService.getToken(this._userCredentials.apiKey));
 
@@ -100,6 +103,10 @@ export class MovieManagerService {
 
     const validResult: ValidateWithLoginResult = await firstValueFrom(this._movieService.validateWithLogin(this._userCredentials.apiKey, login));
 
-    const session: CreateSessionResult = await firstValueFrom(this._movieService.postSession(this._userCredentials.apiKey, tokenResult.request_token, this._options));
+    if (!validResult.success)
+      throw new Error(validResult.status_message);
+
+    const session = await firstValueFrom(this._movieService.postSession(this._userCredentials.apiKey, tokenResult.request_token, this._options));
+    this._sessionId = session.session_id;
   }
 }

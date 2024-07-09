@@ -1,14 +1,23 @@
-export interface ResponseBase {
+export interface ErrorResult {
+  status_code: string;
+  status_message: string;
   success: boolean;
+}
+
+export interface TokenResultBase extends ErrorResult {
   expires_at: Date;
 }
 
-export interface TokenResponse extends ResponseBase {
+export interface TokenResponse extends TokenResultBase {
   request_token: string;
 }
 
-export interface SessionResponse extends ResponseBase {
+export interface SessionResponse extends TokenResultBase {
   guest_session_id: string;
+}
+
+export interface CreateSessionResult extends ErrorResult {
+  session_id: string;
 }
 
 export interface ValidateWithLogin {
@@ -40,20 +49,10 @@ export interface Gravatar {
   hash: string;
 }
 
-
-export interface ValidateWithLoginResult {
-  success: boolean;
+export interface ValidateWithLoginResult extends ErrorResult {
   expires_at: string;
   request_token: string;
 }
-
-export interface CreateSessionResult {
-  success: boolean;
-  session_id: string;
-  status_code: number,
-  status_message: string;
-}
-
 
 export interface PostMovieToList {
   media_id: number;

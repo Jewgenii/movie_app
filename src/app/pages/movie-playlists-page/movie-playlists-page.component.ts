@@ -31,8 +31,6 @@ export class MoviePlayListsPageComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-
-
-    // let res = await this._movieMangerService.getSession();
+    await this._movieMangerService.startSession();
   }
 }
