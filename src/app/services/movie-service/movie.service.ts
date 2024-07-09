@@ -15,17 +15,17 @@ export class MovieService {
 
   }
 
-  public getToken(api_key: string): Observable<TokenResponse> {
-    return this._httpClient.get<TokenResponse>(`${this._baseUrl}/authentication/token/new?api_key=${api_key}`);
+  public getToken(options: HttpOptions): Observable<TokenResponse> {
+    return this._httpClient.get<TokenResponse>(`${this._baseUrl}/authentication/token/new`, options);
   }
 
 
-  public validateWithLogin(api_key: string, loginModel: ValidateWithLogin): Observable<ValidateWithLoginResult> {
-    return this._httpClient.post<ValidateWithLoginResult>(`${this._baseUrl}/authentication/token/validate_with_login?api_key=${api_key}`, loginModel);
+  public validateWithLogin(loginModel: ValidateWithLogin, options: HttpOptions): Observable<ValidateWithLoginResult> {
+    return this._httpClient.post<ValidateWithLoginResult>(`${this._baseUrl}/authentication/token/validate_with_login`, loginModel, options);
   }
 
-  public postSession(api_key: string, request_token: string, options: HttpOptions): Observable<CreateSessionResult> {
-    return this._httpClient.post<CreateSessionResult>(`${this._baseUrl}/authentication/session/new?api_key=${api_key}`,
+  public postSession(request_token: string, options: HttpOptions): Observable<CreateSessionResult> {
+    return this._httpClient.post<CreateSessionResult>(`${this._baseUrl}/authentication/session/new`,
       { "request_token": request_token },
       options);
   }

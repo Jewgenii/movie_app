@@ -93,7 +93,7 @@ export class MovieManagerService {
 
   public async startSession(): Promise<void> {
 
-    const tokenResult: TokenResponse = await firstValueFrom(this._movieService.getToken(this._userCredentials.apiKey));
+    const tokenResult: TokenResponse = await firstValueFrom(this._movieService.getToken(this._options));
 
     const login: ValidateWithLogin = {
       password: this._userCredentials.password,
@@ -101,12 +101,12 @@ export class MovieManagerService {
       request_token: tokenResult.request_token
     };
 
-    const validResult: ValidateWithLoginResult = await firstValueFrom(this._movieService.validateWithLogin(this._userCredentials.apiKey, login));
+    const validResult: ValidateWithLoginResult = await firstValueFrom(this._movieService.validateWithLogin(login, this._options));
 
     if (!validResult.success)
       throw new Error(validResult.status_message);
 
-    const session = await firstValueFrom(this._movieService.postSession(this._userCredentials.apiKey, tokenResult.request_token, this._options));
+    const session = await firstValueFrom(this._movieService.postSession(tokenResult.request_token, this._options));
     this._sessionId = session.session_id;
   }
 }
