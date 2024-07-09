@@ -35,9 +35,9 @@ export class MovieManagerService {
 
   public async getNowPlaying(): Promise<MovieModel[]> {
     let query = this._movieService.getNowPlaying<MovieListWithDatesModel>(this._options);
-    const movieList = await firstValueFrom(query);
+    const movies = await firstValueFrom(query.pipe(map(res => res.results)));
 
-    return movieList.results;
+    return movies;
   }
 
   public async getPopular(): Promise<MovieModel[]> {
@@ -86,7 +86,6 @@ export class MovieManagerService {
     let movie = await firstValueFrom(query);
     return movie.results;
   }
-
 
   private async getAccountDetails(): Promise<AccountDetails> {
     const res: AccountDetails = await firstValueFrom(this._movieService.getAccountInfo(this._options));
