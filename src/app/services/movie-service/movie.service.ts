@@ -15,61 +15,58 @@ export class MovieService {
 
   }
 
-  public getToken(options: HttpOptions): Observable<TokenResult> {
-    return this._httpClient.get<TokenResult>(`${this._baseUrl}/authentication/token/new`, options);
+  public getToken(): Observable<TokenResult> {
+    return this._httpClient.get<TokenResult>(`${this._baseUrl}/authentication/token/new`);
   }
 
 
-  public validateWithLogin(loginModel: ValidateWithLogin, options: HttpOptions): Observable<ValidateWithLoginResult> {
-    return this._httpClient.post<ValidateWithLoginResult>(`${this._baseUrl}/authentication/token/validate_with_login`, loginModel, options);
+  public validateWithLogin(loginModel: ValidateWithLogin): Observable<ValidateWithLoginResult> {
+    return this._httpClient.post<ValidateWithLoginResult>(`${this._baseUrl}/authentication/token/validate_with_login`, loginModel);
   }
 
-  public postSession(request_token: string, options: HttpOptions): Observable<CreateSessionResult> {
+  public postSession(request_token: string): Observable<CreateSessionResult> {
     return this._httpClient.post<CreateSessionResult>(`${this._baseUrl}/authentication/session/new`,
-      { "request_token": request_token },
-      options);
+      { "request_token": request_token });
   }
 
-  public getAccountInfo(options?: HttpOptions): Observable<AccountDetails> {
-    return this._httpClient.get<AccountDetails>(`${this._baseUrl}/account/null`, options)
+  public getAccountInfo(): Observable<AccountDetails> {
+    return this._httpClient.get<AccountDetails>(`${this._baseUrl}/account/null`)
       .pipe();
   }
 
-  public getLists(accountId: string, options: HttpOptions): Observable<any> {
-    return this._httpClient.get<any>(`${this._baseUrl}/account/${accountId}/lists`, options);
+  public getLists(accountId: string): Observable<any> {
+    return this._httpClient.get<any>(`${this._baseUrl}/account/${accountId}/lists`);
   }
 
-  public addToFavorite(id: string, options: HttpOptions): Observable<any> {
-    return this._httpClient.post<any>(`${this._baseUrl}/movie/upcoming`,
-      options);
+  public addToFavorite(id: string): Observable<any> {
+    return this._httpClient.post<any>(`${this._baseUrl}/movie/upcoming`, {});
   }
 
-  public getWatchList<Type>(accountId: number, options: HttpOptions): Observable<Type> {
-    return this._httpClient.get<Type>(`${this._baseUrl}/account/${accountId}/watchlist/movies`, options);
+  public getWatchList<Type>(accountId: number): Observable<Type> {
+    return this._httpClient.get<Type>(`${this._baseUrl}/account/${accountId}/watchlist/movies`);
   }
 
-  public getNowPlaying<Type>(options: HttpOptions): Observable<Type> {
-    return this._httpClient.get<Type>(`${this._baseUrl}/movie/now_playing`, options);
+  public getNowPlaying<Type>(): Observable<Type> {
+    return this._httpClient.get<Type>(`${this._baseUrl}/movie/now_playing`);
   }
 
-  public getPopular<Type>(options: HttpOptions): Observable<Type> {
-    return this._httpClient.get<Type>(`${this._baseUrl}/movie/popular`, options);
+  public getPopular<Type>(): Observable<Type> {
+    return this._httpClient.get<Type>(`${this._baseUrl}/movie/popular`);
   }
 
-  public getTopRated<Type>(options: HttpOptions): Observable<Type> {
-    return this._httpClient.get<Type>(`${this._baseUrl}/movie/top_rated`, options);
+  public getTopRated<Type>(): Observable<Type> {
+    return this._httpClient.get<Type>(`${this._baseUrl}/movie/top_rated`);
   }
 
-  public getUpcoming<Type>(options: HttpOptions): Observable<Type> {
-    return this._httpClient.get<Type>(`${this._baseUrl}/movie/upcoming`, options);
+  public getUpcoming<Type>(): Observable<Type> {
+    return this._httpClient.get<Type>(`${this._baseUrl}/movie/upcoming`);
   }
 
-  public getMovieDetails<Type>(id: number, options: HttpOptions): Observable<Type> {
-    return this._httpClient.get<Type>(`${this._baseUrl}/movie/${id}`, options);
+  public getMovieDetails<Type>(id: number): Observable<Type> {
+    return this._httpClient.get<Type>(`${this._baseUrl}/movie/${id}`);
   }
 
-  public getFavorites<Type>(accountId: number, options: HttpOptions): Observable<Type> {
-    return this._httpClient.get<Type>(`${this._baseUrl}/account/${accountId}/favorite/movies`,
-      options);
+  public getFavorites<Type>(accountId: number): Observable<Type> {
+    return this._httpClient.get<Type>(`${this._baseUrl}/account/${accountId}/favorite/movies`);
   }
 }
