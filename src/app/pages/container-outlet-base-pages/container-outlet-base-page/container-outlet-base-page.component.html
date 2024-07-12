@@ -10,7 +10,8 @@
       since:
       templateUrl: '../container-outlet-base-page/container-outlet-base-page.component.html',
   -->
-  <app-movie-card [movieData]=movie [routerLink]="['/movieCard',movie.id]"></app-movie-card>
+  <app-movie-card [movieData]=movie [routerLink]="['/list',{ outlets: { 'container-outlet': ['movieCard', movie.id] } }]"></app-movie-card>
+
   }@empty {
   <p>no movies</p>
   }

@@ -21,6 +21,7 @@ export const routes: Routes = [
   {
     path: 'list',
     component: MoviePlayListsPageComponent,
+    pathMatch: 'prefix',
     canActivate: [MovieGuard],
     resolve: { data: MovieResolver },
     children: [
@@ -59,17 +60,17 @@ export const routes: Routes = [
         component: WatchLaterPageComponent,
         outlet: 'container-outlet',
         pathMatch: 'full'
+      },
+      {
+        path: 'movieCard/:id',
+        component: MovieCardPageComponent,
+        outlet: 'container-outlet',
+        pathMatch: 'prefix'
       }
     ]
-  },
-  {
-    path: 'movieCard/:id',
-    pathMatch: 'full',
-    component: MovieCardPageComponent
   },
   {
     path: 'not-found', component: NotFoundPageComponent
   },
   { path: '**', redirectTo: 'not-found' }
-
 ];

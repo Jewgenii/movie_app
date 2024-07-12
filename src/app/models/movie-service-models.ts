@@ -1,7 +1,12 @@
+
 export interface ErrorResult {
   status_code: string;
   status_message: string;
   success: boolean;
+}
+
+export interface DeleteSessionResult extends ErrorResult {
+
 }
 
 export interface TokenResultBase extends ErrorResult {

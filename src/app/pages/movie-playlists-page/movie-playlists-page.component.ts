@@ -1,6 +1,5 @@
 
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { SidebarModule } from 'primeng/sidebar';
 import { RouterModule } from '@angular/router';
 import { PanelModule } from 'primeng/panel';
@@ -8,7 +7,6 @@ import { ListboxModule } from 'primeng/listbox';
 import { SplitterModule } from 'primeng/splitter';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { ButtonModule } from 'primeng/button';
-import { HttpHeaders } from '@angular/common/http';
 import { MovieManagerService } from '../../services/movie-manager/movie-manager.service';
 
 
@@ -25,8 +23,6 @@ import { MovieManagerService } from '../../services/movie-manager/movie-manager.
 export class MoviePlayListsPageComponent implements OnInit {
 
   constructor(
-    public route: ActivatedRoute,
-    private _router: Router,
     private _movieMangerService: MovieManagerService) {
   }
 

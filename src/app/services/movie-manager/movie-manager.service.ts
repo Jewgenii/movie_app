@@ -54,34 +54,27 @@ export class MovieManagerService {
   }
 
   public async getMovieDetails(id: number): Promise<MovieModel> {
-    let query = this._movieService.getMovieDetails<MovieDetails>(id,);
-    let movies = await firstValueFrom(query.pipe(map(res => {
-      return res as unknown as MovieModel;
-    })));
-
-    return movies;
+    let query = this._movieService.getMovieDetails<MovieDetails>(id).pipe(map(res => res as unknown as MovieModel));
+    return await firstValueFrom(query);
   }
 
   public async getFavorites(): Promise<MovieModel[]> {
     let accountDetails = await this.getAccountDetails();
 
-    let query = this._movieService.getFavorites<MovieListModel>(accountDetails.id,);
-    let movie = await firstValueFrom(query);
-    return movie.results;
+    let query = this._movieService.getFavorites<MovieListModel>(accountDetails.id).pipe(map(res => res.results));
+    return await firstValueFrom(query);
   }
 
 
   public async getWatchList(): Promise<MovieModel[]> {
     let accountDetails = await this.getAccountDetails();
 
-    let query = this._movieService.getWatchList<MovieListModel>(accountDetails.id,);
-    let movie = await firstValueFrom(query);
-    return movie.results;
+    let query = this._movieService.getWatchList<MovieListModel>(accountDetails.id).pipe(map(res => res.results));
+    return await firstValueFrom(query);
   }
 
   private async getAccountDetails(): Promise<AccountDetails> {
-    const res: AccountDetails = await firstValueFrom(this._movieService.getAccountInfo());
-    return res;
+    return await firstValueFrom(this._movieService.getAccountInfo());
   }
 
   public async startSession(): Promise<void> {
@@ -94,12 +87,12 @@ export class MovieManagerService {
       request_token: tokenResult.request_token
     };
 
-    const validResult: ValidateWithLoginResult = await firstValueFrom(this._movieService.validateWithLogin(login,));
+    const validResult: ValidateWithLoginResult = await firstValueFrom(this._movieService.validateWithLogin(login));
 
     if (!validResult.success)
       throw new Error(validResult.status_message);
 
-    const session = await firstValueFrom(this._movieService.postSession(tokenResult.request_token,));
+    const session = await firstValueFrom(this._movieService.postSession(tokenResult.request_token));
     this._currentSessionId = session.session_id;
   }
 }
