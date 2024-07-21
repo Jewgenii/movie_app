@@ -7,12 +7,13 @@ import { RatingModule } from 'primeng/rating';
 import { ShortOverviewPipe } from '../../pipes/short-overview-pipe.pipe';
 import { LocalizeImagePathPipe } from '../../pipes/localize-image-path-pipe.pipe';
 
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MovieModel } from '../../models/movie-list-model';
+import { MovieData } from '../../models/movie-list-model';
 import { MovieManagerService } from '../../services/movie-manager/movie-manager.service';
-import { Observable } from 'rxjs';
-
+import { delay, Observable, Subject, Subscription, takeUntil } from 'rxjs';
+import { BaseObservableDirective } from '../../directives/base-observable/base-observable.component';
+import { CreateSessionResult } from '../../models/movie-service-models';
 
 @Component({
   selector: 'app-movie-card-component',
@@ -25,39 +26,81 @@ import { Observable } from 'rxjs';
   templateUrl: './movie-card-page.component.html',
   styleUrl: './movie-card-page.component.scss'
 })
-export class MovieCardPageComponent {
+export class MovieCardPageComponent extends BaseObservableDirective implements OnInit, OnDestroy {
+
+  session!: CreateSessionResult;
+  favorite$: Subject<boolean> = new Subject<boolean>();
+  watchLater$: Subject<boolean> = new Subject<boolean>();
 
   public readonly wordsCount: number = 10
 
-  public movieData: MovieModel = {} as MovieModel;
+  public movieData: MovieData = {} as MovieData;
   public isInFavorites: boolean = false;
   public isInWatchLater: boolean = false;
   public isDetails: boolean = false;
 
-  constructor(private _route: ActivatedRoute, private _movieManagerService: MovieManagerService) {
+  constructor(private route: ActivatedRoute, private movieManagerService: MovieManagerService) {
+    super();
   }
 
-
-  async ngOnInit(): Promise<void> {
-
-    this._route.paramMap.subscribe(async data => {
-
-      let id = Number(data.get('id'));
-
-      let tmpMovie = await this._movieManagerService.getMovieDetails(id);
-      if (!tmpMovie) {
-        console.log('movie is not found');
-        return;
-      }
-
-      this.movieData = tmpMovie;
-
-      // this.isInFavorites = this._movieService.getFavorites().some(e => e.id === this.movieData.id);
-      // this.isInWatchLater = this._movieService.getWatchLater().some(e => e.id === this.movieData.id);
+  ngOnInit() {
+    const fav$ = this.favorite$.subscribe(fav => {
+      this.isInFavorites = fav;
     });
+
+    const wl$ = this.watchLater$.subscribe(wl => {
+      this.isInWatchLater = wl;
+    })
+
+    this.subscription.add(fav$);
+    this.subscription.add(wl$);
+
+
+    this.subscription =
+      this.route.paramMap.subscribe(async data => {
+
+        const movieId: number = Number(data.get('id'));
+
+        const tmpMovie$ =
+          this.movieManagerService.getMovieDetails(movieId)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(res => this.movieData = res);
+
+        this.subscription.add(tmpMovie$);
+      });
+
+    this.subscription = this.movieManagerService.authenticateAndGetSession().pipe(takeUntil(this.destroy$))
+      .subscribe(session => {
+        this.session = session;
+      });
+  }
+
+  override ngOnDestroy(): void {
+    super.ngOnDestroy();
+
+    const _$ = this.movieManagerService.removeSession(this.session.session_id).subscribe({
+      next(value) {
+        console.log(value);
+      },
+      error(err) {
+        console.log(err);
+      }
+    });
+
+
+
+    this.subscription.add(_$);
+
   }
 
   public addToFavorites(): void {
+    this.subscription =
+      this.movieManagerService.addToFavorite({ media_type: "movie", favorite: true, media_id: this.movieData.id }).subscribe(res => {
+        if (res.success) {
+          this.favorite$.next(res.success);
+        }
+      });
+
     // let isAdded = this._movieService.addToFavorite(this.movieData);
     // if (isAdded) {
     //   this.isInFavorites = true;

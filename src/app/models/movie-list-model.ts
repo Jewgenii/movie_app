@@ -1,15 +1,21 @@
-export interface MovieListModel {
+export interface MovieListData {
   page: number;
-  results: MovieModel[];
+  results: MovieData[];
   total_pages: number;
   total_results: number;
 }
 
-export interface MovieListWithDatesModel extends MovieListModel {
+export interface MovieListWithDatesModel extends MovieListData {
   dates: Dates;
 }
 
-export interface MovieModel {
+export interface Dates {
+  maximum: string;
+  minimum: string;
+}
+
+
+export interface MovieData {
   adult: boolean;
   backdrop_path: string;
   genre_ids: number[];
@@ -25,13 +31,6 @@ export interface MovieModel {
   vote_average: number;
   vote_count: number;
 }
-
-export interface Dates {
-  maximum: string;
-  minimum: string;
-}
-
-// movie details
 
 export interface MovieDetails {
   adult: boolean;
@@ -90,4 +89,11 @@ export interface Belongstocollection {
   name: string;
   poster_path: string;
   backdrop_path: string;
+}
+
+
+export interface FavoriteMedia {
+  media_id: number;
+  media_type: string;
+  favorite: boolean;
 }

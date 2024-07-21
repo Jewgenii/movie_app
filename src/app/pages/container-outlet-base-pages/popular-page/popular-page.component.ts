@@ -13,12 +13,12 @@ import { MovieManagerService } from '../../../services/movie-manager/movie-manag
 })
 export class PopularComponent extends ContainerOutletBasePageComponent implements OnInit {
 
-  constructor(private _movieManager: MovieManagerService
+  constructor(private movieManagerService: MovieManagerService
   ) {
     super();
   }
 
-  async ngOnInit(): Promise<void> {
-    this._movies = await this._movieManager.getPopular();
+  ngOnInit() {
+    this.movieManagerService.getPopular().subscribe(res => this._movies = res);
   }
 }

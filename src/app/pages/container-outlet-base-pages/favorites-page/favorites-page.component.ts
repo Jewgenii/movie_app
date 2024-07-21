@@ -3,6 +3,7 @@ import { MovieCardComponent } from '../../../components/movie-card/movie-card.co
 import { ContainerOutletBasePageComponent } from '../container-outlet-base-page/container-outlet-base-page.component';
 import { RouterModule } from '@angular/router';  // Import RouterModule for [routerLink]
 import { MovieManagerService } from '../../../services/movie-manager/movie-manager.service';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-favorites-page',
@@ -19,7 +20,15 @@ export class FavoritesPageComponent extends ContainerOutletBasePageComponent imp
     super();
   }
 
-  async ngOnInit(): Promise<void> {
-    this._movies = await this._movieManager.getFavorites();
+  ngOnInit() {
+    this.subscription =
+      this._movieManager.getFavorites()
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (movies) => {
+            this._movies = movies;
+          },
+          error: this.catchError
+        });
   }
 }

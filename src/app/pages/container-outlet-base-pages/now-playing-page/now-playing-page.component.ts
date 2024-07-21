@@ -13,13 +13,13 @@ import { MovieManagerService } from '../../../services/movie-manager/movie-manag
 })
 export class NowPlayingPageComponent extends ContainerOutletBasePageComponent implements OnInit {
 
-  constructor(private _movieManagerService: MovieManagerService
+  constructor(private movieManagerService: MovieManagerService
   ) {
     super();
   }
 
-  async ngOnInit(): Promise<void> {
-    this._movies = await this._movieManagerService.getNowPlaying();
+  ngOnInit() {
+    this.movieManagerService.getNowPlaying().subscribe(res => this._movies = res);
   }
 
 }

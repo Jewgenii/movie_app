@@ -1,15 +1,14 @@
-
-export interface ErrorResult {
+export interface ResponseResult {
+  success: boolean;
   status_code: string;
   status_message: string;
-  success: boolean;
 }
 
-export interface DeleteSessionResult extends ErrorResult {
+export interface DeleteSessionResult extends ResponseResult {
 
 }
 
-export interface TokenResultBase extends ErrorResult {
+export interface TokenResultBase extends ResponseResult {
   expires_at: Date;
 }
 
@@ -21,7 +20,7 @@ export interface SessionResult extends TokenResultBase {
   guest_session_id: string;
 }
 
-export interface CreateSessionResult extends ErrorResult {
+export interface CreateSessionResult extends ResponseResult {
   session_id: string;
 }
 
@@ -54,7 +53,7 @@ export interface Gravatar {
   hash: string;
 }
 
-export interface ValidateWithLoginResult extends ErrorResult {
+export interface ValidateWithLoginResult extends ResponseResult {
   expires_at: string;
   request_token: string;
 }

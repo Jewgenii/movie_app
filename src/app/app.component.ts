@@ -4,10 +4,11 @@ import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { PrimeNGConfig } from 'primeng/api';
 import { SidebarModule } from 'primeng/sidebar';
-import { MovieService } from './services/movie-service/movie.service';
+import { MovieService } from './services/movie-services/movie.service';
 import { LocalStorageService } from './services/local-storage-service/local-storage.service';
 import { MovieManagerService } from './services/movie-manager/movie-manager.service';
 import { CredentialsManagerService } from './services/credentials-service/credentials-manager.service';
+import { MovieAuthService } from './services/movie-services/auth-service/movie-auth.service';
 
 @Component({
   selector: 'app-root',
@@ -21,7 +22,8 @@ import { CredentialsManagerService } from './services/credentials-service/creden
     LocalStorageService,
     CredentialsManagerService,
     MovieService,
-    MovieManagerService
+    MovieAuthService,
+    MovieManagerService,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

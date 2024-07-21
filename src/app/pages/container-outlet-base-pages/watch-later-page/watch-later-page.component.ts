@@ -3,6 +3,7 @@ import { MovieCardComponent } from '../../../components/movie-card/movie-card.co
 import { ContainerOutletBasePageComponent } from '../container-outlet-base-page/container-outlet-base-page.component';
 import { RouterModule } from '@angular/router';
 import { MovieManagerService } from '../../../services/movie-manager/movie-manager.service';
+import { pipe, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-watch-later-page',
@@ -19,7 +20,9 @@ export class WatchLaterPageComponent extends ContainerOutletBasePageComponent im
     super();
   }
 
-  async ngOnInit(): Promise<void> {
-    this._movies = await this._movieManager.getWatchList();
+  ngOnInit() {
+    this.subscription = this._movieManager.getWatchList().pipe(takeUntil(this.destroy$)).subscribe(
+      res => this._movies = res
+    );
   }
 }

@@ -1,98 +1,92 @@
 import { Injectable } from '@angular/core';
-import { MovieService } from '../movie-service/movie.service';
-import { HttpHeaders } from '@angular/common/http';
+import { MovieService } from '../movie-services/movie.service';
 
-import { firstValueFrom, map } from 'rxjs';
+import { firstValueFrom, map, Observable, switchMap, switchScan } from 'rxjs';
 import { UserCredentials } from '../../models/user-credentials';
 import { CredentialsManagerService } from '../credentials-service/credentials-manager.service';
-import { MovieDetails, MovieListModel, MovieListWithDatesModel, MovieModel } from '../../models/movie-list-model';
-import { AccountDetails, CreateSessionResult, TokenResult, ValidateWithLogin, ValidateWithLoginResult } from '../../models/movie-service-models';
+import { FavoriteMedia, MovieDetails, MovieListData, MovieListWithDatesModel, MovieData } from '../../models/movie-list-model';
+import { AccountDetails, CreateSessionResult, DeleteSessionResult, ResponseResult, ValidateWithLogin } from '../../models/movie-service-models';
+import { MovieAuthService } from '../movie-services/auth-service/movie-auth.service';
+import { mapMovieDetailsToMovieData } from '../../mapper/mapper';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class MovieManagerService {
-  private _userCredentials!: UserCredentials;
-  private _currentSessionId: string = "";
+  private userCredentials!: UserCredentials;
 
-  constructor(private _movieService: MovieService,
-    private _credentialsManager: CredentialsManagerService
+  constructor(private movieService: MovieService,
+    private movieAuthService: MovieAuthService,
+    private credentialsManager: CredentialsManagerService
   ) {
-
-    this._userCredentials = this._credentialsManager.getUserCredentials();
+    this.userCredentials = this.credentialsManager.getUserCredentials();
   }
 
 
-  public async getNowPlaying(): Promise<MovieModel[]> {
-
-    let query = this._movieService.getNowPlaying<MovieListWithDatesModel>();
-    const movies = await firstValueFrom(query.pipe(map(res => res.results)));
-
-    return movies;
+  public getNowPlaying(): Observable<MovieData[]> {
+    return this.movieService.getNowPlaying<MovieListWithDatesModel>().pipe(map(res => res.results));
   }
 
-  public async getPopular(): Promise<MovieModel[]> {
-    let query = this._movieService.getPopular<MovieListModel>();
-    const movieList = await firstValueFrom(query);
-
-    return movieList.results;
+  public getPopular(): Observable<MovieData[]> {
+    return this.movieService.getPopular<MovieListData>().pipe(map(e => e.results));
   }
 
-  public async getTopRated(): Promise<MovieModel[]> {
-    let query = this._movieService.getTopRated<MovieListModel>();
-    const movieList = await firstValueFrom(query);
-
-    return movieList.results;
+  public getTopRated(): Observable<MovieData[]> {
+    return this.movieService.getTopRated<MovieListData>().pipe(map(e => e.results));
   }
 
-  public async getUpcoming(): Promise<MovieModel[]> {
-    let query = this._movieService.getUpcoming<MovieListWithDatesModel>();
-    const movieList = await firstValueFrom(query);
-
-    return movieList.results;
+  public getUpcoming(): Observable<MovieData[]> {
+    return this.movieService.getUpcoming<MovieListWithDatesModel>().pipe(map(e => e.results));
   }
 
-  public async getMovieDetails(id: number): Promise<MovieModel> {
-    let query = this._movieService.getMovieDetails<MovieDetails>(id).pipe(map(res => res as unknown as MovieModel));
-    return await firstValueFrom(query);
+  public getMovieDetails(id: number): Observable<MovieData> {
+    return this.movieService.getMovieDetails<MovieDetails>(id).pipe(map(mapMovieDetailsToMovieData));
   }
 
-  public async getFavorites(): Promise<MovieModel[]> {
-    let accountDetails = await this.getAccountDetails();
-
-    let query = this._movieService.getFavorites<MovieListModel>(accountDetails.id).pipe(map(res => res.results));
-    return await firstValueFrom(query);
+  public getFavorites(): Observable<MovieData[]> {
+    return this.getAccountDetails().pipe(switchMap(data =>
+      this.movieService.getFavorites<MovieListData>(data.id).pipe(map(res => res.results))));
   }
 
-
-  public async getWatchList(): Promise<MovieModel[]> {
-    let accountDetails = await this.getAccountDetails();
-
-    let query = this._movieService.getWatchList<MovieListModel>(accountDetails.id).pipe(map(res => res.results));
-    return await firstValueFrom(query);
+  public getWatchList(): Observable<MovieData[]> {
+    return this.getAccountDetails().pipe(switchMap(accountDetails =>
+      this.movieService.getWatchList<MovieListData>(accountDetails.id).pipe(map(res => res.results))));
   }
 
-  private async getAccountDetails(): Promise<AccountDetails> {
-    return await firstValueFrom(this._movieService.getAccountInfo());
+  public getAccountDetails(): Observable<AccountDetails> {
+    return this.movieService.getAccountInfo();
   }
 
-  public async startSession(): Promise<void> {
+  public removeSession(session_id: string): Observable<DeleteSessionResult> {
+    return this.movieAuthService.deleteSession(session_id);
+  }
 
-    const tokenResult: TokenResult = await firstValueFrom(this._movieService.getToken());
+  public authenticateAndGetSession(): Observable<CreateSessionResult> {
+    return this.movieAuthService.getToken().pipe(
+      switchMap(tokenRes => {
+        const login: ValidateWithLogin = {
+          password: this.userCredentials.password,
+          username: this.userCredentials.userName,
+          request_token: tokenRes.request_token
+        };
 
-    const login: ValidateWithLogin = {
-      password: this._userCredentials.password,
-      username: this._userCredentials.userName,
-      request_token: tokenResult.request_token
-    };
+        return this.movieAuthService.validateWithLogin(login).pipe(
+          switchMap(() => this.movieAuthService.postSession(tokenRes.request_token))
+        )
+      })
+    );
+  }
 
-    const validResult: ValidateWithLoginResult = await firstValueFrom(this._movieService.validateWithLogin(login));
+  public addToFavorite(media_id: number): Observable<ResponseResult> {
+    return this.getAccountDetails().pipe(
+      switchMap((accountDetails) => this.movieService.addToFavorite<ResponseResult>(media_id, accountDetails.id))
+    )
+  }
 
-    if (!validResult.success)
-      throw new Error(validResult.status_message);
-
-    const session = await firstValueFrom(this._movieService.postSession(tokenResult.request_token));
-    this._currentSessionId = session.session_id;
+  public removeFromFavorite(media_id: number): Observable<ResponseResult> {
+    return this.getAccountDetails().pipe(
+      switchMap((accountDetails) => this.movieService.removeFromFavorite<ResponseResult>(media_id, accountDetails.id))
+    )
   }
 }
