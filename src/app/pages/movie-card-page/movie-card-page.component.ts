@@ -11,7 +11,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MovieData } from '../../models/movie-list-model';
 import { MovieManagerService } from '../../services/movie-manager/movie-manager.service';
-import { delay, Observable, Subject, Subscription, takeUntil } from 'rxjs';
+import { delay, map, Observable, of, Subject, Subscription, switchMap, takeUntil } from 'rxjs';
 import { BaseObservableDirective } from '../../directives/base-observable/base-observable.component';
 import { CreateSessionResult } from '../../models/movie-service-models';
 
@@ -44,91 +44,68 @@ export class MovieCardPageComponent extends BaseObservableDirective implements O
   }
 
   ngOnInit() {
-    const fav$ = this.favorite$.subscribe(fav => {
+
+    this.favorite$.pipe(takeUntil(this.destroy$)).subscribe(fav => {
       this.isInFavorites = fav;
     });
 
-    const wl$ = this.watchLater$.subscribe(wl => {
+    this.watchLater$.pipe(takeUntil(this.destroy$)).subscribe(wl => {
       this.isInWatchLater = wl;
     })
 
-    this.subscription.add(fav$);
-    this.subscription.add(wl$);
+    this.route.paramMap.subscribe(async data => {
 
+      const movieId = Number(data.get('id'));
 
-    this.subscription =
-      this.route.paramMap.subscribe(async data => {
+      this.movieManagerService.getFavorites().pipe(takeUntil(this.destroy$))
+        .subscribe(res => {
+          const index = res.findIndex(e => e.id == movieId);
+          if (index != -1) {
+            this.movieData = res.at(index)!;
+            this.favorite$.next(true);
+          } else {
+            this.movieManagerService.getMovieDetails(movieId).pipe(takeUntil(this.destroy$)).subscribe(res => this.movieData = res);
+          }
+        })
+    });
 
-        const movieId: number = Number(data.get('id'));
-
-        const tmpMovie$ =
-          this.movieManagerService.getMovieDetails(movieId)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe(res => this.movieData = res);
-
-        this.subscription.add(tmpMovie$);
-      });
-
-    this.subscription = this.movieManagerService.authenticateAndGetSession().pipe(takeUntil(this.destroy$))
+    this.movieManagerService.authenticateAndGetSession().pipe(takeUntil(this.destroy$))
       .subscribe(session => {
         this.session = session;
       });
   }
 
   override ngOnDestroy(): void {
-    super.ngOnDestroy();
-
-    const _$ = this.movieManagerService.removeSession(this.session.session_id).subscribe({
+    this.movieManagerService.removeSession(this.session.session_id).pipe(takeUntil(this.destroy$)).subscribe({
       next(value) {
         console.log(value);
       },
       error(err) {
         console.log(err);
+      },
+      complete() {
+        super.ngOnDestroy();
       }
     });
-
-
-
-    this.subscription.add(_$);
-
   }
 
   public addToFavorites(): void {
-    this.subscription =
-      this.movieManagerService.addToFavorite({ media_type: "movie", favorite: true, media_id: this.movieData.id }).subscribe(res => {
-        if (res.success) {
-          this.favorite$.next(res.success);
-        }
-      });
-
-    // let isAdded = this._movieService.addToFavorite(this.movieData);
-    // if (isAdded) {
-    //   this.isInFavorites = true;
-    //   console.log(this.movieData.title + ' addToFavorites');
-    // }
+    this.movieManagerService.addToFavorite(this.movieData.id).pipe(takeUntil(this.destroy$)).subscribe(res => {
+      this.favorite$.next(res.success);
+    });
   }
 
   public removeFromFavorites(): void {
-    // let isRemoved = this._movieService.removeFromFavorite(this.movieData.id);
-    // if (isRemoved) {
-    //   this.isInFavorites = false;
-    //   console.log(this.movieData.title + ' removeFromFavorites');
-    // }
+    this.movieManagerService.removeFromFavorite(this.movieData.id).pipe(takeUntil(this.destroy$)).subscribe(res => {
+      this.favorite$.next(!res.success);
+    });
   }
 
   public addToWatchLater(): void {
-    // let isAdded = this._movieService.addToWatchLater(this.movieData)
-    // if (isAdded) {
-    //   this.isInWatchLater = true;
-    //   console.log(this.movieData.title + ' addToWatchLater');
-    // }
+
   }
 
   public removeFromWatchLater(): void {
-    // let isRemoved = this._movieService.removeFromWatchLater(this.movieData.id);
-    // if (isRemoved) {
-    //   this.isInWatchLater = false;
-    //   console.log(this.movieData.title + ' removeFromWatchLater');
-    // }
+
   }
 }
