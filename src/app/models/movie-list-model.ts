@@ -1,3 +1,5 @@
+import { ExpressionBinding } from "@angular/compiler";
+
 export interface MovieListData {
   page: number;
   results: MovieData[];
@@ -91,9 +93,15 @@ export interface Belongstocollection {
   backdrop_path: string;
 }
 
-
-export interface FavoriteMedia {
+export interface Media {
   media_id: number;
   media_type: string;
+}
+
+export interface FavoriteMedia extends Media {
   favorite: boolean;
+}
+
+export interface WatchListMedia extends Media {
+  watchlist: boolean;
 }

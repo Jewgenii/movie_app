@@ -89,4 +89,17 @@ export class MovieManagerService {
       switchMap((accountDetails) => this.movieService.removeFromFavorite<ResponseResult>(media_id, accountDetails.id))
     )
   }
+
+  public addToWatchList(media_id: number): Observable<ResponseResult> {
+    return this.getAccountDetails().pipe(
+      switchMap((accountDetails) => this.movieService.addToWatchList<ResponseResult>(media_id, accountDetails.id))
+    )
+  }
+
+  public removeFromWatchList(media_id: number): Observable<ResponseResult> {
+    return this.getAccountDetails().pipe(
+      switchMap((accountDetails) => this.movieService.removeFromWatchList<ResponseResult>(media_id, accountDetails.id))
+    )
+  }
+
 }

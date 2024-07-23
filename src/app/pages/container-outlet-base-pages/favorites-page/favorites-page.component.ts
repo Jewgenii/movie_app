@@ -23,7 +23,7 @@ export class FavoritesPageComponent extends ContainerOutletBasePageComponent imp
   ngOnInit() {
     this.subscription =
       this._movieManager.getFavorites()
-        .pipe(takeUntil(this.destroy$))
+        .pipe(this.untilDestroyContext)
         .subscribe({
           next: (movies) => {
             this._movies = movies;

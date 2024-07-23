@@ -21,7 +21,7 @@ export class WatchLaterPageComponent extends ContainerOutletBasePageComponent im
   }
 
   ngOnInit() {
-    this.subscription = this._movieManager.getWatchList().pipe(takeUntil(this.destroy$)).subscribe(
+    this._movieManager.getWatchList().pipe(this.untilDestroyContext).subscribe(
       res => this._movies = res
     );
   }

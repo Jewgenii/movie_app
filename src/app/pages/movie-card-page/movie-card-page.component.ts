@@ -11,7 +11,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MovieData } from '../../models/movie-list-model';
 import { MovieManagerService } from '../../services/movie-manager/movie-manager.service';
-import { delay, map, Observable, of, Subject, Subscription, switchMap, takeUntil } from 'rxjs';
+import { catchError, delay, map, Observable, of, Subject, Subscription, switchMap, takeUntil } from 'rxjs';
 import { BaseObservableDirective } from '../../directives/base-observable/base-observable.component';
 import { CreateSessionResult } from '../../models/movie-service-models';
 
@@ -29,14 +29,14 @@ import { CreateSessionResult } from '../../models/movie-service-models';
 export class MovieCardPageComponent extends BaseObservableDirective implements OnInit, OnDestroy {
 
   session!: CreateSessionResult;
-  favorite$: Subject<boolean> = new Subject<boolean>();
-  watchLater$: Subject<boolean> = new Subject<boolean>();
+  isFavorite$: Subject<boolean> = new Subject<boolean>();
+  isWatchList$: Subject<boolean> = new Subject<boolean>();
 
   public readonly wordsCount: number = 10
 
   public movieData: MovieData = {} as MovieData;
   public isInFavorites: boolean = false;
-  public isInWatchLater: boolean = false;
+  public isInWatchList: boolean = false;
   public isDetails: boolean = false;
 
   constructor(private route: ActivatedRoute, private movieManagerService: MovieManagerService) {
@@ -44,68 +44,78 @@ export class MovieCardPageComponent extends BaseObservableDirective implements O
   }
 
   ngOnInit() {
+    this.isFavorite$.pipe(this.untilDestroyContext).subscribe(fav => this.isInFavorites = fav);
 
-    this.favorite$.pipe(takeUntil(this.destroy$)).subscribe(fav => {
-      this.isInFavorites = fav;
-    });
+    this.isWatchList$.pipe(this.untilDestroyContext).subscribe(wl => this.isInWatchList = wl);
 
-    this.watchLater$.pipe(takeUntil(this.destroy$)).subscribe(wl => {
-      this.isInWatchLater = wl;
-    })
-
-    this.route.paramMap.subscribe(async data => {
+    this.route.paramMap.pipe(this.untilDestroyContext).subscribe(data => {
 
       const movieId = Number(data.get('id'));
 
-      this.movieManagerService.getFavorites().pipe(takeUntil(this.destroy$))
-        .subscribe(res => {
-          const index = res.findIndex(e => e.id == movieId);
-          if (index != -1) {
-            this.movieData = res.at(index)!;
-            this.favorite$.next(true);
-          } else {
-            this.movieManagerService.getMovieDetails(movieId).pipe(takeUntil(this.destroy$)).subscribe(res => this.movieData = res);
-          }
-        })
+      this.movieManagerService.getMovieDetails(movieId).pipe(this.untilDestroyContext)
+        .subscribe(res => this.movieData = res);
+
+      this.movieManagerService.getFavorites().pipe(this.untilDestroyContext)
+        .subscribe(res => this.isFavorite$.next(res.some(e => e.id == movieId)));
+
+      this.movieManagerService.getWatchList().pipe(this.untilDestroyContext)
+        .subscribe(res => this.isWatchList$.next(res.some(e => e.id == movieId)))
     });
 
-    this.movieManagerService.authenticateAndGetSession().pipe(takeUntil(this.destroy$))
+
+    this.movieManagerService.authenticateAndGetSession().pipe(this.untilDestroyContext)
       .subscribe(session => {
         this.session = session;
       });
   }
 
   override ngOnDestroy(): void {
-    this.movieManagerService.removeSession(this.session.session_id).pipe(takeUntil(this.destroy$)).subscribe({
+    this.movieManagerService.removeSession(this.session.session_id).subscribe({
       next(value) {
-        console.log(value);
+        if (value.success) {
+          console.log("session is removed");
+        }
       },
       error(err) {
         console.log(err);
       },
       complete() {
-        super.ngOnDestroy();
+
       }
-    });
+    }).unsubscribe();
+
+    super.ngOnDestroy();
   }
 
   public addToFavorites(): void {
-    this.movieManagerService.addToFavorite(this.movieData.id).pipe(takeUntil(this.destroy$)).subscribe(res => {
-      this.favorite$.next(res.success);
+    this.movieManagerService.addToFavorite(this.movieData.id).pipe(this.untilDestroyContext).subscribe(res => {
+      this.isFavorite$.next(res.success);
+      console.log("added to favorites");
     });
   }
 
   public removeFromFavorites(): void {
-    this.movieManagerService.removeFromFavorite(this.movieData.id).pipe(takeUntil(this.destroy$)).subscribe(res => {
-      this.favorite$.next(!res.success);
+    this.movieManagerService.removeFromFavorite(this.movieData.id).pipe(this.untilDestroyContext).subscribe(res => {
+
+      if (res.success) {
+        this.isFavorite$.next(false);
+        console.log("removed from favorites");
+      }
+
     });
   }
 
-  public addToWatchLater(): void {
-
+  public addToWatchList(): void {
+    this.movieManagerService.addToWatchList(this.movieData.id).pipe(this.untilDestroyContext).subscribe(res => {
+      this.isWatchList$.next(res.success);
+      console.log("added to watchList");
+    });
   }
 
-  public removeFromWatchLater(): void {
-
+  public removeFromWatchList(): void {
+    this.movieManagerService.removeFromWatchList(this.movieData.id).pipe(this.untilDestroyContext).subscribe(res => {
+      this.isWatchList$.next(res.success);
+      console.log("removed from watchList");
+    });
   }
 }

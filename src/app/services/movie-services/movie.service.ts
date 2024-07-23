@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { catchError, EMPTY, map, Observable, of } from 'rxjs';
 import { HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
 import { AccountDetails, CreateSessionResult, DeleteSessionResult, ResponseResult, TokenResult, ValidateWithLogin, ValidateWithLoginResult } from '../../models/movie-service-models';
-import { FavoriteMedia } from '../../models/movie-list-model';
+import { FavoriteMedia, WatchListMedia } from '../../models/movie-list-model';
 
 @Injectable({
   providedIn: 'root'
@@ -89,5 +89,32 @@ export class MovieService {
     return this.httpClient.post<FavoriteMedia>(`${this.baseUrl}/account/${account_id}/favorite`, media)
       .pipe(catchError(err => of('error', err)));
   }
+
+  public addToWatchList<Type>(mediaId: number, account_id: number): Observable<Type> {
+
+    const media: WatchListMedia = {
+      watchlist: true,
+      media_type: "movie",
+      media_id: mediaId
+    };
+
+    return this.httpClient.post<FavoriteMedia>(`${this.baseUrl}/account/${account_id}/watchlist`, media)
+      .pipe(catchError(err => of('error', err)));
+  }
+
+  public removeFromWatchList<Type>(mediaId: number, account_id: number): Observable<Type> {
+
+    const media: WatchListMedia = {
+      watchlist: false,
+      media_type: "movie",
+      media_id: mediaId
+    };
+
+    return this.httpClient.post<FavoriteMedia>(`${this.baseUrl}/account/${account_id}/watchlist`, media)
+      .pipe(catchError(err => of('error', err)));
+  }
+
+
+
 
 }
