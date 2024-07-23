@@ -11,7 +11,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MovieData } from '../../models/movie-list-model';
 import { MovieManagerService } from '../../services/movie-manager/movie-manager.service';
-import { catchError, delay, map, Observable, of, Subject, Subscription, switchMap, takeUntil } from 'rxjs';
+import { Subject, tap } from 'rxjs';
 import { BaseObservableDirective } from '../../directives/base-observable/base-observable.component';
 import { CreateSessionResult } from '../../models/movie-service-models';
 
@@ -28,9 +28,9 @@ import { CreateSessionResult } from '../../models/movie-service-models';
 })
 export class MovieCardPageComponent extends BaseObservableDirective implements OnInit, OnDestroy {
 
-  session!: CreateSessionResult;
-  isFavorite$: Subject<boolean> = new Subject<boolean>();
-  isWatchList$: Subject<boolean> = new Subject<boolean>();
+  private session!: CreateSessionResult;
+  private isFavorite$: Subject<boolean> = new Subject<boolean>();
+  private isWatchList$: Subject<boolean> = new Subject<boolean>();
 
   public readonly wordsCount: number = 10
 
@@ -44,16 +44,17 @@ export class MovieCardPageComponent extends BaseObservableDirective implements O
   }
 
   ngOnInit() {
-    this.isFavorite$.pipe(this.untilDestroyContext).subscribe(fav => this.isInFavorites = fav);
+    this.isFavorite$.pipe(this.untilDestroyContext).subscribe(isTrue => this.isInFavorites = isTrue);
 
-    this.isWatchList$.pipe(this.untilDestroyContext).subscribe(wl => this.isInWatchList = wl);
+    this.isWatchList$.pipe(this.untilDestroyContext).subscribe(isTrue => this.isInWatchList = isTrue);
 
     this.route.paramMap.pipe(this.untilDestroyContext).subscribe(data => {
 
       const movieId = Number(data.get('id'));
 
-      this.movieManagerService.getMovieDetails(movieId).pipe(this.untilDestroyContext)
-        .subscribe(res => this.movieData = res);
+      this.movieManagerService.getMovieDetails(movieId).pipe(this.untilDestroyContext,
+        tap(movieData => this.movieData = movieData)
+      ).subscribe();
 
       this.movieManagerService.getFavorites().pipe(this.untilDestroyContext)
         .subscribe(res => this.isFavorite$.next(res.some(e => e.id == movieId)));
@@ -89,7 +90,13 @@ export class MovieCardPageComponent extends BaseObservableDirective implements O
 
   public addToFavorites(): void {
     this.movieManagerService.addToFavorite(this.movieData.id).pipe(this.untilDestroyContext).subscribe(res => {
-      this.isFavorite$.next(res.success);
+
+      if (!res.success) {
+        console.log("ERROR: added to favorites");
+        return;
+      }
+
+      this.isFavorite$.next(true);
       console.log("added to favorites");
     });
   }
@@ -97,25 +104,39 @@ export class MovieCardPageComponent extends BaseObservableDirective implements O
   public removeFromFavorites(): void {
     this.movieManagerService.removeFromFavorite(this.movieData.id).pipe(this.untilDestroyContext).subscribe(res => {
 
-      if (res.success) {
-        this.isFavorite$.next(false);
-        console.log("removed from favorites");
+      if (!res.success) {
+        console.log("ERROR: removed from favorites");
+        return;
       }
 
+      this.isFavorite$.next(false);
+      console.log("removed from favorites");
     });
   }
 
   public addToWatchList(): void {
     this.movieManagerService.addToWatchList(this.movieData.id).pipe(this.untilDestroyContext).subscribe(res => {
-      this.isWatchList$.next(res.success);
+      if (!res.success) {
+        console.log("ERROR: added to watchList");
+        return;
+      }
+
+      this.isWatchList$.next(true);
       console.log("added to watchList");
     });
   }
 
   public removeFromWatchList(): void {
     this.movieManagerService.removeFromWatchList(this.movieData.id).pipe(this.untilDestroyContext).subscribe(res => {
-      this.isWatchList$.next(res.success);
+
+      if (!res.success) {
+        console.log("ERROR: removed from watchList");
+        return;
+      }
+
+      this.isWatchList$.next(false);
       console.log("removed from watchList");
+
     });
   }
 }
