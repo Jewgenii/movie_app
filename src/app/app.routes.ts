@@ -77,5 +77,5 @@ export const routes: Routes = [
     path: 'not-found',
     component: NotFoundPageComponent,
   },
-  { path: '**', redirectTo: 'not-found' },
+  { path: '**', redirectTo: '/not-found' },
 ];
