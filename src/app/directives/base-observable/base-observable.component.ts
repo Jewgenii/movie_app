@@ -1,11 +1,12 @@
-import { Directive, OnDestroy, } from '@angular/core';
+import { Directive, OnDestroy } from '@angular/core';
 import { Observable, Subject, takeUntil } from 'rxjs';
 
 @Directive()
 export class BaseObservableDirective implements OnDestroy {
-
   private readonly destroy$ = new Subject<void>();
-  protected readonly untilDestroyContext: <T>(obs: Observable<T>) => Observable<T>;
+  protected readonly untilDestroyContext: <T>(
+    obs: Observable<T>
+  ) => Observable<T>;
 
   constructor() {
     //invoke from current context

@@ -11,7 +11,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MovieData } from '../../models/movie-list-model';
 import { MovieManagerService } from '../../services/movie-manager/movie-manager.service';
-import { Subject, tap } from 'rxjs';
+import { Subject, Subscription, tap } from 'rxjs';
 import { BaseObservableDirective } from '../../directives/base-observable/base-observable.component';
 import { CreateSessionResult } from '../../models/movie-service-models';
 
@@ -89,19 +89,24 @@ export class MovieCardPageComponent
   }
 
   override ngOnDestroy(): void {
-    this.movieManagerService
+    super.ngOnDestroy();
+
+    const sub: Subscription = this.movieManagerService
       .removeSession(this.session.session_id)
+      .pipe(this.untilDestroyContext)
       .subscribe({
-        next(resp) {
+        next: (resp) => {
           if (resp.success) {
             console.log('session is removed');
           }
+          sub.unsubscribe();
         },
-        error: this.catchError,
-      })
-      .unsubscribe();
-
-    super.ngOnDestroy();
+        error: (err) => {
+          this.catchError(err);
+          sub.unsubscribe();
+        },
+        complete: () => sub.unsubscribe(),
+      });
   }
 
   public addToFavorites(): void {
