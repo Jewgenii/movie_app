@@ -13,8 +13,9 @@ export const appConfig: ApplicationConfig = {
     {
       useClass: AuthInterceptor,
       provide: HTTP_INTERCEPTORS,
-      multi: true
+      multi: true,
     },
     provideHttpClient(),
-    importProvidersFrom(BrowserAnimationsModule)]
+    importProvidersFrom(BrowserAnimationsModule),
+  ],
 };
