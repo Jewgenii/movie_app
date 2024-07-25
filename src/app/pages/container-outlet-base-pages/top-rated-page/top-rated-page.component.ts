@@ -19,6 +19,8 @@ export class TopRatedComponent extends ContainerOutletBasePageComponent implemen
   }
 
   ngOnInit() {
-    this.movieManagerService.getTopRated().subscribe(res => this._movies = res);
+    this.movieManagerService.getTopRated()
+      .pipe(this.untilDestroyContext)
+      .subscribe(topRated => this.movies = topRated);
   }
 }

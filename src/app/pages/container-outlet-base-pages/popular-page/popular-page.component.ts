@@ -19,6 +19,6 @@ export class PopularComponent extends ContainerOutletBasePageComponent implement
   }
 
   ngOnInit() {
-    this.movieManagerService.getPopular().subscribe(res => this._movies = res);
+    this.movieManagerService.getPopular().subscribe(popular => this.movies = popular);
   }
 }

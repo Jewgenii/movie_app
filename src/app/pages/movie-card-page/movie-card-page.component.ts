@@ -48,47 +48,39 @@ export class MovieCardPageComponent extends BaseObservableDirective implements O
 
     this.isWatchList$.pipe(this.untilDestroyContext).subscribe(isTrue => this.isInWatchList = isTrue);
 
-    this.route.paramMap.pipe(this.untilDestroyContext).subscribe(data => {
+    const movieId = Number(this.route.snapshot.params['id']);
 
-      const movieId = Number(data.get('id'));
+    this.movieManagerService.getMovieDetails(movieId).pipe(this.untilDestroyContext,
+      tap(movieData => this.movieData = movieData)
+    ).subscribe();
 
-      this.movieManagerService.getMovieDetails(movieId).pipe(this.untilDestroyContext,
-        tap(movieData => this.movieData = movieData)
-      ).subscribe();
+    this.movieManagerService.getFavorites().pipe(this.untilDestroyContext)
+      .subscribe(res => this.isFavorite$.next(res.some(e => e.id == movieId)));
 
-      this.movieManagerService.getFavorites().pipe(this.untilDestroyContext)
-        .subscribe(res => this.isFavorite$.next(res.some(e => e.id == movieId)));
-
-      this.movieManagerService.getWatchList().pipe(this.untilDestroyContext)
-        .subscribe(res => this.isWatchList$.next(res.some(e => e.id == movieId)))
-    });
-
+    this.movieManagerService.getWatchList().pipe(this.untilDestroyContext)
+      .subscribe(res => this.isWatchList$.next(res.some(e => e.id == movieId)));
 
     this.movieManagerService.authenticateAndGetSession().pipe(this.untilDestroyContext)
-      .subscribe(session => {
-        this.session = session;
-      });
+      .subscribe(session => this.session = session);
   }
 
   override ngOnDestroy(): void {
     this.movieManagerService.removeSession(this.session.session_id).subscribe({
-      next(value) {
-        if (value.success) {
+      next(resp) {
+        if (resp.success) {
           console.log("session is removed");
         }
       },
-      error(err) {
-        console.log(err);
-      }
+      error: this.catchError
     }).unsubscribe();
 
     super.ngOnDestroy();
   }
 
   public addToFavorites(): void {
-    this.movieManagerService.addToFavorite(this.movieData.id).pipe(this.untilDestroyContext).subscribe(res => {
+    this.movieManagerService.addToFavorite(this.movieData.id).pipe(this.untilDestroyContext).subscribe(resp => {
 
-      if (!res.success) {
+      if (!resp.success) {
         console.log("ERROR: added to favorites");
         return;
       }
@@ -99,9 +91,9 @@ export class MovieCardPageComponent extends BaseObservableDirective implements O
   }
 
   public removeFromFavorites(): void {
-    this.movieManagerService.removeFromFavorite(this.movieData.id).pipe(this.untilDestroyContext).subscribe(res => {
+    this.movieManagerService.removeFromFavorite(this.movieData.id).pipe(this.untilDestroyContext).subscribe(resp => {
 
-      if (!res.success) {
+      if (!resp.success) {
         console.log("ERROR: removed from favorites");
         return;
       }
@@ -112,8 +104,8 @@ export class MovieCardPageComponent extends BaseObservableDirective implements O
   }
 
   public addToWatchList(): void {
-    this.movieManagerService.addToWatchList(this.movieData.id).pipe(this.untilDestroyContext).subscribe(res => {
-      if (!res.success) {
+    this.movieManagerService.addToWatchList(this.movieData.id).pipe(this.untilDestroyContext).subscribe(resp => {
+      if (!resp.success) {
         console.log("ERROR: added to watchList");
         return;
       }
@@ -124,9 +116,9 @@ export class MovieCardPageComponent extends BaseObservableDirective implements O
   }
 
   public removeFromWatchList(): void {
-    this.movieManagerService.removeFromWatchList(this.movieData.id).pipe(this.untilDestroyContext).subscribe(res => {
+    this.movieManagerService.removeFromWatchList(this.movieData.id).pipe(this.untilDestroyContext).subscribe(resp => {
 
-      if (!res.success) {
+      if (!resp.success) {
         console.log("ERROR: removed from watchList");
         return;
       }

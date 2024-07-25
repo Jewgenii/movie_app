@@ -19,6 +19,8 @@ export class UpcomingPageComponent extends ContainerOutletBasePageComponent impl
   }
 
   ngOnInit() {
-    this.movieManagerService.getUpcoming().subscribe(res => this._movies = res);
+    this.movieManagerService.getUpcoming()
+      .pipe(this.untilDestroyContext)
+      .subscribe(upcoming => this.movies = upcoming);
   }
 }

@@ -19,7 +19,7 @@ export class NowPlayingPageComponent extends ContainerOutletBasePageComponent im
   }
 
   ngOnInit() {
-    this.movieManagerService.getNowPlaying().subscribe(res => this._movies = res);
+    this.movieManagerService.getNowPlaying().subscribe(nowPlaying => this.movies = nowPlaying);
   }
 
 }

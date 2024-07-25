@@ -7,10 +7,7 @@ import { ListboxModule } from 'primeng/listbox';
 import { SplitterModule } from 'primeng/splitter';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { ButtonModule } from 'primeng/button';
-import { MovieManagerService } from '../../services/movie-manager/movie-manager.service';
 import { BaseObservableDirective } from '../../directives/base-observable/base-observable.component';
-
-
 
 @Component({
   selector: 'app-movie-playlists-page',
@@ -23,8 +20,7 @@ import { BaseObservableDirective } from '../../directives/base-observable/base-o
   styleUrl: './movie-playlists-page.component.scss'
 })
 export class MoviePlayListsPageComponent extends BaseObservableDirective {
-
-  constructor(private _movieMangerService: MovieManagerService) {
+  constructor() {
     super();
   }
 }

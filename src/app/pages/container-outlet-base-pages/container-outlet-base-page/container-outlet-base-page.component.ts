@@ -13,7 +13,7 @@ import { BaseObservableDirective } from '../../../directives/base-observable/bas
 })
 export class ContainerOutletBasePageComponent extends BaseObservableDirective {
 
-  protected _movies!: Array<MovieData>;
+  protected movies!: Array<MovieData>;
 
   constructor() {
     super();

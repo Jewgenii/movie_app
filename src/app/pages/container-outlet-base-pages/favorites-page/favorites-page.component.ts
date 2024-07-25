@@ -24,8 +24,8 @@ export class FavoritesPageComponent extends ContainerOutletBasePageComponent imp
       this._movieManager.getFavorites()
         .pipe(this.untilDestroyContext)
         .subscribe({
-          next: (movies) => {
-            this._movies = movies;
+          next: (favorites) => {
+            this.movies = favorites;
           },
           error: this.catchError
         });

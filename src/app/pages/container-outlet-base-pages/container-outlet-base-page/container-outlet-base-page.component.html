@@ -1,5 +1,5 @@
 <div class="cards-container">
-  @for (movie of _movies; track movie.id) {
+  @for (movie of movies; track movie.id) {
   <app-movie-card [movieData]=movie
     [routerLink]="['/list',{ outlets: { 'container-outlet': ['movieCard', movie.id] } }]"></app-movie-card>
   }@empty {
