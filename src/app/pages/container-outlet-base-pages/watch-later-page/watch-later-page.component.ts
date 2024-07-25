@@ -9,22 +9,23 @@ import { pipe, takeUntil } from 'rxjs';
   selector: 'app-watch-later-page',
   standalone: true,
   imports: [MovieCardComponent, RouterModule],
-  templateUrl: '../container-outlet-base-page/container-outlet-base-page.component.html',
-  styleUrl: '../container-outlet-base-page/container-outlet-base-page.component.scss',
+  templateUrl:
+    '../container-outlet-base-page/container-outlet-base-page.component.html',
+  styleUrl:
+    '../container-outlet-base-page/container-outlet-base-page.component.scss',
 })
-export class WatchLaterPageComponent extends ContainerOutletBasePageComponent implements OnInit {
-
-  constructor(
-    private _movieManager: MovieManagerService
-  ) {
+export class WatchLaterPageComponent
+  extends ContainerOutletBasePageComponent
+  implements OnInit
+{
+  constructor(private _movieManager: MovieManagerService) {
     super();
   }
 
   ngOnInit() {
-    this._movieManager.getWatchList()
+    this._movieManager
+      .getWatchList()
       .pipe(this.untilDestroyContext)
-      .subscribe(
-        watchList => this.movies = watchList
-      );
+      .subscribe((watchList) => (this.movies = watchList));
   }
 }

@@ -1,4 +1,3 @@
-
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
@@ -13,11 +12,7 @@ import { MovieAuthService } from './services/movie-services/auth-service/movie-a
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [
-    HttpClientModule,
-    RouterOutlet,
-    SidebarModule
-  ],
+  imports: [HttpClientModule, RouterOutlet, SidebarModule],
   providers: [
     LocalStorageService,
     CredentialsManagerService,
@@ -26,14 +21,12 @@ import { MovieAuthService } from './services/movie-services/auth-service/movie-a
     MovieManagerService,
   ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
-
-  constructor(private primengConfig: PrimeNGConfig) { }
+  constructor(private primengConfig: PrimeNGConfig) {}
 
   ngOnInit(): void {
-
     this.primengConfig.ripple = true;
   }
 }
