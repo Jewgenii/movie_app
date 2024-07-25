@@ -11,7 +11,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MovieData } from '../../models/movie-list-model';
 import { MovieManagerService } from '../../services/movie-manager/movie-manager.service';
-import { Subject, Subscription, tap } from 'rxjs';
+import { delay, Subject, Subscription, tap, timeout } from 'rxjs';
 import { BaseObservableDirective } from '../../directives/base-observable/base-observable.component';
 import { CreateSessionResult } from '../../models/movie-service-models';
 
@@ -93,19 +93,19 @@ export class MovieCardPageComponent
 
     const sub: Subscription = this.movieManagerService
       .removeSession(this.session.session_id)
-      .pipe(this.untilDestroyContext)
       .subscribe({
         next: (resp) => {
           if (resp.success) {
             console.log('session is removed');
           }
-          sub.unsubscribe();
         },
         error: (err) => {
           this.catchError(err);
           sub.unsubscribe();
         },
-        complete: () => sub.unsubscribe(),
+        complete: () => {
+          sub.unsubscribe();
+        },
       });
   }
 
