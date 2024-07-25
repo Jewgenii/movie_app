@@ -79,9 +79,6 @@ export class MovieCardPageComponent extends BaseObservableDirective implements O
       },
       error(err) {
         console.log(err);
-      },
-      complete() {
-
       }
     }).unsubscribe();
 

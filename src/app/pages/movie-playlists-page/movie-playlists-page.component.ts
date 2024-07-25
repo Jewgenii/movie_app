@@ -8,9 +8,8 @@ import { SplitterModule } from 'primeng/splitter';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { ButtonModule } from 'primeng/button';
 import { MovieManagerService } from '../../services/movie-manager/movie-manager.service';
-import { Observable, takeUntil } from 'rxjs';
 import { BaseObservableDirective } from '../../directives/base-observable/base-observable.component';
-import { CreateSessionResult } from '../../models/movie-service-models';
+
 
 
 @Component({

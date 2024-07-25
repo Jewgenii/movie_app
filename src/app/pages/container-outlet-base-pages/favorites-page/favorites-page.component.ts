@@ -21,7 +21,6 @@ export class FavoritesPageComponent extends ContainerOutletBasePageComponent imp
   }
 
   ngOnInit() {
-    this.subscription =
       this._movieManager.getFavorites()
         .pipe(this.untilDestroyContext)
         .subscribe({

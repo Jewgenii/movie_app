@@ -1,16 +1,14 @@
 import { Directive, OnDestroy, } from '@angular/core';
-import { Observable, Subject, Subscription, takeUntil } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 
 @Directive()
 export class BaseObservableDirective implements OnDestroy {
 
-  private destroy$ = new Subject<void>();
-  protected subscription = new Subscription();
-
-  protected untilDestroyContext: <T>(obs: Observable<T>) => Observable<T>;
+  private readonly destroy$ = new Subject<void>();
+  protected readonly untilDestroyContext: <T>(obs: Observable<T>) => Observable<T>;
 
   constructor() {
-    //invoke this this context
+    //invoke from current context
     this.untilDestroyContext = this.until.bind(this);
   }
 
@@ -25,10 +23,5 @@ export class BaseObservableDirective implements OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-
-    this.subscription.unsubscribe();
   }
-
-
-
 }
