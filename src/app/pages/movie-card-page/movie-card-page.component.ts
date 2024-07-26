@@ -7,84 +7,165 @@ import { RatingModule } from 'primeng/rating';
 import { ShortOverviewPipe } from '../../pipes/short-overview-pipe.pipe';
 import { LocalizeImagePathPipe } from '../../pipes/localize-image-path-pipe.pipe';
 
-import { Component, OnInit, numberAttribute } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MovieModel } from '../../models/movie-model';
-import { MovieService } from '../../services/movie-service/movie.service';
-
+import { MovieData } from '../../models/movie-list-model';
+import { MovieManagerService } from '../../services/movie-manager/movie-manager.service';
+import { delay, Subject, Subscription, tap, timeout } from 'rxjs';
+import { BaseObservableDirective } from '../../directives/base-observable/base-observable.component';
+import { CreateSessionResult } from '../../models/movie-service-models';
 
 @Component({
   selector: 'app-movie-card-component',
   standalone: true,
   imports: [
     CommonModule,
-    LocalizeImagePathPipe, ShortOverviewPipe,
-    CardModule, ButtonModule, ImageModule, RatingModule
+    LocalizeImagePathPipe,
+    ShortOverviewPipe,
+    CardModule,
+    ButtonModule,
+    ImageModule,
+    RatingModule,
   ],
   templateUrl: './movie-card-page.component.html',
-  styleUrl: './movie-card-page.component.scss'
+  styleUrl: './movie-card-page.component.scss',
 })
-export class MovieCardPageComponent {
+export class MovieCardPageComponent
+  extends BaseObservableDirective
+  implements OnInit, OnDestroy
+{
+  private session!: CreateSessionResult;
+  private isFavorite$: Subject<boolean> = new Subject<boolean>();
+  private isWatchList$: Subject<boolean> = new Subject<boolean>();
 
-  public readonly wordsCount: number = 10
+  public readonly wordsCount: number = 10;
 
-  public movieData: MovieModel = {} as MovieModel;
+  public movieData: MovieData = {} as MovieData;
   public isInFavorites: boolean = false;
-  public isInWatchLater: boolean = false;
+  public isInWatchList: boolean = false;
   public isDetails: boolean = false;
 
-  constructor(private _route: ActivatedRoute, private _movieService: MovieService) {
+  constructor(
+    private route: ActivatedRoute,
+    private movieManagerService: MovieManagerService
+  ) {
+    super();
   }
 
+  ngOnInit() {
+    this.isFavorite$
+      .pipe(this.untilDestroyContext)
+      .subscribe((isTrue) => (this.isInFavorites = isTrue));
 
-  ngOnInit(): void {
+    this.isWatchList$
+      .pipe(this.untilDestroyContext)
+      .subscribe((isTrue) => (this.isInWatchList = isTrue));
 
-    this._route.paramMap.subscribe(data => {
+    const movieId = Number(this.route.snapshot.params['id']);
 
-      let id = Number(data.get('id'));
+    this.movieManagerService
+      .getMovieDetails(movieId)
+      .pipe(this.untilDestroyContext)
+      .subscribe((movieData) => (this.movieData = movieData));
 
-      let tmpMovie = this._movieService.getMovieById(id);
-      if (!tmpMovie) {
-        console.log('movie is not found');
-        return;
-      }
+    this.movieManagerService
+      .getFavorites()
+      .pipe(this.untilDestroyContext)
+      .subscribe((res) =>
+        this.isFavorite$.next(res.some((e) => e.id == movieId))
+      );
 
-      this.movieData = tmpMovie;
+    this.movieManagerService
+      .getWatchList()
+      .pipe(this.untilDestroyContext)
+      .subscribe((res) =>
+        this.isWatchList$.next(res.some((e) => e.id == movieId))
+      );
 
-      this.isInFavorites = this._movieService.getFavorites().some(e => e.id === this.movieData.id);
-      this.isInWatchLater = this._movieService.getWatchLater().some(e => e.id === this.movieData.id);
-    });
+    this.movieManagerService
+      .authenticateAndGetSession()
+      .pipe(this.untilDestroyContext)
+      .subscribe((session) => (this.session = session));
+  }
+
+  override ngOnDestroy(): void {
+    super.ngOnDestroy();
+
+    const sub: Subscription = this.movieManagerService
+      .removeSession(this.session.session_id)
+      .subscribe({
+        next: (resp) => {
+          if (resp.success) {
+            console.log('session is removed');
+          }
+        },
+        error: (err) => {
+          this.catchError(err);
+          sub.unsubscribe();
+        },
+        complete: () => {
+          sub.unsubscribe();
+        },
+      });
   }
 
   public addToFavorites(): void {
-    let isAdded = this._movieService.addToFavorite(this.movieData);
-    if (isAdded) {
-      this.isInFavorites = true;
-      console.log(this.movieData.title + ' addToFavorites');
-    }
+    this.movieManagerService
+      .addToFavorite(this.movieData.id)
+      .pipe(this.untilDestroyContext)
+      .subscribe((resp) => {
+        if (!resp.success) {
+          console.log('ERROR: added to favorites');
+          return;
+        }
+
+        this.isFavorite$.next(true);
+        console.log('added to favorites');
+      });
   }
 
   public removeFromFavorites(): void {
-    let isRemoved = this._movieService.removeFromFavorite(this.movieData.id);
-    if (isRemoved) {
-      this.isInFavorites = false;
-      console.log(this.movieData.title + ' removeFromFavorites');
-    }
+    this.movieManagerService
+      .removeFromFavorite(this.movieData.id)
+      .pipe(this.untilDestroyContext)
+      .subscribe((resp) => {
+        if (!resp.success) {
+          console.log('ERROR: removed from favorites');
+          return;
+        }
+
+        this.isFavorite$.next(false);
+        console.log('removed from favorites');
+      });
   }
 
-  public addToWatchLater(): void {
-    let isAdded = this._movieService.addToWatchLater(this.movieData)
-    if (isAdded) {
-      this.isInWatchLater = true;
-      console.log(this.movieData.title + ' addToWatchLater');
-    }
+  public addToWatchList(): void {
+    this.movieManagerService
+      .addToWatchList(this.movieData.id)
+      .pipe(this.untilDestroyContext)
+      .subscribe((resp) => {
+        if (!resp.success) {
+          console.log('ERROR: added to watchList');
+          return;
+        }
+
+        this.isWatchList$.next(true);
+        console.log('added to watchList');
+      });
   }
 
-  public removeFromWatchLater(): void {
-    let isRemoved = this._movieService.removeFromWatchLater(this.movieData.id);
-    if (isRemoved) {
-      this.isInWatchLater = false;
-      console.log(this.movieData.title + ' removeFromWatchLater');
-    }
+  public removeFromWatchList(): void {
+    this.movieManagerService
+      .removeFromWatchList(this.movieData.id)
+      .pipe(this.untilDestroyContext)
+      .subscribe((resp) => {
+        if (!resp.success) {
+          console.log('ERROR: removed from watchList');
+          return;
+        }
+
+        this.isWatchList$.next(false);
+        console.log('removed from watchList');
+      });
   }
 }

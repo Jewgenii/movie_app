@@ -4,8 +4,18 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { importProvidersFrom } from '@angular/core';
 
 import { routes } from './app.routes';
-import { provideHttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
+import { AuthInterceptor } from './interceptors/auth-interceptor';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes), provideHttpClient(), importProvidersFrom(BrowserAnimationsModule)]
+  providers: [
+    provideRouter(routes),
+    {
+      useClass: AuthInterceptor,
+      provide: HTTP_INTERCEPTORS,
+      multi: true,
+    },
+    provideHttpClient(),
+    importProvidersFrom(BrowserAnimationsModule),
+  ],
 };

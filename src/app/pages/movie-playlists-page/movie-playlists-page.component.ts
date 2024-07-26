@@ -1,6 +1,5 @@
 
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SidebarModule } from 'primeng/sidebar';
 import { RouterModule } from '@angular/router';
 import { PanelModule } from 'primeng/panel';
@@ -8,7 +7,7 @@ import { ListboxModule } from 'primeng/listbox';
 import { SplitterModule } from 'primeng/splitter';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { ButtonModule } from 'primeng/button';
-
+import { BaseObservableDirective } from '../../directives/base-observable/base-observable.component';
 
 @Component({
   selector: 'app-movie-playlists-page',
@@ -20,18 +19,8 @@ import { ButtonModule } from 'primeng/button';
   templateUrl: './movie-playlists-page.component.html',
   styleUrl: './movie-playlists-page.component.scss'
 })
-export class MoviePlayListsPageComponent implements OnInit {
-
-  constructor(
-    public route: ActivatedRoute,
-    private _router: Router) {
-  }
-
-  ngOnInit(): void {
-
-  }
-
-  navigateToContainerOutlet(routeName: string) {
-    this._router.navigate([{ outlets: { 'container-outlet': routeName }, }], { relativeTo: this.route });
+export class MoviePlayListsPageComponent extends BaseObservableDirective {
+  constructor() {
+    super();
   }
 }

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { MovieService } from '../../../services/movie-service/movie.service';
 import { MovieCardComponent } from '../../../components/movie-card/movie-card.component';
 import { ContainerOutletBasePageComponent } from '../container-outlet-base-page/container-outlet-base-page.component';
 import { RouterModule } from '@angular/router';  // Import RouterModule for [routerLink]
+import { MovieManagerService } from '../../../services/movie-manager/movie-manager.service';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-favorites-page',
@@ -14,12 +15,19 @@ import { RouterModule } from '@angular/router';  // Import RouterModule for [rou
 export class FavoritesPageComponent extends ContainerOutletBasePageComponent implements OnInit {
 
   constructor(
-    private _movieService: MovieService
+    private _movieManager: MovieManagerService
   ) {
     super();
   }
 
-  ngOnInit(): void {
-    this._movies = this._movieService.getFavorites();
+  ngOnInit() {
+      this._movieManager.getFavorites()
+        .pipe(this.untilDestroyContext)
+        .subscribe({
+          next: (favorites) => {
+            this.movies = favorites;
+          },
+          error: this.catchError
+        });
   }
 }

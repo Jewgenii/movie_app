@@ -8,10 +8,9 @@ describe('WatchLaterPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [WatchLaterPageComponent]
-    })
-    .compileComponents();
-    
+      imports: [WatchLaterPageComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(WatchLaterPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

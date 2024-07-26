@@ -1,16 +1,7 @@
 <div class="cards-container">
-  @for (movie of _movies; track movie.id) {
-  <!-- ['/movieCard',movie.id]  absolute navigation
-         ['movieCard',movie.id]  relative navigation
-    -->
-
-  <!-- all child classes must:
-      import { RouterModule } from '@angular/router';
-
-      since:
-      templateUrl: '../container-outlet-base-page/container-outlet-base-page.component.html',
-  -->
-  <app-movie-card [movieData]=movie [routerLink]="['/movieCard',movie.id]"></app-movie-card>
+  @for (movie of movies; track movie.id) {
+  <app-movie-card [movieData]=movie
+    [routerLink]="['/list',{ outlets: { 'container-outlet': ['movieCard', movie.id] } }]"></app-movie-card>
   }@empty {
   <p>no movies</p>
   }

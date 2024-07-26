@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { MovieService } from '../../../services/movie-service/movie.service';
 import { MovieCardComponent } from '../../../components/movie-card/movie-card.component';
 import { ContainerOutletBasePageComponent } from '../container-outlet-base-page/container-outlet-base-page.component';
 import { RouterModule } from '@angular/router';
+import { MovieManagerService } from '../../../services/movie-manager/movie-manager.service';
 
 @Component({
   selector: 'app-upcoming-page',
@@ -13,12 +13,14 @@ import { RouterModule } from '@angular/router';
 })
 export class UpcomingPageComponent extends ContainerOutletBasePageComponent implements OnInit {
 
-  constructor(private _movieService: MovieService
+  constructor(private movieManagerService: MovieManagerService
   ) {
     super();
   }
 
-  ngOnInit(): void {
-    this._movies = this._movieService.getUpcoming();
+  ngOnInit() {
+    this.movieManagerService.getUpcoming()
+      .pipe(this.untilDestroyContext)
+      .subscribe(upcoming => this.movies = upcoming);
   }
 }
