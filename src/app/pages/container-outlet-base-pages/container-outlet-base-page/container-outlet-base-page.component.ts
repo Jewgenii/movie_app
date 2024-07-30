@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { MovieCardComponent } from '../../../components/movie-card/movie-card.component';
-import { RouterModule } from '@angular/router'; // Import RouterModule for [routerLink]
 import { MovieData } from '../../../models/movie-list-model';
 import { BaseObservableDirective } from '../../../directives/base-observable/base-observable.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-container-outlet-base-page',

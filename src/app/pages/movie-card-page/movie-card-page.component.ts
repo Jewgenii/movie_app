@@ -8,12 +8,12 @@ import { ShortOverviewPipe } from '../../pipes/short-overview-pipe.pipe';
 import { LocalizeImagePathPipe } from '../../pipes/localize-image-path-pipe.pipe';
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { MovieData } from '../../models/movie-list-model';
 import { MovieManagerService } from '../../services/movie-manager/movie-manager.service';
 import { delay, Subject, Subscription, tap, timeout } from 'rxjs';
 import { BaseObservableDirective } from '../../directives/base-observable/base-observable.component';
 import { CreateSessionResult } from '../../models/movie-service-models';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-movie-card-component',

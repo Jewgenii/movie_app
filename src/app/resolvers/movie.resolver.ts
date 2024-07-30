@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
+
+import { HttpClient } from '@angular/common/http';
+import { MovieData } from '../models/movie-list-model';
 import {
   ActivatedRouteSnapshot,
-  MaybeAsync,
   Resolve,
   RouterStateSnapshot,
 } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { MovieData } from '../models/movie-list-model';
 
 @Injectable({ providedIn: 'root' })
 export class MovieResolver implements Resolve<MovieData> {

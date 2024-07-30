@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MovieCardComponent } from '../../../components/movie-card/movie-card.component';
 import { ContainerOutletBasePageComponent } from '../container-outlet-base-page/container-outlet-base-page.component';
-import { RouterModule } from '@angular/router';
 import { MovieManagerService } from '../../../services/movie-manager/movie-manager.service';
-import { pipe, takeUntil } from 'rxjs';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-watch-later-page',
