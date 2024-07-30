@@ -12,7 +12,7 @@ import { MovieAuthService } from './services/movie-services/auth-service/movie-a
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, SidebarModule],
+  imports: [HttpClientModule, RouterOutlet, SidebarModule],
   providers: [
     LocalStorageService,
     CredentialsManagerService,
