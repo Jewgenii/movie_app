@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MovieService } from '../movie-services/movie.service';
 
-import { firstValueFrom, map, Observable, switchMap, switchScan } from 'rxjs';
+import { firstValueFrom, map, Observable, switchMap } from 'rxjs';
 import { UserCredentials } from '../../models/user-credentials';
 import { CredentialsManagerService } from '../credentials-service/credentials-manager.service';
 import {
@@ -19,7 +19,7 @@ import {
   ValidateWithLogin,
 } from '../../models/movie-service-models';
 import { MovieAuthService } from '../movie-services/auth-service/movie-auth.service';
-import { mapMovieDetailsToMovieData } from '../../mapper/mapper';
+import { DataMapper } from '../../mapper/mapper';
 
 @Injectable({
   providedIn: 'root',
@@ -62,7 +62,7 @@ export class MovieManagerService {
   public getMovieDetails(id: number): Observable<MovieData> {
     return this.movieService
       .getMovieDetails<MovieDetails>(id)
-      .pipe(map(mapMovieDetailsToMovieData));
+      .pipe(map(DataMapper.mapMovieDetailsToMovieData));
   }
 
   public getFavorites(): Observable<MovieData[]> {
