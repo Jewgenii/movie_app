@@ -6,16 +6,18 @@ import { importProvidersFrom } from '@angular/core';
 import { routes } from './app.routes';
 import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
 import { AuthInterceptor } from './interceptors/auth-interceptor';
+import { provideStore } from '@ngrx/store';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     {
-      useClass: AuthInterceptor,
-      provide: HTTP_INTERCEPTORS,
-      multi: true,
+        useClass: AuthInterceptor,
+        provide: HTTP_INTERCEPTORS,
+        multi: true,
     },
     provideHttpClient(),
     importProvidersFrom(BrowserAnimationsModule),
-  ],
+    provideStore()
+],
 };
