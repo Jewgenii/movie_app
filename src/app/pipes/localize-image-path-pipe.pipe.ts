@@ -3,10 +3,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({
   name: 'localizeImagePath',
   pure: true,
-  standalone: true
+  standalone: true,
 })
 export class LocalizeImagePathPipe implements PipeTransform {
-
   private imagesPath: string = 'https://image.tmdb.org/t/p/w500/';
 
   transform(value: string | undefined, ...relativePath: string[]): string {

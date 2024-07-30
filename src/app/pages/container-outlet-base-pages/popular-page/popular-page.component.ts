@@ -8,17 +8,23 @@ import { MovieManagerService } from '../../../services/movie-manager/movie-manag
   selector: 'app-popular-page',
   standalone: true,
   imports: [MovieCardComponent, RouterModule],
-  templateUrl: '../container-outlet-base-page/container-outlet-base-page.component.html',
-  styleUrl: '../container-outlet-base-page/container-outlet-base-page.component.scss',
+  templateUrl:
+    '../container-outlet-base-page/container-outlet-base-page.component.html',
+  styleUrl:
+    '../container-outlet-base-page/container-outlet-base-page.component.scss',
 })
-export class PopularComponent extends ContainerOutletBasePageComponent implements OnInit {
-
-  constructor(private movieManagerService: MovieManagerService
-  ) {
+export class PopularComponent
+  extends ContainerOutletBasePageComponent
+  implements OnInit
+{
+  constructor(private movieManagerService: MovieManagerService) {
     super();
   }
 
   ngOnInit() {
-    this.movieManagerService.getPopular().subscribe(popular => this.movies = popular);
+    this.movieManagerService
+      .getPopular()
+      .pipe(this.untilDestroyContext)
+      .subscribe((popular) => (this.movies = popular));
   }
 }

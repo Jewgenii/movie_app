@@ -3,10 +3,9 @@ import { UserCredentials } from '../../models/user-credentials';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CredentialsManagerService {
-
   private readonly _env!: UserCredentials;
 
   constructor() {

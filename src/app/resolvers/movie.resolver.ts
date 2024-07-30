@@ -1,24 +1,21 @@
-import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, MaybeAsync, Resolve, RouterStateSnapshot } from "@angular/router";
-import { HttpClient } from "@angular/common/http";
-import { MovieData } from "../models/movie-list-model";
-
-
+import { Injectable } from '@angular/core';
+import {
+  ActivatedRouteSnapshot,
+  MaybeAsync,
+  Resolve,
+  RouterStateSnapshot,
+} from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { MovieData } from '../models/movie-list-model';
 
 @Injectable({ providedIn: 'root' })
 export class MovieResolver implements Resolve<MovieData> {
-
-
   constructor(private httpClient: HttpClient) {
-
     //export mock data
-
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): any {
-
     let id = route.paramMap.get('id');
     return id;
   }
-
 }

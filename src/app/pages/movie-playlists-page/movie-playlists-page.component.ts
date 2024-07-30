@@ -1,4 +1,3 @@
-
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SidebarModule } from 'primeng/sidebar';
 import { RouterModule } from '@angular/router';
@@ -12,12 +11,17 @@ import { BaseObservableDirective } from '../../directives/base-observable/base-o
 @Component({
   selector: 'app-movie-playlists-page',
   standalone: true,
-  imports: [SidebarModule,
-    ButtonModule, RouterModule, PanelModule, ListboxModule, SplitterModule,
-    TabMenuModule
+  imports: [
+    SidebarModule,
+    ButtonModule,
+    RouterModule,
+    PanelModule,
+    ListboxModule,
+    SplitterModule,
+    TabMenuModule,
   ],
   templateUrl: './movie-playlists-page.component.html',
-  styleUrl: './movie-playlists-page.component.scss'
+  styleUrl: './movie-playlists-page.component.scss',
 })
 export class MoviePlayListsPageComponent extends BaseObservableDirective {
   constructor() {
